@@ -1,28 +1,30 @@
 ---
-description: Create a new Odoo demo-data package for a customer
-agent: build
+description: Create a new Odoo demo-data package for a customer (autonomous, no clarifying questions)
+agent: demo
 ---
 
-Create a new Odoo demo-data package for the following customer: $ARGUMENTS
+Create a new Odoo demo-data package for: $ARGUMENTS
 
-Load and follow the `odoo-demo-data` skill (`skills/odoo-demo-data/SKILL.md`) and
-the reference files it points to. Steps:
+Work autonomously - no clarifying questions. Follow the `odoo-demo-data` skill
+and its reference files.
 
-1. Research the customer (industry/business model). Reason about which processes
-   matter - including adjacent apps (e.g. medical devices -> quality control).
-   Pick capability bundles per `skills/odoo-demo-data/reference/capabilities.md`
-   (`python3 -m engine.cli capabilities`); dependencies are closed automatically.
-   If the reasoning needs an app without a bundle, say so explicitly (demand
-   signal) instead of faking data. Determine the demo-data language: derive it
-   from the company country unless the user names a language explicitly
-   (e.g. an English-only IT lead).
-2. Create a new spec under `examples/<customer>.json`, based on
-   `examples/muster_handel.json`; format per `reference/spec-format.md`.
-3. Build: `python3 -m engine.cli generate --spec examples/<customer>.json --out output`.
-4. Run the real install smoke test per `reference/install-test-protocol.md`
-   (fresh DB, no `--test-enable`, Postgres cross-check).
-5. On an install error: read the full traceback first, then fix. Never guess Odoo
-   field names - verify new object types against the 20.0 source per
-   `reference/verification-protocol.md`.
+1. Decide the capability bundles from the customer's business model
+   (`python3 -m engine.cli capabilities --json`); dependencies close
+   automatically. Derive the demo-data language from the company country unless
+   the arguments name one. Capture the reasoning once in `customer_profile`.
+2. Scaffold and author `examples/<customer>.json`:
+   `python3 -m engine.cli new --with <bundles> --name "<Customer>" --country <cc>
+   --out examples/<customer>.json`, then fill it per
+   `skills/odoo-demo-data/reference/spec-format.md`. Use compact tables and aim
+   for the "rich demo" volume. Leave no leftover `TODO`.
+3. Build:
+   `python3 -m engine.cli generate --spec examples/<customer>.json --out output`.
+4. Install smoke test in one shot (fresh DB, no `--test-enable`, Postgres check):
+   `engine/docker/smoke.sh --module <technical_name>`.
+   Set the bash tool `timeout` to at least 1800000 ms - the 120 s default aborts
+   it.
+5. On an install error: read the full traceback first, fix, retry. Never guess
+   Odoo field names - verify against the 20.0 source per
+   `skills/odoo-demo-data/reference/verification-protocol.md`.
 
-Summarise at the end: files created, verified installation, open points.
+Report at the end: spec path, bundles, ZIP path, install result, open points.

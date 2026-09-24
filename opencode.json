@@ -2,5 +2,22 @@
   "$schema": "https://opencode.ai/config.json",
   "skills": {
     "paths": ["skills"]
+  },
+  "permission": {
+    "bash": {
+      "*": "ask",
+      "python3 -m engine.cli *": "allow",
+      "python3 engine/docker/test_install.py *": "allow",
+      "python3 -m unittest *": "allow",
+      "engine/docker/smoke.sh *": "allow",
+      "./engine/docker/smoke.sh *": "allow",
+      "bash engine/docker/smoke.sh *": "allow",
+      "docker compose *": "allow",
+      "docker ps*": "allow",
+      "git status*": "allow",
+      "git diff*": "allow",
+      "git log*": "allow",
+      "rm *": "ask"
+    }
   }
 }

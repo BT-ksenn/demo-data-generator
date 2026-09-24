@@ -86,6 +86,13 @@ in `../odoodemo-local-20` (outside this repo). There is no official `odoo:20.0`
 Docker image yet, so that instance is built from source on top of the `odoo:19.0`
 base image. Setup and usage: [engine/docker/README.md](engine/docker/README.md).
 
+One-shot smoke test (starts the instance, then runs the test with Postgres
+assertions) - use a long tool timeout (>= 30 min), the install takes minutes:
+
+```bash
+engine/docker/smoke.sh --module bt_demo_musterhandel
+```
+
 ## Tests
 
 ```bash
@@ -112,7 +119,8 @@ engine/
   docker/          installation smoke-test harness against the local Enterprise
                    instance ../odoodemo-local-20 (see its README)
 skills/odoo-demo-data/   skill: workflow + reference (verified-patterns, spec-format, ...)
-opencode.json/.opencode/ opencode adapter (registers skills/, /new-demo command)
+opencode.json/.opencode/ opencode adapter (registers skills/, /new-demo command,
+                         autonomous `demo` agent, pre-approved pipeline permissions)
 examples/                anonymized example specifications (real specs are gitignored)
 examples/reference/      historical reference modules (no longer a template)
 .githooks/pre-commit     blocks committing non-anonymized specs (enable: see Setup)

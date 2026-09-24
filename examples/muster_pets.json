@@ -1,0 +1,2270 @@
+{
+  "module": {
+    "technical_name": "bt_demo_musterpets",
+    "title": "Demo Data - Muster Pet Lifestyle GmbH (Sales, CRM, Purchase, Inventory, Accounting, Helpdesk, Project)",
+    "category": "Sales",
+    "summary": "ERP demo for a German pet-accessories brand: own company with the German chart of accounts (SKR04), a dog/cat accessory assortment, a supplier network, inventory, a B2B pipeline, posted customer/vendor invoices, after-sales service tickets and product-launch/rollout projects.",
+    "description": "Sample demo-data module for Muster Pet Lifestyle GmbH (Musterstadt, Germany), a premium lifestyle brand for dog and cat accessories (leashes, collars, harnesses, smart ID tags, safety electronics, apparel, grooming, toys and retail displays). It creates 1 new company including the German chart of accounts (l10n_de, SKR04), 31 contacts (contract manufacturers, packaging/logistics vendors, specialist retailers and distributors, and private customers), 30 products, 10 purchase orders, stock for 13 products, 15 CRM opportunities, 12 posted customer/vendor invoices, 12 helpdesk tickets, 5 quotation templates, 13 sales orders, 3 projects with task stages and tasks. Bundles: sales, crm, purchase, stock, accounting, helpdesk, project."
+  },
+  "accounting_app": "full",
+  "company": {
+    "xml_id": "demo_company",
+    "name": "Muster Pet Lifestyle GmbH",
+    "street": "Musterstrasse 12",
+    "city": "Musterstadt",
+    "zip": "24937",
+    "country_xmlid": "base.de",
+    "currency_xmlid": "base.EUR",
+    "chart_template": "de_skr04",
+    "vat": "DE290123454"
+  },
+  "customer_profile": {
+    "industry": "Heimtierbedarf / Pet Accessories",
+    "business_model": "Design- und Markenunternehmen fuer Hunde- und Katzenzubehoer; Vertrieb ueber B2B-Fachhandel, Distributoren und D2C-E-Commerce, Lagerlogistik ueber einen 3PL-Dienstleister",
+    "product_domains": [
+      "Leinen",
+      "Halsbänder",
+      "Geschirre",
+      "Sicherheit",
+      "Pflege",
+      "Spielzeug",
+      "Katzenzubehör"
+    ],
+    "customer_segments": [
+      "Fachhandel",
+      "Gartencenter",
+      "E-Commerce",
+      "Grosshandel",
+      "Endkunden"
+    ],
+    "region": "Musterstadt, Musterregion"
+  },
+  "partners": [
+    [
+      "xml_id",
+      "name",
+      "country_xmlid",
+      "street",
+      "city",
+      "zip",
+      "vat",
+      "is_company",
+      "supplier_rank",
+      "customer_rank"
+    ],
+    [
+      "partner_supplier_textile",
+      "Textilwerk Nord GmbH",
+      "base.de",
+      "Gewerbering 4",
+      "Neumuenster",
+      "24534",
+      "DE312457898",
+      true,
+      1,
+      0
+    ],
+    [
+      "partner_supplier_webbing",
+      "Weberei Muensterland GmbH",
+      "base.de",
+      "Werkstrasse 18",
+      "Rheine",
+      "48431",
+      "DE142078566",
+      true,
+      1,
+      0
+    ],
+    [
+      "partner_supplier_electronics",
+      "Shenzhen Pet Electronics Co. Ltd.",
+      "base.cn",
+      "Bao'an District, Xinhu Road 88",
+      "Shenzhen",
+      "518101",
+      null,
+      true,
+      1,
+      0
+    ],
+    [
+      "partner_supplier_plastic",
+      "Kunststofftechnik Erzgebirge GmbH",
+      "base.de",
+      "Industriestrasse 9",
+      "Annaberg-Buchholz",
+      "09456",
+      "DE156234783",
+      true,
+      1,
+      0
+    ],
+    [
+      "partner_supplier_packaging",
+      "Verpackung Nord GmbH",
+      "base.de",
+      "Hafenweg 7",
+      "Kiel",
+      "24103",
+      "DE126789340",
+      true,
+      1,
+      0
+    ],
+    [
+      "partner_supplier_logistics",
+      "Logistik Service Nord GmbH",
+      "base.de",
+      "Werkstrasse 8",
+      "Harrislee",
+      "24955",
+      "DE145678903",
+      true,
+      1,
+      0
+    ],
+    [
+      "partner_supplier_metal",
+      "Metallwaren Solingen GmbH",
+      "base.de",
+      "Klingenstrasse 22",
+      "Solingen",
+      "42651",
+      "DE219876546",
+      true,
+      1,
+      0
+    ],
+    [
+      "partner_supplier_toys",
+      "Spielwaren Import GmbH",
+      "base.de",
+      "Handelsweg 3",
+      "Nuernberg",
+      "90402",
+      "DE301234565",
+      true,
+      1,
+      0
+    ],
+    [
+      "partner_supplier_grooming",
+      "Pflegeprodukte Europa GmbH",
+      "base.de",
+      "Rheinallee 40",
+      "Mainz",
+      "55118",
+      "DE234567894",
+      true,
+      1,
+      0
+    ],
+    [
+      "partner_supplier_tag",
+      "SmartTag Technologies GmbH",
+      "base.de",
+      "Technikpark 11",
+      "Regensburg",
+      "93053",
+      "DE245678907",
+      true,
+      1,
+      0
+    ],
+    [
+      "partner_customer_zoo",
+      "Tierbedarf Nord GmbH",
+      "base.de",
+      "Einkaufszentrum 5",
+      "Hamburg",
+      "20095",
+      "DE256789018",
+      true,
+      0,
+      1
+    ],
+    [
+      "partner_customer_garden",
+      "Gartencenter Gruen GmbH",
+      "base.de",
+      "Am Stadtwald 2",
+      "Bremen",
+      "28209",
+      "DE267890126",
+      true,
+      0,
+      1
+    ],
+    [
+      "partner_customer_petstore",
+      "Pfoten-Shop GmbH",
+      "base.de",
+      "Hauptstrasse 88",
+      "Hannover",
+      "30159",
+      "DE278901239",
+      true,
+      0,
+      1
+    ],
+    [
+      "partner_customer_wholesale",
+      "Grosshandel Heimtier GmbH",
+      "base.de",
+      "Lagerstrasse 14",
+      "Osnabrueck",
+      "49074",
+      "DE289012347",
+      true,
+      0,
+      1
+    ],
+    [
+      "partner_customer_online",
+      "Online-Pet Handels GmbH",
+      "base.de",
+      "Digitalpark 1",
+      "Berlin",
+      "10115",
+      "DE290123454",
+      true,
+      0,
+      1
+    ],
+    [
+      "partner_customer_at",
+      "Tierfachhandel Wien GmbH",
+      "base.at",
+      "Mariahilfer Strasse 30",
+      "Wien",
+      "1070",
+      "ATU22334454",
+      true,
+      0,
+      1
+    ],
+    [
+      "partner_customer_nl",
+      "Pet Distribution Benelux B.V.",
+      "base.nl",
+      "Havenstraat 12",
+      "Rotterdam",
+      "3011",
+      null,
+      true,
+      0,
+      1
+    ],
+    [
+      "partner_customer_fr",
+      "Accessoires Animaux SARL",
+      "base.fr",
+      "Rue du Commerce 8",
+      "Lyon",
+      "69002",
+      null,
+      true,
+      0,
+      1
+    ],
+    [
+      "partner_customer_ch",
+      "Tierbedarf Zuerich AG",
+      "base.ch",
+      "Bahnhofstrasse 45",
+      "Zuerich",
+      "8001",
+      null,
+      true,
+      0,
+      1
+    ],
+    [
+      "partner_customer_department",
+      "Kaufhaus Nord GmbH & Co. KG",
+      "base.de",
+      "Innenstadt 1",
+      "Luebeck",
+      "23552",
+      "DE311122232",
+      true,
+      0,
+      1
+    ],
+    [
+      "partner_customer_boutique",
+      "Hundeboutique Alster",
+      "base.de",
+      "Alsterufer 6",
+      "Hamburg",
+      "20354",
+      "DE322233345",
+      true,
+      0,
+      1
+    ],
+    [
+      "partner_customer_breeder",
+      "Zuchtverband Nord e.V.",
+      "base.de",
+      "Vereinsweg 3",
+      "Flensburg",
+      "24937",
+      "DE333344458",
+      true,
+      0,
+      1
+    ],
+    [
+      "partner_customer_vet",
+      "Tierarztpraxis Dr. Hansen",
+      "base.de",
+      "Praxisstrasse 5",
+      "Schleswig",
+      "24837",
+      "DE344455566",
+      true,
+      0,
+      1
+    ],
+    [
+      "partner_customer_pharmacy",
+      "Tierapotheke Nord GmbH",
+      "base.de",
+      "Marktplatz 9",
+      "Rendsburg",
+      "24768",
+      "DE355566674",
+      true,
+      0,
+      1
+    ],
+    [
+      "partner_customer_marketplace",
+      "Marktplatz Partner GmbH",
+      "base.de",
+      "Logistikpark 2",
+      "Leipzig",
+      "04103",
+      "DE366677784",
+      true,
+      0,
+      1
+    ],
+    [
+      "partner_private_schmidt",
+      "Anna Schmidt",
+      "base.de",
+      "Lindenweg 7",
+      "Flensburg",
+      "24939",
+      null,
+      false,
+      0,
+      1
+    ],
+    [
+      "partner_private_weber",
+      "Michael Weber",
+      "base.de",
+      "Am Park 12",
+      "Kiel",
+      "24103",
+      null,
+      false,
+      0,
+      1
+    ],
+    [
+      "partner_private_fischer",
+      "Sabine Fischer",
+      "base.de",
+      "Rosenstrasse 3",
+      "Hamburg",
+      "20259",
+      null,
+      false,
+      0,
+      1
+    ],
+    [
+      "partner_private_keller",
+      "Jonas Keller",
+      "base.de",
+      "Bergstrasse 21",
+      "Freiburg",
+      "79098",
+      null,
+      false,
+      0,
+      1
+    ],
+    [
+      "partner_private_hoffmann",
+      "Laura Hoffmann",
+      "base.de",
+      "Seeweg 4",
+      "Konstanz",
+      "78462",
+      null,
+      false,
+      0,
+      1
+    ],
+    [
+      "partner_private_brandt",
+      "Tobias Brandt",
+      "base.de",
+      "Feldstrasse 15",
+      "Muenster",
+      "48143",
+      null,
+      false,
+      0,
+      1
+    ]
+  ],
+  "products": [
+    [
+      "xml_id",
+      "name",
+      "type",
+      "sale_ok",
+      "purchase_ok",
+      "list_price",
+      "standard_price",
+      "default_code",
+      "barcode",
+      "weight",
+      "description_sale"
+    ],
+    [
+      "product_leash_multi",
+      "Multifunktionsleine Classic 2 m",
+      "consu",
+      true,
+      true,
+      24.9,
+      9.8,
+      "MM-LEINE-MF2",
+      "4012345001015",
+      0.3,
+      "Verstellbare Multifunktionsleine fuer Hunde mit drei Tragevarianten und neongelben Reflektorstreifen."
+    ],
+    [
+      "product_leash_short",
+      "Stadtleine Kurz 60 cm",
+      "consu",
+      true,
+      true,
+      17.9,
+      7.1,
+      "MM-LEINE-SH60",
+      "4012345001022",
+      0.18,
+      "Kurze Fuehrleine fuer den Stadtbummel, gepolstert, mit weicher Handschlaufe."
+    ],
+    [
+      "product_leash_rope",
+      "Tauleine Rope Matrix 1,5 m",
+      "consu",
+      true,
+      true,
+      24.9,
+      10.4,
+      "MM-LEINE-ROPE",
+      "4012345001039",
+      0.35,
+      "Runde Tauleine mit Neopren-Griff, reissfest und wetterfest."
+    ],
+    [
+      "product_collar_comfort",
+      "Halsband Comfort S-M",
+      "consu",
+      true,
+      true,
+      15.9,
+      5.9,
+      "MM-HALSB-COMF",
+      "4012345001046",
+      0.1,
+      "Weich gepolstertes Halsband mit Sicherheitsverschluss, Groessen XS bis L."
+    ],
+    [
+      "product_collar_soft",
+      "Halsband Soft Rose",
+      "consu",
+      true,
+      true,
+      14.9,
+      5.4,
+      "MM-HALSB-SOFT",
+      "4012345001053",
+      0.09,
+      "Leichtes Halsband in Rose mit weichem Innenfutter."
+    ],
+    [
+      "product_harness_h",
+      "H-Geschirr Komfort",
+      "consu",
+      true,
+      true,
+      24.9,
+      9.9,
+      "MM-GESCH-H",
+      "4012345001060",
+      0.22,
+      "Gepolstertes H-Geschirr mit verstellbaren Gurten, kein Zug am Hals."
+    ],
+    [
+      "product_harness_air",
+      "Air Vest Sicherheitsgeschirr",
+      "consu",
+      true,
+      true,
+      39.9,
+      16.8,
+      "MM-GESCH-AIR",
+      "4012345001077",
+      0.4,
+      "Gepolstertes Sicherheitsgeschirr mit Air-Mesh, ideal fuer lange Spaziergaenge."
+    ],
+    [
+      "product_harness_sport",
+      "Sport-Geschirr Matrix 2.0",
+      "consu",
+      true,
+      true,
+      29.9,
+      12.2,
+      "MM-GESCH-SPORT",
+      "4012345001084",
+      0.28,
+      "Sportliches Brustgeschirr mit Metallringen und zusaetzlichem Bauchgurt."
+    ],
+    [
+      "product_collar_id",
+      "Smart ID Halsband mit QR-Code",
+      "consu",
+      true,
+      true,
+      17.9,
+      6.9,
+      "MM-ID-HALSB",
+      "4012345001091",
+      0.12,
+      "Halsband mit integriertem QR-ID-Tag zur schnellen Wiedervereinigung mit dem Tier."
+    ],
+    [
+      "product_tag_id",
+      "GOTCHA! Smart ID Tag",
+      "consu",
+      true,
+      true,
+      9.9,
+      3.2,
+      "MM-ID-TAG",
+      "4012345001107",
+      0.02,
+      "Metall-ID-Tag mit QR-Code, verknuepft mit dem GOTCHA! Lost-and-Found Profil."
+    ],
+    [
+      "product_led_light",
+      "Matrix 2.0 Ultra LED Sicherheitslicht",
+      "consu",
+      true,
+      true,
+      16.9,
+      6.4,
+      "MM-LED-ULTRA",
+      "4012345001114",
+      0.06,
+      "Wiederaufladbares LED-Sicherheitslicht fuer Halsband und Geschirr."
+    ],
+    [
+      "product_tick_sound",
+      "Soundshield Ultraschall-Zeckenschutz",
+      "consu",
+      true,
+      true,
+      34.9,
+      14.9,
+      "MM-SOUND-SH",
+      "4012345001121",
+      0.08,
+      "Ultraschall-Geraet gegen Zecken und Floehe, 24/7 Schutz, inklusive Ladegeraet."
+    ],
+    [
+      "product_raincoat",
+      "Regenmantel City",
+      "consu",
+      true,
+      true,
+      34.9,
+      13.6,
+      "MM-KLEID-REGEN",
+      "4012345001138",
+      0.35,
+      "Wasserdichter Regenmantel mit Kapuze und Reflexstreifen."
+    ],
+    [
+      "product_bathrobe",
+      "Hundebademantel Pluesch",
+      "consu",
+      true,
+      true,
+      34.9,
+      14.1,
+      "MM-KLEID-BADEM",
+      "4012345001145",
+      0.55,
+      "Saugfaehiger Bademantel aus Pluesch mit Klettverschluss."
+    ],
+    [
+      "product_bandana",
+      "Bandana Garden",
+      "consu",
+      true,
+      true,
+      7.9,
+      2.4,
+      "MM-ACCESS-BAND",
+      "4012345001152",
+      0.04,
+      "Bedrucktes Halstuch fuer Hunde, kombinierbar mit Halsband und Leine."
+    ],
+    [
+      "product_brush",
+      "Buerste Soft Grooming",
+      "consu",
+      true,
+      true,
+      12.9,
+      4.2,
+      "MM-PFLEGE-BUER",
+      "4012345001169",
+      0.15,
+      "Weiche Pflegebuerste fuer Fellpflege und Unterwolle."
+    ],
+    [
+      "product_shampoo",
+      "Pflegeshampoo Sensitiv 250 ml",
+      "consu",
+      true,
+      true,
+      9.9,
+      3.1,
+      "MM-PFLEGE-SHAM",
+      "4012345001176",
+      0.3,
+      "Mildes Pflegeshampoo fuer empfindliche Hundehaut, pH-neutral."
+    ],
+    [
+      "product_claw",
+      "Krallenschere Edelstahl",
+      "consu",
+      true,
+      true,
+      11.9,
+      4.5,
+      "MM-PFLEGE-KRAL",
+      "4012345001183",
+      0.09,
+      "Scharfe Krallenschere aus Edelstahl mit Sicherheitsstopp."
+    ],
+    [
+      "product_chew",
+      "Kauspielzeug Robust",
+      "consu",
+      true,
+      true,
+      8.9,
+      3.2,
+      "MM-TOY-KAU",
+      "4012345001190",
+      0.2,
+      "Langlebiges Kauspielzeug aus Naturkautschuk."
+    ],
+    [
+      "product_plush",
+      "Plueschtier Kollektion",
+      "consu",
+      true,
+      true,
+      9.9,
+      3.6,
+      "MM-TOY-PLUESCH",
+      "4012345001206",
+      0.11,
+      "Kuscheliges Plueschtier mit Quietscher in verschiedenen Designs."
+    ],
+    [
+      "product_rope",
+      "Zerrseil mit zwei Knoten",
+      "consu",
+      true,
+      true,
+      7.9,
+      2.6,
+      "MM-TOY-ZERR",
+      "4012345001213",
+      0.25,
+      "Robustes Zerrseil fuer gemeinsames Spiel."
+    ],
+    [
+      "product_poop_bag",
+      "Kotbeutelspender mit 30 Beuteln",
+      "consu",
+      true,
+      true,
+      6.9,
+      2.1,
+      "MM-ACCESS-KOT",
+      "4012345001220",
+      0.08,
+      "Spender fuer Hundekotbeutel inklusive 30 kompostierbarer Beutel."
+    ],
+    [
+      "product_travel_bowl",
+      "Reise-Napf-Set",
+      "consu",
+      true,
+      true,
+      14.9,
+      5.3,
+      "MM-ACCESS-NAP",
+      "4012345001237",
+      0.22,
+      "Faltbares Napfset aus Silikon fuer unterwegs."
+    ],
+    [
+      "product_car_seat",
+      "Autositzschutz Premium",
+      "consu",
+      true,
+      true,
+      44.9,
+      18.2,
+      "MM-ACCESS-AUTO",
+      "4012345001244",
+      1.1,
+      "Wasserdichter Autositzschutz mit Befestigungsschlaufen."
+    ],
+    [
+      "product_display",
+      "Verkaufsdisplay 40x60 cm",
+      "consu",
+      true,
+      true,
+      29.9,
+      11.0,
+      "MM-DISPLAY-4060",
+      "4012345001251",
+      2.4,
+      "Verkaufsdisplay fuer den Handel, bestueckbar mit bis zu 24 Artikeln."
+    ],
+    [
+      "product_cat_collar",
+      "Katzenhalsband mit Glocke",
+      "consu",
+      true,
+      true,
+      12.9,
+      4.3,
+      "MM-KATZE-HALSB",
+      "4012345001268",
+      0.05,
+      "Sicherheits-Katzenhalsband mit Sollbruchstelle und Glocke."
+    ],
+    [
+      "product_cat_harness",
+      "Katzengeschirr Set",
+      "consu",
+      true,
+      true,
+      29.9,
+      12.0,
+      "MM-KATZE-SET",
+      "4012345001275",
+      0.24,
+      "Katzengeschirr mit passender Leine, verstellbar und ausbruchsicher."
+    ],
+    [
+      "product_svc_fulfillment",
+      "B2B Logistik- und Fulfillment-Service (Monatspauschale)",
+      "service",
+      true,
+      false,
+      2500.0,
+      null,
+      "MM-SVC-FULFILL",
+      null,
+      null,
+      "Lagerlogistik, Kommissionierung und Versand fuer Handelspartner inklusive Retourenbearbeitung."
+    ],
+    [
+      "product_svc_category",
+      "Katalog- und Category-Management (Monatspauschale)",
+      "service",
+      true,
+      false,
+      1200.0,
+      null,
+      "MM-SVC-CATEGORY",
+      null,
+      null,
+      "Sortimentspflege, Katalogdaten und POS-Material fuer den Fachhandel."
+    ],
+    [
+      "product_svc_display",
+      "Handelsdisplay-Montage (Pauschale)",
+      "service",
+      true,
+      false,
+      450.0,
+      null,
+      "MM-SVC-DISPLAY",
+      null,
+      null,
+      "Lieferung, Aufbau und Bestueckung von Verkaufsdisplays beim Handelspartner."
+    ]
+  ],
+  "crm_leads": [
+    {
+      "xml_id": "crm_lead_zoo_expansion",
+      "name": "Sortimentserweiterung Tierbedarf Nord",
+      "partner_xmlid": "partner_customer_zoo",
+      "expected_revenue": 45000.0,
+      "probability": 60.0,
+      "stage_xmlid": "crm.stage_lead2",
+      "priority": "2",
+      "description": "Erweiterung der Listung um Geschirre, Sicherheitsbeleuchtung und Pflegeprodukte."
+    },
+    {
+      "xml_id": "crm_lead_garden_ss27",
+      "name": "Fruehjahrskollektion Gartencenter Gruen",
+      "partner_xmlid": "partner_customer_garden",
+      "expected_revenue": 28000.0,
+      "probability": 25.0,
+      "stage_xmlid": "crm.stage_lead1",
+      "priority": "1",
+      "description": "Einstieg in die Saisonkollektion mit Bandanas, Regenmaenteln und Reisenapf-Sets."
+    },
+    {
+      "xml_id": "crm_lead_nl_distribution",
+      "name": "Distribution Benelux Vertrag",
+      "partner_xmlid": "partner_customer_nl",
+      "expected_revenue": 120000.0,
+      "probability": 70.0,
+      "stage_xmlid": "crm.stage_lead3",
+      "priority": "3",
+      "description": "Exklusivvertrag fuer den Benelux-Fachhandel inklusive Lagerhaltung."
+    },
+    {
+      "xml_id": "crm_lead_fr_partner",
+      "name": "Fachhandelspartner Lyon",
+      "partner_xmlid": "partner_customer_fr",
+      "expected_revenue": 35000.0,
+      "probability": 20.0,
+      "stage_xmlid": "crm.stage_lead1",
+      "priority": "1",
+      "description": "Neuer Handelspartner fuer den franzoesischen Markt, erste Testbestellung geplant."
+    },
+    {
+      "xml_id": "crm_lead_online_listing",
+      "name": "Listing-Erweiterung Online-Pet",
+      "partner_xmlid": "partner_customer_online",
+      "expected_revenue": 60000.0,
+      "probability": 55.0,
+      "stage_xmlid": "crm.stage_lead2",
+      "priority": "2",
+      "description": "Ausbau des Onlinesortiments um Smart-ID-Artikel und Sicherheitsprodukte."
+    },
+    {
+      "xml_id": "crm_lead_at_retail",
+      "name": "Oesterreich-Rollout Tierfachhandel Wien",
+      "partner_xmlid": "partner_customer_at",
+      "expected_revenue": 42000.0,
+      "probability": 50.0,
+      "stage_xmlid": "crm.stage_lead2",
+      "priority": "2",
+      "description": "Rollout neuer Verkaufsdisplays und Listung der Katzenkollektion in Oesterreich."
+    },
+    {
+      "xml_id": "crm_lead_department",
+      "name": "Shop-in-Shop Kaufhaus Nord",
+      "partner_xmlid": "partner_customer_department",
+      "expected_revenue": 85000.0,
+      "probability": 65.0,
+      "stage_xmlid": "crm.stage_lead3",
+      "priority": "2",
+      "description": "Shop-in-Shop-Flaeche mit Displaykonzept und laufender Sortimentspflege."
+    },
+    {
+      "xml_id": "crm_lead_interzoo",
+      "name": "Interzoo Messe-Lead: neuer Fachhandelspartner",
+      "contact_name": "Katrin Vogel",
+      "email_from": "katrin.vogel@example.de",
+      "phone": "+49 911 555 42 18",
+      "expected_revenue": 30000.0,
+      "probability": 15.0,
+      "stage_xmlid": "crm.stage_lead1",
+      "description": "Messe-Kontakt von der Interzoo, Interesse an einer saisonalen Listung."
+    },
+    {
+      "xml_id": "crm_lead_breeder",
+      "name": "Vereins-Sortiment Zuchtverband Nord",
+      "partner_xmlid": "partner_customer_breeder",
+      "expected_revenue": 12000.0,
+      "probability": 30.0,
+      "stage_xmlid": "crm.stage_lead1",
+      "priority": "1",
+      "description": "Sammelbestellung fuer Mitglieder inklusive individueller Vereins-Banderole."
+    },
+    {
+      "xml_id": "crm_lead_vet",
+      "name": "Wartezimmer-Display Tierarztpraxis",
+      "partner_xmlid": "partner_customer_vet",
+      "expected_revenue": 8000.0,
+      "probability": 40.0,
+      "stage_xmlid": "crm.stage_lead2",
+      "priority": "1",
+      "description": "Praesentationsdisplay mit Pflege- und Sicherheitsprodukten fuer Wartezimmer."
+    },
+    {
+      "xml_id": "crm_lead_pharmacy",
+      "name": "Tierapotheke Nord Listing",
+      "partner_xmlid": "partner_customer_pharmacy",
+      "expected_revenue": 15000.0,
+      "probability": 20.0,
+      "stage_xmlid": "crm.stage_lead1",
+      "description": "Listung von Pflege- und Zeckenschutzprodukten im Apothekenregal."
+    },
+    {
+      "xml_id": "crm_lead_marketplace",
+      "name": "Marktplatz-Kampagne Q4",
+      "partner_xmlid": "partner_customer_marketplace",
+      "expected_revenue": 90000.0,
+      "probability": 75.0,
+      "stage_xmlid": "crm.stage_lead3",
+      "priority": "3",
+      "description": "Kampagnen- und Listingpaket fuer das vierte Quartal inklusive Fulfillment."
+    },
+    {
+      "xml_id": "crm_lead_ch_retail",
+      "name": "Schweiz-Distribution Tierbedarf Zuerich",
+      "partner_xmlid": "partner_customer_ch",
+      "expected_revenue": 55000.0,
+      "probability": 45.0,
+      "stage_xmlid": "crm.stage_lead2",
+      "priority": "2",
+      "description": "Aufbau eines Schweizer Fachhandelsnetzes mit zentraler Distribution."
+    },
+    {
+      "xml_id": "crm_lead_boutique",
+      "name": "Limitierte Kollektion Hundeboutique Alster",
+      "partner_xmlid": "partner_customer_boutique",
+      "expected_revenue": 18000.0,
+      "probability": 35.0,
+      "stage_xmlid": "crm.stage_lead1",
+      "priority": "1",
+      "description": "Exklusive Sonderkollektion fuer eine Hamburger Hundeboutique."
+    },
+    {
+      "xml_id": "crm_lead_wholesale",
+      "name": "Jahresrahmen Grosshandel Heimtier",
+      "partner_xmlid": "partner_customer_wholesale",
+      "expected_revenue": 150000.0,
+      "probability": 80.0,
+      "stage_xmlid": "crm.stage_lead3",
+      "priority": "3",
+      "description": "Jaehrlicher Abnahmerahmen ueber das komplette Sortiment zu Staffelpreisen."
+    }
+  ],
+  "purchase_orders": [
+    {
+      "xml_id": "po_textile",
+      "partner_xmlid": "partner_supplier_textile",
+      "state": "sent",
+      "date_order": "2026-06-15 09:00:00",
+      "partner_ref": "TWN-2026-0615",
+      "lines": [
+        {
+          "product_xmlid": "product_leash_multi",
+          "qty": 2000.0,
+          "price_unit": 9.8,
+          "description": "Multifunktionsleine Classic 2 m"
+        },
+        {
+          "product_xmlid": "product_leash_short",
+          "qty": 1500.0,
+          "price_unit": 7.1,
+          "description": "Stadtleine Kurz 60 cm"
+        },
+        {
+          "product_xmlid": "product_collar_comfort",
+          "qty": 2500.0,
+          "price_unit": 5.9,
+          "description": "Halsband Comfort S-M"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_webbing",
+      "partner_xmlid": "partner_supplier_webbing",
+      "state": "sent",
+      "date_order": "2026-07-02 10:30:00",
+      "partner_ref": "WBM-2026-0702",
+      "lines": [
+        {
+          "product_xmlid": "product_harness_h",
+          "qty": 1800.0,
+          "price_unit": 9.9,
+          "description": "H-Geschirr Komfort"
+        },
+        {
+          "product_xmlid": "product_harness_sport",
+          "qty": 1200.0,
+          "price_unit": 12.2,
+          "description": "Sport-Geschirr Matrix 2.0"
+        },
+        {
+          "product_xmlid": "product_collar_soft",
+          "qty": 2000.0,
+          "price_unit": 5.4,
+          "description": "Halsband Soft Rose"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_electronics",
+      "partner_xmlid": "partner_supplier_electronics",
+      "state": "draft",
+      "date_order": "2026-08-10 14:00:00",
+      "partner_ref": "SZ-2026-0810",
+      "lines": [
+        {
+          "product_xmlid": "product_led_light",
+          "qty": 3000.0,
+          "price_unit": 6.4,
+          "description": "Matrix 2.0 Ultra LED Sicherheitslicht"
+        },
+        {
+          "product_xmlid": "product_tick_sound",
+          "qty": 1500.0,
+          "price_unit": 14.9,
+          "description": "Soundshield Ultraschall-Zeckenschutz"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_plastic",
+      "partner_xmlid": "partner_supplier_plastic",
+      "state": "sent",
+      "date_order": "2026-06-28 11:15:00",
+      "partner_ref": "KTE-2026-0628",
+      "lines": [
+        {
+          "product_xmlid": "product_poop_bag",
+          "qty": 5000.0,
+          "price_unit": 2.1,
+          "description": "Kotbeutelspender mit 30 Beuteln"
+        },
+        {
+          "product_xmlid": "product_travel_bowl",
+          "qty": 2000.0,
+          "price_unit": 5.3,
+          "description": "Reise-Napf-Set"
+        },
+        {
+          "product_xmlid": "product_car_seat",
+          "qty": 600.0,
+          "price_unit": 18.2,
+          "description": "Autositzschutz Premium"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_metal",
+      "partner_xmlid": "partner_supplier_metal",
+      "state": "sent",
+      "date_order": "2026-05-22 09:45:00",
+      "partner_ref": "MWS-2026-0522",
+      "lines": [
+        {
+          "product_xmlid": "product_tag_id",
+          "qty": 4000.0,
+          "price_unit": 3.2,
+          "description": "GOTCHA! Smart ID Tag"
+        },
+        {
+          "product_xmlid": "product_claw",
+          "qty": 1200.0,
+          "price_unit": 4.5,
+          "description": "Krallenschere Edelstahl"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_toys",
+      "partner_xmlid": "partner_supplier_toys",
+      "state": "sent",
+      "date_order": "2026-07-18 15:20:00",
+      "partner_ref": "SPI-2026-0718",
+      "lines": [
+        {
+          "product_xmlid": "product_chew",
+          "qty": 2500.0,
+          "price_unit": 3.2,
+          "description": "Kauspielzeug Robust"
+        },
+        {
+          "product_xmlid": "product_plush",
+          "qty": 2000.0,
+          "price_unit": 3.6,
+          "description": "Plueschtier Kollektion"
+        },
+        {
+          "product_xmlid": "product_rope",
+          "qty": 1800.0,
+          "price_unit": 2.6,
+          "description": "Zerrseil mit zwei Knoten"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_grooming",
+      "partner_xmlid": "partner_supplier_grooming",
+      "state": "draft",
+      "date_order": "2026-08-05 13:10:00",
+      "partner_ref": "PFE-2026-0805",
+      "lines": [
+        {
+          "product_xmlid": "product_brush",
+          "qty": 1500.0,
+          "price_unit": 4.2,
+          "description": "Buerste Soft Grooming"
+        },
+        {
+          "product_xmlid": "product_shampoo",
+          "qty": 3000.0,
+          "price_unit": 3.1,
+          "description": "Pflegeshampoo Sensitiv 250 ml"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_tag",
+      "partner_xmlid": "partner_supplier_tag",
+      "state": "draft",
+      "date_order": "2026-08-22 08:30:00",
+      "partner_ref": "STT-2026-0822",
+      "lines": [
+        {
+          "product_xmlid": "product_collar_id",
+          "qty": 2200.0,
+          "price_unit": 6.9,
+          "description": "Smart ID Halsband mit QR-Code"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_packaging",
+      "partner_xmlid": "partner_supplier_packaging",
+      "state": "sent",
+      "date_order": "2026-05-30 10:00:00",
+      "partner_ref": "VPN-2026-0530",
+      "lines": [
+        {
+          "product_xmlid": "product_display",
+          "qty": 400.0,
+          "price_unit": 11.0,
+          "description": "Verkaufsdisplay 40x60 cm"
+        },
+        {
+          "product_xmlid": "product_bandana",
+          "qty": 2500.0,
+          "price_unit": 2.4,
+          "description": "Bandana Garden"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_textile_q4",
+      "partner_xmlid": "partner_supplier_textile",
+      "state": "draft",
+      "date_order": "2026-09-01 09:15:00",
+      "partner_ref": "TWN-2026-0901",
+      "lines": [
+        {
+          "product_xmlid": "product_raincoat",
+          "qty": 900.0,
+          "price_unit": 13.6,
+          "description": "Regenmantel City"
+        },
+        {
+          "product_xmlid": "product_bathrobe",
+          "qty": 800.0,
+          "price_unit": 14.1,
+          "description": "Hundebademantel Pluesch"
+        }
+      ]
+    }
+  ],
+  "stock_quants": [
+    {
+      "product_xmlid": "product_leash_multi",
+      "qty": 1450.0
+    },
+    {
+      "product_xmlid": "product_leash_short",
+      "qty": 980.0
+    },
+    {
+      "product_xmlid": "product_collar_comfort",
+      "qty": 2100.0
+    },
+    {
+      "product_xmlid": "product_harness_h",
+      "qty": 1200.0
+    },
+    {
+      "product_xmlid": "product_harness_sport",
+      "qty": 760.0
+    },
+    {
+      "product_xmlid": "product_led_light",
+      "qty": 2400.0
+    },
+    {
+      "product_xmlid": "product_tick_sound",
+      "qty": 640.0
+    },
+    {
+      "product_xmlid": "product_raincoat",
+      "qty": 380.0
+    },
+    {
+      "product_xmlid": "product_bathrobe",
+      "qty": 420.0
+    },
+    {
+      "product_xmlid": "product_chew",
+      "qty": 1900.0
+    },
+    {
+      "product_xmlid": "product_plush",
+      "qty": 1500.0
+    },
+    {
+      "product_xmlid": "product_cat_harness",
+      "qty": 540.0
+    },
+    {
+      "product_xmlid": "product_display",
+      "qty": 210.0
+    }
+  ],
+  "invoices": [
+    {
+      "xml_id": "inv_customer_zoo_1",
+      "move_type": "out_invoice",
+      "partner_xmlid": "partner_customer_zoo",
+      "invoice_date": "2026-07-10",
+      "ref": "RE-2026-0710",
+      "lines": [
+        {
+          "product_xmlid": "product_collar_comfort",
+          "qty": 800.0,
+          "price_unit": 15.9,
+          "description": "Halsband Comfort S-M"
+        },
+        {
+          "product_xmlid": "product_harness_h",
+          "qty": 500.0,
+          "price_unit": 24.9,
+          "description": "H-Geschirr Komfort"
+        },
+        {
+          "product_xmlid": "product_leash_multi",
+          "qty": 600.0,
+          "price_unit": 24.9,
+          "description": "Multifunktionsleine Classic 2 m"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_customer_garden_1",
+      "move_type": "out_invoice",
+      "partner_xmlid": "partner_customer_garden",
+      "invoice_date": "2026-07-22",
+      "ref": "RE-2026-0722",
+      "lines": [
+        {
+          "product_xmlid": "product_bandana",
+          "qty": 400.0,
+          "price_unit": 7.9,
+          "description": "Bandana Garden"
+        },
+        {
+          "product_xmlid": "product_poop_bag",
+          "qty": 300.0,
+          "price_unit": 6.9,
+          "description": "Kotbeutelspender mit 30 Beuteln"
+        },
+        {
+          "product_xmlid": "product_travel_bowl",
+          "qty": 200.0,
+          "price_unit": 14.9,
+          "description": "Reise-Napf-Set"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_customer_nl_1",
+      "move_type": "out_invoice",
+      "partner_xmlid": "partner_customer_nl",
+      "invoice_date": "2026-08-05",
+      "ref": "RE-2026-0805",
+      "lines": [
+        {
+          "product_xmlid": "product_harness_sport",
+          "qty": 300.0,
+          "price_unit": 29.9,
+          "description": "Sport-Geschirr Matrix 2.0"
+        },
+        {
+          "product_xmlid": "product_led_light",
+          "qty": 500.0,
+          "price_unit": 16.9,
+          "description": "Matrix 2.0 Ultra LED Sicherheitslicht"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_customer_online_1",
+      "move_type": "out_invoice",
+      "partner_xmlid": "partner_customer_online",
+      "invoice_date": "2026-08-18",
+      "ref": "RE-2026-0818",
+      "lines": [
+        {
+          "product_xmlid": "product_leash_multi",
+          "qty": 1000.0,
+          "price_unit": 24.9,
+          "description": "Multifunktionsleine Classic 2 m"
+        },
+        {
+          "product_xmlid": "product_collar_id",
+          "qty": 700.0,
+          "price_unit": 17.9,
+          "description": "Smart ID Halsband mit QR-Code"
+        },
+        {
+          "product_xmlid": "product_svc_category",
+          "qty": 1.0,
+          "price_unit": 1200.0,
+          "description": "Katalog- und Category-Management (August)"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_customer_at_1",
+      "move_type": "out_invoice",
+      "partner_xmlid": "partner_customer_at",
+      "invoice_date": "2026-09-02",
+      "ref": "RE-2026-0902",
+      "lines": [
+        {
+          "product_xmlid": "product_cat_collar",
+          "qty": 600.0,
+          "price_unit": 12.9,
+          "description": "Katzenhalsband mit Glocke"
+        },
+        {
+          "product_xmlid": "product_cat_harness",
+          "qty": 400.0,
+          "price_unit": 29.9,
+          "description": "Katzengeschirr Set"
+        },
+        {
+          "product_xmlid": "product_tag_id",
+          "qty": 800.0,
+          "price_unit": 9.9,
+          "description": "GOTCHA! Smart ID Tag"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_customer_department_1",
+      "move_type": "out_invoice",
+      "partner_xmlid": "partner_customer_department",
+      "invoice_date": "2026-09-12",
+      "ref": "RE-2026-0912",
+      "lines": [
+        {
+          "product_xmlid": "product_display",
+          "qty": 40.0,
+          "price_unit": 29.9,
+          "description": "Verkaufsdisplay 40x60 cm"
+        },
+        {
+          "product_xmlid": "product_svc_display",
+          "qty": 2.0,
+          "price_unit": 450.0,
+          "description": "Handelsdisplay-Montage (Pauschale)"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_customer_marketplace_1",
+      "move_type": "out_invoice",
+      "partner_xmlid": "partner_customer_marketplace",
+      "invoice_date": "2026-06-25",
+      "ref": "RE-2026-0625",
+      "lines": [
+        {
+          "product_xmlid": "product_plush",
+          "qty": 1200.0,
+          "price_unit": 9.9,
+          "description": "Plueschtier Kollektion"
+        },
+        {
+          "product_xmlid": "product_chew",
+          "qty": 900.0,
+          "price_unit": 8.9,
+          "description": "Kauspielzeug Robust"
+        },
+        {
+          "product_xmlid": "product_rope",
+          "qty": 700.0,
+          "price_unit": 7.9,
+          "description": "Zerrseil mit zwei Knoten"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_customer_boutique_1",
+      "move_type": "out_invoice",
+      "partner_xmlid": "partner_customer_boutique",
+      "invoice_date": "2026-05-28",
+      "ref": "RE-2026-0528",
+      "lines": [
+        {
+          "product_xmlid": "product_collar_soft",
+          "qty": 150.0,
+          "price_unit": 14.9,
+          "description": "Halsband Soft Rose"
+        },
+        {
+          "product_xmlid": "product_bandana",
+          "qty": 120.0,
+          "price_unit": 7.9,
+          "description": "Bandana Garden"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_vendor_textile_1",
+      "move_type": "in_invoice",
+      "partner_xmlid": "partner_supplier_textile",
+      "invoice_date": "2026-06-20",
+      "ref": "TWN-RE-2026-0615",
+      "lines": [
+        {
+          "product_xmlid": "product_leash_multi",
+          "qty": 2000.0,
+          "price_unit": 9.8,
+          "description": "Multifunktionsleine Classic 2 m"
+        },
+        {
+          "product_xmlid": "product_leash_short",
+          "qty": 1500.0,
+          "price_unit": 7.1,
+          "description": "Stadtleine Kurz 60 cm"
+        },
+        {
+          "product_xmlid": "product_collar_comfort",
+          "qty": 2500.0,
+          "price_unit": 5.9,
+          "description": "Halsband Comfort S-M"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_vendor_electronics_1",
+      "move_type": "in_invoice",
+      "partner_xmlid": "partner_supplier_electronics",
+      "invoice_date": "2026-08-15",
+      "ref": "SZ-RE-2026-0810",
+      "lines": [
+        {
+          "product_xmlid": "product_led_light",
+          "qty": 3000.0,
+          "price_unit": 6.4,
+          "description": "Matrix 2.0 Ultra LED Sicherheitslicht"
+        },
+        {
+          "product_xmlid": "product_tick_sound",
+          "qty": 1500.0,
+          "price_unit": 14.9,
+          "description": "Soundshield Ultraschall-Zeckenschutz"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_vendor_packaging_1",
+      "move_type": "in_invoice",
+      "partner_xmlid": "partner_supplier_packaging",
+      "invoice_date": "2026-07-31",
+      "ref": "VPN-RE-2026-0530",
+      "lines": [
+        {
+          "product_xmlid": "product_display",
+          "qty": 400.0,
+          "price_unit": 11.0,
+          "description": "Verkaufsdisplay 40x60 cm"
+        },
+        {
+          "product_xmlid": "product_bandana",
+          "qty": 2500.0,
+          "price_unit": 2.4,
+          "description": "Bandana Garden"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_vendor_plastic_1",
+      "move_type": "in_invoice",
+      "partner_xmlid": "partner_supplier_plastic",
+      "invoice_date": "2026-06-30",
+      "ref": "KTE-RE-2026-0628",
+      "lines": [
+        {
+          "product_xmlid": "product_poop_bag",
+          "qty": 5000.0,
+          "price_unit": 2.1,
+          "description": "Kotbeutelspender mit 30 Beuteln"
+        },
+        {
+          "product_xmlid": "product_travel_bowl",
+          "qty": 2000.0,
+          "price_unit": 5.3,
+          "description": "Reise-Napf-Set"
+        },
+        {
+          "product_xmlid": "product_car_seat",
+          "qty": 600.0,
+          "price_unit": 18.2,
+          "description": "Autositzschutz Premium"
+        }
+      ]
+    }
+  ],
+  "helpdesk_tickets": [
+    {
+      "xml_id": "ticket_return_size",
+      "name": "Ruecksendung Halsband - falsche Groesse",
+      "partner_xmlid": "partner_private_schmidt",
+      "stage_xmlid": "helpdesk.stage_in_progress",
+      "priority": "2",
+      "description": "Kundin benoetigt das Halsband Comfort in Groesse S statt M."
+    },
+    {
+      "xml_id": "ticket_led_defect",
+      "name": "Reklamation LED-Sicherheitslicht laedt nicht",
+      "partner_xmlid": "partner_private_weber",
+      "stage_xmlid": "helpdesk.stage_new",
+      "priority": "2",
+      "description": "Das Ultra-LED laesst sich nicht mehr aufladen; Ersatz wurde angeboten."
+    },
+    {
+      "xml_id": "ticket_delivery_delay",
+      "name": "Lieferverzoegerung Harness-Lieferung",
+      "partner_xmlid": "partner_customer_zoo",
+      "stage_xmlid": "helpdesk.stage_new",
+      "priority": "3",
+      "description": "Handelspartner fragt nach dem Liefertermin der offenen H-Geschirre."
+    },
+    {
+      "xml_id": "ticket_gotcha_app",
+      "name": "GOTCHA! App: QR-Code nicht erkannt",
+      "partner_xmlid": "partner_private_fischer",
+      "stage_xmlid": "helpdesk.stage_in_progress",
+      "priority": "2",
+      "description": "Der QR-Code des Smart ID Tags wird in der App nicht erkannt; Technik prueft."
+    },
+    {
+      "xml_id": "ticket_shampoo_reaction",
+      "name": "Hautreaktion nach Pflegeshampoo",
+      "partner_xmlid": "partner_private_keller",
+      "stage_xmlid": "helpdesk.stage_new",
+      "priority": "3",
+      "description": "Kunde meldet Roetung nach der Anwendung; Produktcharge wird geprueft."
+    },
+    {
+      "xml_id": "ticket_wrong_item",
+      "name": "Falscher Artikel geliefert (Tauleine statt Kurzleine)",
+      "partner_xmlid": "partner_customer_petstore",
+      "stage_xmlid": "helpdesk.stage_solved",
+      "priority": "1",
+      "description": "Falsch kommissionierte Leine wurde ersetzt und gutgeschrieben."
+    },
+    {
+      "xml_id": "ticket_display_damage",
+      "name": "Verkaufsdisplay beschaedigt angekommen",
+      "partner_xmlid": "partner_customer_department",
+      "stage_xmlid": "helpdesk.stage_in_progress",
+      "priority": "2",
+      "description": "Ein Display wurde beim Transport beschaedigt; Ersatz ist unterwegs."
+    },
+    {
+      "xml_id": "ticket_tick_device",
+      "name": "Soundshield Geraet ohne Funktion",
+      "partner_xmlid": "partner_private_hoffmann",
+      "stage_xmlid": "helpdesk.stage_new",
+      "priority": "2",
+      "description": "Ultraschallgeraet gibt kein Signal ab; Garantiefall wird geprueft."
+    },
+    {
+      "xml_id": "ticket_invoice_question",
+      "name": "Frage zur Sammelrechnung",
+      "partner_xmlid": "partner_customer_wholesale",
+      "stage_xmlid": "helpdesk.stage_solved",
+      "priority": "1",
+      "description": "Klaerung der Positionen und Zahlungskonditionen der Sammelrechnung."
+    },
+    {
+      "xml_id": "ticket_cat_harness",
+      "name": "Katzengeschirr Ausbruch - Beratung",
+      "partner_xmlid": "partner_private_brandt",
+      "stage_xmlid": "helpdesk.stage_new",
+      "priority": "1",
+      "description": "Kunde bittet um Beratung zur korrekten Einstellung des Katzengeschirrs."
+    },
+    {
+      "xml_id": "ticket_wholesale_pricing",
+      "name": "B2B-Konditionen fuer Nachbestellung",
+      "partner_xmlid": "partner_customer_garden",
+      "stage_xmlid": "helpdesk.stage_in_progress",
+      "priority": "2",
+      "description": "Anfrage zu Staffelpreisen und Lieferzeit fuer eine Nachbestellung."
+    },
+    {
+      "xml_id": "ticket_return_raincoat",
+      "name": "Ruecksendung Regenmantel - Groesse",
+      "partner_xmlid": "partner_private_schmidt",
+      "stage_xmlid": "helpdesk.stage_solved",
+      "priority": "1",
+      "description": "Regenmantel wurde gegen die naechstgroessere Groesse getauscht."
+    }
+  ],
+  "quotation": {
+    "xml_id": "quotation_zoo_q4",
+    "partner_xmlid": "partner_customer_zoo",
+    "state": "draft",
+    "lines": [
+      {
+        "product_xmlid": "product_harness_h",
+        "qty": 400.0,
+        "description": "H-Geschirr Komfort"
+      },
+      {
+        "product_xmlid": "product_leash_multi",
+        "qty": 500.0,
+        "description": "Multifunktionsleine Classic 2 m"
+      },
+      {
+        "product_xmlid": "product_led_light",
+        "qty": 300.0,
+        "description": "Matrix 2.0 Ultra LED Sicherheitslicht"
+      },
+      {
+        "product_xmlid": "product_svc_category",
+        "qty": 1.0,
+        "description": "Katalog- und Category-Management (Q4)"
+      }
+    ]
+  },
+  "quotation_templates": [
+    {
+      "xml_id": "quote_template_retail_starter",
+      "name": "Fachhandel-Starterpaket",
+      "number_of_days": 30,
+      "note": "Alle Preise zzgl. gesetzlicher MwSt. Lieferzeit 10-15 Werktage. Inklusive Verkaufsdisplay und POS-Material.",
+      "lines": [
+        {
+          "product_xmlid": "product_collar_comfort",
+          "qty": 12.0,
+          "description": "Halsband Comfort S-M"
+        },
+        {
+          "product_xmlid": "product_leash_multi",
+          "qty": 12.0,
+          "description": "Multifunktionsleine Classic 2 m"
+        },
+        {
+          "product_xmlid": "product_harness_h",
+          "qty": 12.0,
+          "description": "H-Geschirr Komfort"
+        },
+        {
+          "product_xmlid": "product_display",
+          "qty": 1.0,
+          "description": "Verkaufsdisplay 40x60 cm"
+        }
+      ]
+    },
+    {
+      "xml_id": "quote_template_seasonal",
+      "name": "Saisonkollektion Fruehjahr/Sommer",
+      "number_of_days": 45,
+      "note": "Saisonartikel mit Umtauschrecht nicht verkaufter Ware nach Saisonende. Staffelpreise ab 500 Stueck.",
+      "lines": [
+        {
+          "product_xmlid": "product_raincoat",
+          "qty": 6.0,
+          "description": "Regenmantel City"
+        },
+        {
+          "product_xmlid": "product_bandana",
+          "qty": 24.0,
+          "description": "Bandana Garden"
+        },
+        {
+          "product_xmlid": "product_poop_bag",
+          "qty": 12.0,
+          "description": "Kotbeutelspender mit 30 Beuteln"
+        },
+        {
+          "product_xmlid": "product_travel_bowl",
+          "qty": 6.0,
+          "description": "Reise-Napf-Set"
+        }
+      ]
+    },
+    {
+      "xml_id": "quote_template_display",
+      "name": "Verkaufsdisplay-Paket 40x60",
+      "number_of_days": 30,
+      "note": "Display inklusive Bestueckung und Aufbau beim Handelspartner. Bestueckung frei waehlbar.",
+      "lines": [
+        {
+          "product_xmlid": "product_display",
+          "qty": 1.0,
+          "description": "Verkaufsdisplay 40x60 cm"
+        },
+        {
+          "product_xmlid": "product_svc_display",
+          "qty": 1.0,
+          "description": "Handelsdisplay-Montage (Pauschale)"
+        },
+        {
+          "product_xmlid": "product_tag_id",
+          "qty": 24.0,
+          "description": "GOTCHA! Smart ID Tag"
+        },
+        {
+          "product_xmlid": "product_collar_id",
+          "qty": 12.0,
+          "description": "Smart ID Halsband mit QR-Code"
+        }
+      ]
+    },
+    {
+      "xml_id": "quote_template_cat",
+      "name": "Katzen-Sortiment",
+      "number_of_days": 30,
+      "note": "Katzenzubehoer mit Sicherheitsverschluss und Sollbruchstelle. Mindestbestellmenge 24 Stueck je Artikel.",
+      "lines": [
+        {
+          "product_xmlid": "product_cat_collar",
+          "qty": 24.0,
+          "description": "Katzenhalsband mit Glocke"
+        },
+        {
+          "product_xmlid": "product_cat_harness",
+          "qty": 12.0,
+          "description": "Katzengeschirr Set"
+        }
+      ]
+    },
+    {
+      "xml_id": "quote_template_safety",
+      "name": "Sicherheits- und Pflegepaket",
+      "number_of_days": 30,
+      "note": "Kombipaket aus Sicherheits- und Pflegeprodukten fuer den Fachhandel. Inklusive Schulungsunterlagen.",
+      "lines": [
+        {
+          "product_xmlid": "product_led_light",
+          "qty": 12.0,
+          "description": "Matrix 2.0 Ultra LED Sicherheitslicht"
+        },
+        {
+          "product_xmlid": "product_tick_sound",
+          "qty": 6.0,
+          "description": "Soundshield Ultraschall-Zeckenschutz"
+        },
+        {
+          "product_xmlid": "product_brush",
+          "qty": 12.0,
+          "description": "Buerste Soft Grooming"
+        },
+        {
+          "product_xmlid": "product_shampoo",
+          "qty": 12.0,
+          "description": "Pflegeshampoo Sensitiv 250 ml"
+        }
+      ]
+    }
+  ],
+  "example_orders": [
+    {
+      "xml_id": "so_zoo_1",
+      "partner_xmlid": "partner_customer_zoo",
+      "state": "sent",
+      "date_order": "2026-09-05",
+      "lines": [
+        {
+          "product_xmlid": "product_collar_comfort",
+          "qty": 600.0,
+          "description": "Halsband Comfort S-M"
+        },
+        {
+          "product_xmlid": "product_harness_h",
+          "qty": 400.0,
+          "description": "H-Geschirr Komfort"
+        },
+        {
+          "product_xmlid": "product_leash_multi",
+          "qty": 500.0,
+          "description": "Multifunktionsleine Classic 2 m"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_garden_1",
+      "partner_xmlid": "partner_customer_garden",
+      "state": "sent",
+      "date_order": "2026-08-20",
+      "lines": [
+        {
+          "product_xmlid": "product_bandana",
+          "qty": 300.0,
+          "description": "Bandana Garden"
+        },
+        {
+          "product_xmlid": "product_poop_bag",
+          "qty": 250.0,
+          "description": "Kotbeutelspender mit 30 Beuteln"
+        },
+        {
+          "product_xmlid": "product_travel_bowl",
+          "qty": 150.0,
+          "description": "Reise-Napf-Set"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_online_1",
+      "partner_xmlid": "partner_customer_online",
+      "state": "sent",
+      "date_order": "2026-09-01",
+      "lines": [
+        {
+          "product_xmlid": "product_leash_multi",
+          "qty": 800.0,
+          "description": "Multifunktionsleine Classic 2 m"
+        },
+        {
+          "product_xmlid": "product_collar_id",
+          "qty": 500.0,
+          "description": "Smart ID Halsband mit QR-Code"
+        },
+        {
+          "product_xmlid": "product_tag_id",
+          "qty": 600.0,
+          "description": "GOTCHA! Smart ID Tag"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_at_1",
+      "partner_xmlid": "partner_customer_at",
+      "state": "sent",
+      "date_order": "2026-08-28",
+      "lines": [
+        {
+          "product_xmlid": "product_cat_collar",
+          "qty": 500.0,
+          "description": "Katzenhalsband mit Glocke"
+        },
+        {
+          "product_xmlid": "product_cat_harness",
+          "qty": 300.0,
+          "description": "Katzengeschirr Set"
+        },
+        {
+          "product_xmlid": "product_tag_id",
+          "qty": 700.0,
+          "description": "GOTCHA! Smart ID Tag"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_nl_1",
+      "partner_xmlid": "partner_customer_nl",
+      "state": "sent",
+      "date_order": "2026-07-30",
+      "lines": [
+        {
+          "product_xmlid": "product_harness_sport",
+          "qty": 250.0,
+          "description": "Sport-Geschirr Matrix 2.0"
+        },
+        {
+          "product_xmlid": "product_led_light",
+          "qty": 400.0,
+          "description": "Matrix 2.0 Ultra LED Sicherheitslicht"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_fr_1",
+      "partner_xmlid": "partner_customer_fr",
+      "state": "sent",
+      "date_order": "2026-07-15",
+      "lines": [
+        {
+          "product_xmlid": "product_collar_soft",
+          "qty": 300.0,
+          "description": "Halsband Soft Rose"
+        },
+        {
+          "product_xmlid": "product_bandana",
+          "qty": 250.0,
+          "description": "Bandana Garden"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_department_1",
+      "partner_xmlid": "partner_customer_department",
+      "state": "sent",
+      "date_order": "2026-09-10",
+      "lines": [
+        {
+          "product_xmlid": "product_display",
+          "qty": 30.0,
+          "description": "Verkaufsdisplay 40x60 cm"
+        },
+        {
+          "product_xmlid": "product_svc_display",
+          "qty": 1.0,
+          "description": "Handelsdisplay-Montage (Pauschale)"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_wholesale_1",
+      "partner_xmlid": "partner_customer_wholesale",
+      "state": "sent",
+      "date_order": "2026-09-14",
+      "lines": [
+        {
+          "product_xmlid": "product_chew",
+          "qty": 800.0,
+          "description": "Kauspielzeug Robust"
+        },
+        {
+          "product_xmlid": "product_plush",
+          "qty": 700.0,
+          "description": "Plueschtier Kollektion"
+        },
+        {
+          "product_xmlid": "product_rope",
+          "qty": 600.0,
+          "description": "Zerrseil mit zwei Knoten"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_marketplace_1",
+      "partner_xmlid": "partner_customer_marketplace",
+      "state": "sent",
+      "date_order": "2026-06-18",
+      "lines": [
+        {
+          "product_xmlid": "product_plush",
+          "qty": 1000.0,
+          "description": "Plueschtier Kollektion"
+        },
+        {
+          "product_xmlid": "product_chew",
+          "qty": 800.0,
+          "description": "Kauspielzeug Robust"
+        },
+        {
+          "product_xmlid": "product_rope",
+          "qty": 600.0,
+          "description": "Zerrseil mit zwei Knoten"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_boutique_1",
+      "partner_xmlid": "partner_customer_boutique",
+      "state": "sent",
+      "date_order": "2026-06-05",
+      "lines": [
+        {
+          "product_xmlid": "product_collar_soft",
+          "qty": 120.0,
+          "description": "Halsband Soft Rose"
+        },
+        {
+          "product_xmlid": "product_bandana",
+          "qty": 100.0,
+          "description": "Bandana Garden"
+        },
+        {
+          "product_xmlid": "product_tag_id",
+          "qty": 150.0,
+          "description": "GOTCHA! Smart ID Tag"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_pharmacy_1",
+      "partner_xmlid": "partner_customer_pharmacy",
+      "state": "sent",
+      "date_order": "2026-08-08",
+      "lines": [
+        {
+          "product_xmlid": "product_brush",
+          "qty": 150.0,
+          "description": "Buerste Soft Grooming"
+        },
+        {
+          "product_xmlid": "product_shampoo",
+          "qty": 200.0,
+          "description": "Pflegeshampoo Sensitiv 250 ml"
+        },
+        {
+          "product_xmlid": "product_claw",
+          "qty": 100.0,
+          "description": "Krallenschere Edelstahl"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_vet_1",
+      "partner_xmlid": "partner_customer_vet",
+      "state": "sent",
+      "date_order": "2026-07-08",
+      "lines": [
+        {
+          "product_xmlid": "product_tick_sound",
+          "qty": 60.0,
+          "description": "Soundshield Ultraschall-Zeckenschutz"
+        },
+        {
+          "product_xmlid": "product_brush",
+          "qty": 40.0,
+          "description": "Buerste Soft Grooming"
+        },
+        {
+          "product_xmlid": "product_display",
+          "qty": 2.0,
+          "description": "Verkaufsdisplay 40x60 cm"
+        }
+      ]
+    }
+  ],
+  "project_task_stages": [
+    {
+      "xml_id": "task_stage_backlog",
+      "name": "Backlog",
+      "sequence": 1
+    },
+    {
+      "xml_id": "task_stage_design",
+      "name": "Design",
+      "sequence": 10
+    },
+    {
+      "xml_id": "task_stage_sample",
+      "name": "Muster",
+      "sequence": 20
+    },
+    {
+      "xml_id": "task_stage_review",
+      "name": "Freigabe",
+      "sequence": 30
+    },
+    {
+      "xml_id": "task_stage_done",
+      "name": "Erledigt",
+      "sequence": 40,
+      "fold": true
+    }
+  ],
+  "projects": [
+    {
+      "xml_id": "project_collection_ss27",
+      "name": "Kollektion Fruehjahr/Sommer 2027",
+      "stage_xmlid": "project.project_project_stage_1",
+      "date_start": "2026-08-01",
+      "date_end": "2027-02-28",
+      "privacy_visibility": "employees",
+      "description": "Entwicklung, Musterfreigabe und Markteinfuehrung der Kollektion F/S 2027 inklusive Katalogupdate."
+    },
+    {
+      "xml_id": "project_interzoo",
+      "name": "Interzoo Messe 2027",
+      "stage_xmlid": "project.project_project_stage_1",
+      "date_start": "2026-09-01",
+      "date_end": "2027-05-15",
+      "privacy_visibility": "employees",
+      "description": "Planung, Standbau und Nachbereitung der Interzoo-Messe inklusive Lead-Qualifizierung."
+    },
+    {
+      "xml_id": "project_retail_rollout",
+      "name": "Retail-Rollout DACH",
+      "partner_xmlid": "partner_customer_department",
+      "stage_xmlid": "project.project_project_stage_1",
+      "date_start": "2026-07-01",
+      "date_end": "2026-12-31",
+      "privacy_visibility": "portal",
+      "description": "Ausrollen neuer Verkaufsdisplays und Listungen bei Fachhandelspartnern in DACH."
+    }
+  ],
+  "project_tasks": [
+    {
+      "xml_id": "task_coll_trend",
+      "name": "Trend- und Farbkonzept F/S 2027",
+      "project_xmlid": "project_collection_ss27",
+      "stage_xmlid": "task_stage_design",
+      "priority": "2",
+      "allocated_hours": 40.0,
+      "date_deadline": "2026-09-15 17:00:00"
+    },
+    {
+      "xml_id": "task_coll_design",
+      "name": "Designentwuerfe Leinen und Halsbaender",
+      "project_xmlid": "project_collection_ss27",
+      "stage_xmlid": "task_stage_design",
+      "priority": "2",
+      "allocated_hours": 60.0,
+      "date_deadline": "2026-10-01 17:00:00"
+    },
+    {
+      "xml_id": "task_coll_sample",
+      "name": "Musteranfertigung Textilwerk Nord",
+      "project_xmlid": "project_collection_ss27",
+      "stage_xmlid": "task_stage_sample",
+      "priority": "1",
+      "allocated_hours": 24.0,
+      "date_deadline": "2026-11-15 17:00:00"
+    },
+    {
+      "xml_id": "task_coll_review",
+      "name": "Musterfreigabe und Qualitaetscheck",
+      "project_xmlid": "project_collection_ss27",
+      "stage_xmlid": "task_stage_review",
+      "priority": "3",
+      "allocated_hours": 16.0,
+      "date_deadline": "2026-12-05 17:00:00"
+    },
+    {
+      "xml_id": "task_coll_launch",
+      "name": "Markteinfuehrung und Katalogupdate",
+      "project_xmlid": "project_collection_ss27",
+      "stage_xmlid": "task_stage_backlog",
+      "priority": "2",
+      "allocated_hours": 32.0,
+      "date_deadline": "2027-01-20 17:00:00"
+    },
+    {
+      "xml_id": "task_iz_booth",
+      "name": "Standkonzept und Budget",
+      "project_xmlid": "project_interzoo",
+      "stage_xmlid": "task_stage_design",
+      "priority": "2",
+      "allocated_hours": 24.0,
+      "date_deadline": "2026-11-30 17:00:00"
+    },
+    {
+      "xml_id": "task_iz_partner",
+      "name": "Partnermeetings und Einladungen",
+      "project_xmlid": "project_interzoo",
+      "stage_xmlid": "task_stage_backlog",
+      "priority": "1",
+      "allocated_hours": 20.0,
+      "date_deadline": "2027-02-15 17:00:00"
+    },
+    {
+      "xml_id": "task_iz_material",
+      "name": "POS-Material und Giveaways",
+      "project_xmlid": "project_interzoo",
+      "stage_xmlid": "task_stage_sample",
+      "priority": "1",
+      "allocated_hours": 16.0,
+      "date_deadline": "2027-03-15 17:00:00"
+    },
+    {
+      "xml_id": "task_iz_followup",
+      "name": "Lead-Nachverfolgung nach der Messe",
+      "project_xmlid": "project_interzoo",
+      "stage_xmlid": "task_stage_backlog",
+      "priority": "2",
+      "allocated_hours": 12.0,
+      "date_deadline": "2027-05-31 17:00:00"
+    },
+    {
+      "xml_id": "task_roll_display",
+      "name": "Displays produzieren und liefern",
+      "project_xmlid": "project_retail_rollout",
+      "stage_xmlid": "task_stage_sample",
+      "priority": "2",
+      "allocated_hours": 20.0,
+      "date_deadline": "2026-09-30 17:00:00"
+    },
+    {
+      "xml_id": "task_roll_install",
+      "name": "Montage bei Fachhandelspartnern",
+      "project_xmlid": "project_retail_rollout",
+      "stage_xmlid": "task_stage_backlog",
+      "priority": "2",
+      "allocated_hours": 40.0,
+      "date_deadline": "2026-11-15 17:00:00"
+    },
+    {
+      "xml_id": "task_roll_training",
+      "name": "Schulung Verkaufspersonal",
+      "project_xmlid": "project_retail_rollout",
+      "stage_xmlid": "task_stage_review",
+      "priority": "1",
+      "allocated_hours": 24.0,
+      "date_deadline": "2026-10-20 17:00:00"
+    },
+    {
+      "xml_id": "task_roll_listing",
+      "name": "Katalogdaten an Handelspartner",
+      "project_xmlid": "project_retail_rollout",
+      "stage_xmlid": "task_stage_done",
+      "priority": "1",
+      "allocated_hours": 16.0
+    },
+    {
+      "xml_id": "task_roll_report",
+      "name": "Rollout-Report und Auswertung",
+      "project_xmlid": "project_retail_rollout",
+      "stage_xmlid": "task_stage_backlog",
+      "priority": "1",
+      "allocated_hours": 8.0,
+      "date_deadline": "2026-12-20 17:00:00"
+    }
+  ]
+}
