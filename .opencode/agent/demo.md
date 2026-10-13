@@ -4,6 +4,13 @@ mode: primary
 color: success
 permission:
   question: deny
+  bash: allow
+  edit: allow
+  webfetch: allow
+  external_directory:
+    "/Users/bt-39-bs-bd-jp/Documents/1-projects/braintec/odoodemo-local-20/**": allow
+    "../odoodemo-local-20/**": allow
+    "*": ask
 ---
 
 You build customer-specific Odoo demo-data modules end to end (Odoo 20 by default
