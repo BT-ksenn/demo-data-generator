@@ -21,6 +21,8 @@ from engine.model import (
     ManufacturingOrder,
     Module,
     Partner,
+    PlanningRole,
+    PlanningSlot,
     Product,
     Project,
     ProjectTask,
@@ -40,7 +42,13 @@ from engine.model import (
     SubscriptionLine,
 )
 from engine.docker.test_install import analyze_log
-from engine.manifest import DEMO_USER_LOGIN, DEMO_USER_PASSWORD, depends, render_hooks_py
+from engine.manifest import (
+    DEMO_USER_LOGIN,
+    DEMO_USER_PASSWORD,
+    data_files,
+    depends,
+    render_hooks_py,
+)
 from engine.schema import build_schema
 from engine.spec_loader import load_spec
 from engine.validate import _is_valid_at_uid, _is_valid_de_vat, validate_module
@@ -699,6 +707,38 @@ class AdjacentProcessTests(unittest.TestCase):
     def test_rejects_invalid_maintenance_type(self):
         with self.assertRaises(SpecError):
             MaintenanceRequest(xml_id="m1", name="X", maintenance_type="breakdown")
+
+    def test_rejects_unknown_maintenance_stage(self):
+        # The maintenance module ships stage_0/1/3/4 - there is no stage_2.
+        with self.assertRaises(SpecError):
+            MaintenanceRequest(xml_id="m1", name="X", stage_xmlid="maintenance.stage_2")
+
+    def test_planning_bundle_builds_files_and_depends(self):
+        spec = self._spec(
+            planning_roles=[PlanningRole(xml_id="role1", name="Techniker:in")],
+            planning_slots=[PlanningSlot(
+                xml_id="fs1", name="Begehung", partner_xmlid="p1", role_xmlid="role1",
+                start_datetime="2026-09-14 08:00:00", end_datetime="2026-09-14 12:00:00",
+                state="2_published", priority="1")],
+        )
+        self.assertTrue(spec.needs_planning)
+        self.assertIn("planning_field_service", depends(spec))
+        files = data_files(spec)
+        self.assertIn("data/planning_role_data.xml", files)
+        self.assertIn("data/planning_slot_data.xml", files)
+        # Roles must load before the slots that reference them.
+        self.assertLess(files.index("data/planning_role_data.xml"),
+                        files.index("data/planning_slot_data.xml"))
+
+    def test_rejects_invalid_planning_slot_state(self):
+        with self.assertRaises(SpecError):
+            PlanningSlot(xml_id="fs1", name="X", state="done")
+
+    def test_rejects_planning_slot_end_before_start(self):
+        with self.assertRaises(SpecError):
+            PlanningSlot(xml_id="fs1", name="X",
+                         start_datetime="2026-09-14 08:00:00",
+                         end_datetime="2026-09-14 07:00:00")
 
     def test_rejects_move_line_measure_on(self):
         # measure_on='move_line' is forbidden with an mrp operation type.

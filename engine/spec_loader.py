@@ -25,6 +25,8 @@ from .model import (
     ManufacturingOrder,
     Module,
     Partner,
+    PlanningRole,
+    PlanningSlot,
     Product,
     Project,
     ProjectTask,
@@ -526,6 +528,35 @@ def load_subscription(d: dict[str, Any]) -> Subscription:
     )
 
 
+def load_planning_role(d: dict[str, Any]) -> PlanningRole:
+    xml_id = _get(d, "xml_id", "planning_role", required=True)
+    where = f"planning_role {xml_id}"
+    _reject_unknown(d, PlanningRole, where)
+    return PlanningRole(
+        xml_id=xml_id,
+        name=_get(d, "name", where, required=True),
+        color=_get(d, "color", where, default=None),
+        sequence=_get(d, "sequence", where, default=None),
+    )
+
+
+def load_planning_slot(d: dict[str, Any]) -> PlanningSlot:
+    xml_id = _get(d, "xml_id", "planning_slot", required=True)
+    where = f"planning_slot {xml_id}"
+    _reject_unknown(d, PlanningSlot, where)
+    return PlanningSlot(
+        xml_id=xml_id,
+        name=_get(d, "name", where, required=True),
+        partner_xmlid=_get(d, "partner_xmlid", where, default=None),
+        role_xmlid=_get(d, "role_xmlid", where, default=None),
+        start_datetime=_get(d, "start_datetime", where, default=None),
+        end_datetime=_get(d, "end_datetime", where, default=None),
+        allocated_hours=_get(d, "allocated_hours", where, default=None),
+        state=_get(d, "state", where, default="1_draft"),
+        priority=_get(d, "priority", where, default=None),
+    )
+
+
 def load_spec(d: dict[str, Any]) -> CustomerSpec:
     _reject_unknown(d, CustomerSpec, "spec")
     if "module" not in d:
@@ -565,6 +596,8 @@ def load_spec(d: dict[str, Any]) -> CustomerSpec:
         quality_checks=[load_quality_check(x) for x in rows("quality_checks")],
         quality_alerts=[load_quality_alert(x) for x in rows("quality_alerts")],
         subscriptions=[load_subscription(x) for x in rows("subscriptions")],
+        planning_roles=[load_planning_role(x) for x in rows("planning_roles")],
+        planning_slots=[load_planning_slot(x) for x in rows("planning_slots")],
         language=_get(d, "language", "spec", default=None),
         crm_team_name=_get(d, "crm_team_name", "spec", default=None),
         helpdesk_team_name=_get(d, "helpdesk_team_name", "spec", default=None),

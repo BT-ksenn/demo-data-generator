@@ -904,6 +904,65 @@
         "partner_xmlid"
       ]
     },
+    "PlanningRole": {
+      "type": "object",
+      "properties": {
+        "xml_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "color": {
+          "type": "integer"
+        },
+        "sequence": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "xml_id",
+        "name"
+      ]
+    },
+    "PlanningSlot": {
+      "type": "object",
+      "properties": {
+        "xml_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "partner_xmlid": {
+          "type": "string"
+        },
+        "role_xmlid": {
+          "type": "string"
+        },
+        "start_datetime": {
+          "type": "string"
+        },
+        "end_datetime": {
+          "type": "string"
+        },
+        "allocated_hours": {
+          "type": "number"
+        },
+        "state": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "xml_id",
+        "name"
+      ]
+    },
     "CustomerProfile": {
       "type": "object",
       "properties": {
@@ -1067,6 +1126,18 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/Subscription"
+          }
+        },
+        "planning_roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PlanningRole"
+          }
+        },
+        "planning_slots": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PlanningSlot"
           }
         },
         "language": {

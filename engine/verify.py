@@ -155,6 +155,10 @@ def data_checks(spec: CustomerSpec) -> list[DataCheck]:
         count_xmlids("quality_checks", "quality.check", len(spec.quality_checks))
     if spec.quality_alerts:
         count_xmlids("quality_alerts", "quality.alert", len(spec.quality_alerts))
+    if spec.planning_roles:
+        count_xmlids("planning_roles", "planning.role", len(spec.planning_roles))
+    if spec.planning_slots:
+        count_xmlids("planning_slots", "planning.slot", len(spec.planning_slots))
     recurring = [p for p in spec.products if p.recurring_invoice]
     if recurring:
         checks.append(

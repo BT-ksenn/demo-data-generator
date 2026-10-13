@@ -608,6 +608,40 @@ Source: `odoo/odoo@20.0` + `enterprise` (20.0).
   `planning.slot` (sibling modules `planning_field_service_sale_stock`,
   `..._repair`, `..._worksheet`, ...).
 - **Consequence for the generator:** the `field_service` bundle and the
-  `Project.is_fsm` spec field were removed. Generating Field Service demo data
-  again requires a new `planning.slot` building block (demand-driven growth) - not
-  started yet.
+  `Project.is_fsm` spec field were removed. Field Service demo data is now built
+  on the `planning` bundle (see 4.27).
+
+## 4.27 Planning / Field Service — `planning.role` + `planning.slot`
+
+Source: `enterprise/planning` + `enterprise/planning_field_service` (20.0),
+`models/planning_role.py`, `models/planning_slot.py`, the Field Service
+`models/planning_slot.py` and both `data/*_demo.xml`.
+
+- **App/bundle:** `planning_field_service` (depends on `planning`, `web_map`,
+  `base_geolocalize`, `portal_rating`); the `planning` bundle installs it. It
+  models on-site interventions as `planning.slot` records (`planning.slot` is
+  `_inherit`-ed by Field Service: `mail.thread`, `portal.mixin`, `rating.mixin`).
+- **`planning.role`:** only `name` is required (translatable); `color`/`sequence`
+  optional. No `company_id` on the model.
+- **`planning.slot` fields safe to set in XML:** `name` (`fields.Text('Note')`,
+  the visible intervention text), `company_id` (compute+store, `readonly=False`,
+  required - its compute falls back to `env.company`, so set it explicitly to the
+  demo company), `start_datetime`/`end_datetime` (compute defaults to today),
+  `allocated_hours` (`>= 0`), `role_id`, `partner_id` (added by
+  `planning_field_service`, `check_company` -> the partner must belong to the demo
+  company), `state` and `priority`.
+- **States:** base Planning `1_draft`/`2_published`; Field Service adds
+  `3_in_progress`/`4_completed` via `selection_add`. The `planning` bundle always
+  installs `planning_field_service`, so all four are valid.
+- **DB constraints:** `end_datetime > start_datetime`, `allocated_hours >= 0`
+  (declarative `models.Constraint`). The Field Service `create()` rejects
+  `state in ('3_in_progress','4_completed')` only when **no** start/end is set
+  (`planning_field_service/models/planning_slot.py:310-315`) - with dates it is
+  safe.
+- **No resources needed:** like the shipped Field Service demo
+  (`data/planning_field_service_demo.xml`), the engine creates the slots as open
+  shifts (no `resource_ids`); no `hr.employee`/`resource.resource` record is
+  required, which avoids the company-calendar pitfalls of `resource.resource`.
+- **Engine:** `PlanningRole`/`PlanningSlot`, files `planning_role_data.xml` ->
+  `planning_slot_data.xml`, bundle `planning` (app `planning_field_service`,
+  requires `contacts`).

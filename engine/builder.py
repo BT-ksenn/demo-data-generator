@@ -105,6 +105,15 @@ def write_module_dir(spec: CustomerSpec, out_dir: Path) -> Path:
         (data_dir / "sale_order_subscription_data.xml").write_text(
             records.render_subscription_xml(spec), encoding="utf-8"
         )
+    # Planning roles MUST exist before the interventions that reference them.
+    if spec.planning_roles:
+        (data_dir / "planning_role_data.xml").write_text(
+            records.render_planning_role_xml(spec), encoding="utf-8"
+        )
+    if spec.planning_slots:
+        (data_dir / "planning_slot_data.xml").write_text(
+            records.render_planning_slot_xml(spec), encoding="utf-8"
+        )
     return module_dir
 
 

@@ -36,6 +36,8 @@ RECOMMENDED_VOLUME: dict[str, int] = {
     "quality_points": 4,
     "quality_checks": 6,
     "quality_alerts": 4,
+    "planning_roles": 4,
+    "planning_slots": 12,
 }
 
 
@@ -60,6 +62,8 @@ def _section_counts(spec: CustomerSpec) -> dict[str, int]:
         "quality_points": len(spec.quality_points),
         "quality_checks": len(spec.quality_checks),
         "quality_alerts": len(spec.quality_alerts),
+        "planning_roles": len(spec.planning_roles),
+        "planning_slots": len(spec.planning_slots),
     }
 
 

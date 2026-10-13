@@ -1,0 +1,3008 @@
+{
+  "module": {
+    "technical_name": "bt_demo_muster_verschlusstechnik",
+    "title": "Demo Data - Muster Verschlusstechnik GmbH (Verschlusstechnik, Spritzguss, Automotive-Qualitaet)",
+    "category": "Manufacturing",
+    "summary": "ERP demo for an automotive closure-technology manufacturer: company with German chart of accounts (SKR04), customer/supplier network, raw-material and finished-goods catalog, bills of materials, injection-moulding manufacturing orders, procurement, stock, quality control (IATF 16949), machine and mould maintenance, tool-development projects, CRM pipeline, quotations, posted customer/vendor invoices and complaint tickets.",
+    "description": "Sample demo-data module for Muster Verschlusstechnik GmbH (Musterstadt, Baden-Wuerttemberg), a manufacturer of closure and media-conducting systems for the automotive and industrial market (radiator caps, oil filler and tank caps, SCR/AdBlue filling systems, battery vents and battery cooling connections) produced mainly by plastic injection moulding. It creates 1 new company including the German chart of accounts (l10n_de, SKR04), 38 contacts (automotive customers, industrial buyers and raw-material/component suppliers), 33 products (polymer granulates, seals, springs and inserts as components; closure systems as finished goods; tooling and PPAP services), 9 bills of materials, 9 draft injection-moulding manufacturing orders, 16 CRM opportunities, 12 purchase orders, 21 stock quants, 12 posted customer/vendor invoices (posted in the post_init_hook), 8 quality control points with checks and alerts, 9 machines/moulds under maintenance with requests, 13 after-sales/complaint tickets, 5 quotation templates, 1 quotation, 11 example sales orders, 4 projects with 16 tasks."
+  },
+  "accounting_app": "full",
+  "language": "de_DE",
+  "company": {
+    "xml_id": "demo_company",
+    "name": "Muster Verschlusstechnik GmbH",
+    "street": "Musterstrasse 10",
+    "city": "Musterstadt",
+    "zip": "99999",
+    "country_xmlid": "base.de",
+    "vat": "DE318745202",
+    "currency_xmlid": "base.EUR",
+    "chart_template": "de_skr04"
+  },
+  "customer_profile": {
+    "industry": "Automotive-Zulieferer / Verschlusstechnik (Kunststoff-Spritzguss)",
+    "business_model": "B2B-Serienfertigung von Verschluss- und Medienfuehrungssystemen fuer Automobil- und Industriekunden; Entwicklung, Werkzeugbau, Spritzguss, Montage, Qualitaetssicherung und Serienlogistik im Haus",
+    "product_domains": [
+      "Verschlusstechnik",
+      "Kuehlerverschlussdeckel",
+      "Oeleinfuellverschluss",
+      "Tankverschluss",
+      "SCR",
+      "AdBlue",
+      "Batterieentlueftung",
+      "Batteriekuehlsystem",
+      "Kunststoff-Spritzguss",
+      "Dichtungen",
+      "Spritzgiesswerkzeug"
+    ],
+    "customer_segments": [
+      "Automobil-OEM",
+      "Nutzfahrzeug",
+      "Land- und Baumaschinen",
+      "Industrie",
+      "Aftermarket"
+    ],
+    "region": "Musterstadt / Stuttgart (Baden-Wuerttemberg), Standorte in AT, SK, PL, IT, MX, IN und US"
+  },
+  "partners": [
+    [
+      "xml_id",
+      "name",
+      "country_xmlid",
+      "street",
+      "city",
+      "zip",
+      "vat",
+      "is_company",
+      "supplier_rank",
+      "customer_rank"
+    ],
+    [
+      "customer_autowerke_stuttgart",
+      "Autowerke Stuttgart AG",
+      "base.de",
+      "Werksstrasse 1",
+      "Stuttgart",
+      "70546",
+      "DE118273454",
+      true,
+      0,
+      1
+    ],
+    [
+      "customer_nordstern",
+      "Nordstern Motoren GmbH",
+      "base.de",
+      "Motorenweg 22",
+      "Ingolstadt",
+      "85049",
+      "DE160348219",
+      true,
+      0,
+      1
+    ],
+    [
+      "customer_elektromobil",
+      "Elektromobil Systems AG",
+      "base.de",
+      "Innovationspark 7",
+      "Muenchen",
+      "80939",
+      "DE225471905",
+      true,
+      0,
+      1
+    ],
+    [
+      "customer_nutzfahrzeug_ulm",
+      "Nutzfahrzeugwerke Ulm GmbH",
+      "base.de",
+      "Lkw-Allee 40",
+      "Ulm",
+      "89079",
+      "DE301984758",
+      true,
+      0,
+      1
+    ],
+    [
+      "customer_agrartechnik",
+      "Agrartechnik Nord GmbH",
+      "base.de",
+      "Feldweg 18",
+      "Hannover",
+      "30453",
+      "DE278365411",
+      true,
+      0,
+      1
+    ],
+    [
+      "customer_baumaschinen",
+      "Baumaschinen Werke Kassel GmbH",
+      "base.de",
+      "Baggerstrasse 5",
+      "Kassel",
+      "34123",
+      "DE142907689",
+      true,
+      0,
+      1
+    ],
+    [
+      "customer_zweirad",
+      "Zweiradwerke Neckar GmbH",
+      "base.de",
+      "Zweiradpark 3",
+      "Neckarsulm",
+      "74172",
+      "DE319457226",
+      true,
+      0,
+      1
+    ],
+    [
+      "customer_salzburg",
+      "Motorenwerk Salzburg GmbH",
+      "base.at",
+      "Alpenstrasse 12",
+      "Salzburg",
+      "5020",
+      "ATU22334454",
+      true,
+      0,
+      1
+    ],
+    [
+      "customer_alpine",
+      "Alpine Traktoren GmbH",
+      "base.at",
+      "Traktorenweg 9",
+      "Graz",
+      "8020",
+      "ATU64127821",
+      true,
+      0,
+      1
+    ],
+    [
+      "customer_padana",
+      "Padana Veicoli Industriali S.p.A.",
+      "base.it",
+      "Via Industria 14",
+      "Paderno Franciacorta",
+      "25050",
+      null,
+      true,
+      0,
+      1
+    ],
+    [
+      "customer_detroit",
+      "Detroit Powertrain LLC",
+      "base.us",
+      "2723 South State Street",
+      "Ann Arbor",
+      "48104",
+      null,
+      true,
+      0,
+      1
+    ],
+    [
+      "customer_chennai",
+      "Chennai Automotive Systems Pvt Ltd",
+      "base.in",
+      "31 NP SIDCO Industrial Estate",
+      "Chennai",
+      "600098",
+      null,
+      true,
+      0,
+      1
+    ],
+    [
+      "customer_wroclaw",
+      "Wroclaw Components Sp. z o.o.",
+      "base.pl",
+      "ul. Przemyslowa 41",
+      "Wroclaw",
+      "50-201",
+      null,
+      true,
+      0,
+      1
+    ],
+    [
+      "customer_brno",
+      "Brno Motor Works s.r.o.",
+      "base.cz",
+      "Prumyslova 8",
+      "Brno",
+      "61900",
+      null,
+      true,
+      0,
+      1
+    ],
+    [
+      "customer_mexico",
+      "Autopartes del Bajio S.A. de C.V.",
+      "base.mx",
+      "Av. Hermenegildo Galeana 8",
+      "Cuautla",
+      "62715",
+      null,
+      true,
+      0,
+      1
+    ],
+    [
+      "customer_slovakia",
+      "Myjava Plastmont s.r.o.",
+      "base.sk",
+      "Priemyselna 9053/7",
+      "Myjava",
+      "90701",
+      null,
+      true,
+      0,
+      1
+    ],
+    [
+      "supplier_polymer",
+      "Polymer-Technik Kunststoffe GmbH",
+      "base.de",
+      "Chemiepark 12",
+      "Ludwigshafen",
+      "67059",
+      "DE240813575",
+      true,
+      1,
+      0
+    ],
+    [
+      "supplier_elastomer",
+      "Elastomer-Dichtungen GmbH",
+      "base.de",
+      "Gummiweg 4",
+      "Weinheim",
+      "69469",
+      "DE290718458",
+      true,
+      1,
+      0
+    ],
+    [
+      "supplier_federtechnik",
+      "Federtechnik Schwarzwald GmbH",
+      "base.de",
+      "Federstrasse 6",
+      "Villingen-Schwenningen",
+      "78054",
+      "DE311445563",
+      true,
+      1,
+      0
+    ],
+    [
+      "supplier_metall",
+      "Metallumformung Sauerland GmbH",
+      "base.de",
+      "Huettenweg 11",
+      "Luedenscheid",
+      "58507",
+      "DE331209844",
+      true,
+      1,
+      0
+    ],
+    [
+      "supplier_masterbatch",
+      "Farbstoffe & Additive GmbH",
+      "base.de",
+      "Pigmentweg 2",
+      "Ludwigshafen",
+      "67061",
+      "DE148520931",
+      true,
+      1,
+      0
+    ],
+    [
+      "supplier_werkzeugbau",
+      "Werkzeugbau Praezision GmbH",
+      "base.de",
+      "Stahlstrasse 17",
+      "Schwaebisch Gmuend",
+      "73525",
+      "DE290384756",
+      true,
+      1,
+      0
+    ],
+    [
+      "supplier_verpackung",
+      "Verpackungstechnik Allgaeu GmbH",
+      "base.de",
+      "Kartonstrasse 3",
+      "Kempten",
+      "87437",
+      "DE157304926",
+      true,
+      1,
+      0
+    ],
+    [
+      "supplier_recycling",
+      "Kunststoff-Recycling Sued GmbH",
+      "base.de",
+      "Recyclingpark 9",
+      "Augsburg",
+      "86156",
+      "DE284756130",
+      true,
+      1,
+      0
+    ],
+    [
+      "supplier_schrauben",
+      "Schraubentechnik Nuernberg GmbH",
+      "base.de",
+      "Gewindeweg 5",
+      "Nuernberg",
+      "90402",
+      "DE309485767",
+      true,
+      1,
+      0
+    ],
+    [
+      "supplier_pruefmittel",
+      "Pruefmittel & Messtechnik GmbH",
+      "base.de",
+      "Messweg 8",
+      "Esslingen",
+      "73728",
+      "DE173904850",
+      true,
+      1,
+      0
+    ],
+    [
+      "supplier_rohstoff",
+      "Rohstoffhandel Donau GmbH",
+      "base.de",
+      "Hafenstrasse 21",
+      "Regensburg",
+      "93059",
+      "DE250193849",
+      true,
+      1,
+      0
+    ],
+    [
+      "supplier_elektronik",
+      "Steuerungstechnik Elektronik GmbH",
+      "base.de",
+      "Sensorstrasse 4",
+      "Reutlingen",
+      "72764",
+      "DE328405918",
+      true,
+      1,
+      0
+    ],
+    [
+      "supplier_oberflaeche",
+      "Oberflaechentechnik Galvanik GmbH",
+      "base.de",
+      "Galvanikweg 6",
+      "Pforzheim",
+      "75172",
+      "DE196384750",
+      true,
+      1,
+      0
+    ],
+    [
+      "supplier_logistik",
+      "Logistik Partner Sued GmbH",
+      "base.de",
+      "Speditionsstrasse 30",
+      "Heilbronn",
+      "74076",
+      "DE271645032",
+      true,
+      1,
+      0
+    ],
+    [
+      "contact_autowerke_binder",
+      "Karlheinz Binder",
+      "base.de",
+      "Werksstrasse 1",
+      "Stuttgart",
+      "70546",
+      null,
+      false,
+      0,
+      1
+    ],
+    [
+      "contact_nordstern_roth",
+      "Sabine Roth",
+      "base.de",
+      "Motorenweg 22",
+      "Ingolstadt",
+      "85049",
+      null,
+      false,
+      0,
+      1
+    ],
+    [
+      "contact_elektromobil_wagner",
+      "Thomas Wagner",
+      "base.de",
+      "Innovationspark 7",
+      "Muenchen",
+      "80939",
+      null,
+      false,
+      0,
+      1
+    ],
+    [
+      "contact_nutzfahrzeug_klein",
+      "Julia Klein",
+      "base.de",
+      "Lkw-Allee 40",
+      "Ulm",
+      "89079",
+      null,
+      false,
+      0,
+      1
+    ],
+    [
+      "contact_salzburg_huber",
+      "Peter Huber",
+      "base.at",
+      "Alpenstrasse 12",
+      "Salzburg",
+      "5020",
+      null,
+      false,
+      0,
+      1
+    ],
+    [
+      "contact_padana_ferrari",
+      "Elena Ferrari",
+      "base.it",
+      "Via Industria 14",
+      "Paderno Franciacorta",
+      "25050",
+      null,
+      false,
+      0,
+      1
+    ],
+    [
+      "contact_polymer_brandt",
+      "Uwe Brandt",
+      "base.de",
+      "Chemiepark 12",
+      "Ludwigshafen",
+      "67059",
+      null,
+      false,
+      0,
+      1
+    ],
+    [
+      "contact_elastomer_kowalski",
+      "Anna Kowalski",
+      "base.de",
+      "Gummiweg 4",
+      "Weinheim",
+      "69469",
+      null,
+      false,
+      0,
+      1
+    ]
+  ],
+  "products": [
+    [
+      "xml_id",
+      "name",
+      "type",
+      "sale_ok",
+      "purchase_ok",
+      "list_price",
+      "standard_price",
+      "default_code",
+      "barcode",
+      "weight",
+      "description_sale"
+    ],
+    [
+      "c_pa66",
+      "PA66-GF30 Granulat (Polyamid 66 glasfaserverstaerkt)",
+      "consu",
+      false,
+      true,
+      0.0,
+      4.2,
+      "ROH-PA66-GF30",
+      "4091000000001",
+      0.025,
+      null
+    ],
+    [
+      "c_pp",
+      "PP-Homopolymer Granulat",
+      "consu",
+      false,
+      true,
+      0.0,
+      2.1,
+      "ROH-PP-HOMO",
+      "4091000000002",
+      0.025,
+      null
+    ],
+    [
+      "c_pom",
+      "POM Granulat (Polyoxymethylen)",
+      "consu",
+      false,
+      true,
+      0.0,
+      3.8,
+      "ROH-POM",
+      "4091000000003",
+      0.025,
+      null
+    ],
+    [
+      "c_epdm",
+      "EPDM-Dichtring DN32 (Kuehlmittel)",
+      "consu",
+      false,
+      true,
+      0.0,
+      0.35,
+      "KOMP-EPDM-DN32",
+      "4091000000004",
+      0.004,
+      null
+    ],
+    [
+      "c_silikon",
+      "Silikondichtung HT-200 (hochtemperaturbestaendig)",
+      "consu",
+      false,
+      true,
+      0.0,
+      0.62,
+      "KOMP-SIL-HT200",
+      "4091000000005",
+      0.006,
+      null
+    ],
+    [
+      "c_feder",
+      "Druckfeder Edelstahl V2A (Ventilfeder)",
+      "consu",
+      false,
+      true,
+      0.0,
+      0.18,
+      "KOMP-FEDER-V2A",
+      "4091000000006",
+      0.003,
+      null
+    ],
+    [
+      "c_membran",
+      "PTFE-Ventilmembran",
+      "consu",
+      false,
+      true,
+      0.0,
+      0.95,
+      "KOMP-MEMBRAN-PTFE",
+      "4091000000007",
+      0.002,
+      null
+    ],
+    [
+      "c_insert",
+      "Gewindebuchse M6 Messing (Insert)",
+      "consu",
+      false,
+      true,
+      0.0,
+      0.22,
+      "KOMP-INSERT-M6",
+      "4091000000008",
+      0.005,
+      null
+    ],
+    [
+      "c_masterbatch",
+      "Farbmasterbatch Schwarz UV-stabilisiert",
+      "consu",
+      false,
+      true,
+      0.0,
+      5.6,
+      "ROH-MB-SCHWARZ",
+      "4091000000009",
+      0.025,
+      null
+    ],
+    [
+      "c_uv",
+      "UV-Stabilisator Additiv",
+      "consu",
+      false,
+      true,
+      0.0,
+      9.4,
+      "ROH-UV-ADDITIV",
+      "4091000000010",
+      0.025,
+      null
+    ],
+    [
+      "c_klt",
+      "Kleinladungstraeger KLT 6429 (rueckfuehrbar)",
+      "consu",
+      false,
+      true,
+      0.0,
+      18.5,
+      "VERP-KLT-6429",
+      "4091000000011",
+      2.6,
+      null
+    ],
+    [
+      "c_schraube",
+      "Torx-Schraube T20 verzinkt",
+      "consu",
+      false,
+      true,
+      0.0,
+      0.07,
+      "KOMP-TORX-T20",
+      "4091000000012",
+      0.002,
+      null
+    ],
+    [
+      "c_ventileinsatz",
+      "Ventileinsatz Batterieentlueftung",
+      "consu",
+      false,
+      true,
+      0.0,
+      1.85,
+      "KOMP-VENTIL-BEV",
+      "4091000000013",
+      0.009,
+      null
+    ],
+    [
+      "c_aktivkohle",
+      "Aktivkohlefilter rund (Batterieentlueftung)",
+      "consu",
+      false,
+      true,
+      0.0,
+      1.2,
+      "KOMP-AK-FILTER",
+      "4091000000014",
+      0.012,
+      null
+    ],
+    [
+      "c_schelle",
+      "Schlauchklemme Edelstahl 32-45 mm",
+      "consu",
+      false,
+      true,
+      0.0,
+      0.48,
+      "KOMP-SCHELLE-3245",
+      "4091000000015",
+      0.014,
+      null
+    ],
+    [
+      "f_kvs140",
+      "Kuehlerverschlussdeckel KVS-140 (1,4 bar)",
+      "consu",
+      true,
+      false,
+      8.9,
+      3.9,
+      "FIN-KVS-140",
+      "4091000000016",
+      0.062,
+      "Kuehlerverschlussdeckel mit Ueberdruckventil 1,4 bar, PA66-GF30-Gehaeuse, EPDM-Dichtung, Temperatureinsatz bis 130 Grad C."
+    ],
+    [
+      "f_kvs200",
+      "Kuehlerverschlussdeckel KVS-200 (2,0 bar)",
+      "consu",
+      true,
+      false,
+      9.6,
+      4.25,
+      "FIN-KVS-200",
+      "4091000000017",
+      0.068,
+      "Hochdruck-Kuehlerverschlussdeckel 2,0 bar fuer moderne Verbrennungs- und Hybridantriebe, inkl. Entlueftungsventil."
+    ],
+    [
+      "f_oev38",
+      "Oeleinfuellverschluss OEV-38",
+      "consu",
+      true,
+      false,
+      6.4,
+      2.35,
+      "FIN-OEV-38",
+      "4091000000018",
+      0.044,
+      "Oeleinfuellverschluss mit integrierter Dichtung und Bajonettverriegelung, fuer Zylinderkopfhauben aus Kunststoff."
+    ],
+    [
+      "f_tv60",
+      "Tankverschluss TV-60 mit Schloss",
+      "consu",
+      true,
+      false,
+      14.8,
+      6.1,
+      "FIN-TV-60",
+      "4091000000019",
+      0.132,
+      "Abschliessbarer Tankverschluss mit zwei Schluesseln und Entlueftung, Gehaeuse PP, Dichtung EPDM."
+    ],
+    [
+      "f_scr45",
+      "SCR-/AdBlue-Verschlussdeckel SCR-45",
+      "consu",
+      true,
+      false,
+      11.2,
+      4.6,
+      "FIN-SCR-45",
+      "4091000000020",
+      0.081,
+      "Verschlussdeckel fuer SCR-/AdBlue-Fuellsysteme mit Harnstoff-bestaendiger Dichtung und Fehlbetankungsschutz."
+    ],
+    [
+      "f_as60",
+      "AdBlue-Fuellstutzen komplett AS-60",
+      "consu",
+      true,
+      false,
+      24.5,
+      11.3,
+      "FIN-AS-60",
+      "4091000000021",
+      0.245,
+      "Kompletter Fuellstutzen fuer Nutzfahrzeug-SCR-Systeme inkl. Magnetventil-Anschluss, Dichtung und Befestigung."
+    ],
+    [
+      "f_bev12",
+      "Batterieentlueftung BEV-12",
+      "consu",
+      true,
+      false,
+      7.3,
+      2.95,
+      "FIN-BEV-12",
+      "4091000000022",
+      0.058,
+      "Druckausgleichs- und Entlueftungseinheit fuer Hochvolt-Batteriegehaeuse, inkl. Aktivkohlefilter und PTFE-Membran."
+    ],
+    [
+      "f_bks25",
+      "Batteriekuehlsystem-Anschluss BKS-25",
+      "consu",
+      true,
+      false,
+      18.9,
+      8.4,
+      "FIN-BKS-25",
+      "4091000000023",
+      0.156,
+      "Anschluss- und Verteilerbauteil fuer Batteriekuehlkreise mit zwei Schlauchstutzen und Dichtungssitz."
+    ],
+    [
+      "f_kmv90",
+      "Kuehlmittelverteiler KMV-90",
+      "consu",
+      true,
+      false,
+      32.4,
+      15.2,
+      "FIN-KMV-90",
+      "4091000000024",
+      0.312,
+      "Mehrfach-Kuehlmittelverteiler fuer Motor- und Batteriekuehlkreise, PA66-GF30, mit integrierten Dichtungen."
+    ],
+    [
+      "f_sv16",
+      "Schnellverschluss SV-16 Steckkupplung",
+      "consu",
+      true,
+      false,
+      5.6,
+      2.4,
+      "FIN-SV-16",
+      "4091000000025",
+      0.037,
+      "Schnellkupplung fuer Medienleitungen, einhaendig loesbar, mit doppelter Dichtung und Verriegelung."
+    ],
+    [
+      "f_abv50",
+      "Ausgleichsbehaelter-Verschluss ABV-50",
+      "consu",
+      true,
+      false,
+      7.8,
+      3.1,
+      "FIN-ABV-50",
+      "4091000000026",
+      0.071,
+      "Verschlussdeckel fuer Kuehlmittel-Ausgleichsbehaelter mit Zweistufen-Ueberdruckventil."
+    ],
+    [
+      "f_evccs",
+      "Ladeklappenverschluss EV-CCS",
+      "consu",
+      true,
+      false,
+      21.5,
+      9.8,
+      "FIN-EV-CCS",
+      "4091000000027",
+      0.198,
+      "Verschluss- und Verriegelungseinheit fuer CCS-Ladeklappen mit Aktuator-Anbindung und Notentriegelung."
+    ],
+    [
+      "f_tes55",
+      "Tankeinfuellstutzen TES-55",
+      "consu",
+      true,
+      false,
+      19.7,
+      8.9,
+      "FIN-TES-55",
+      "4091000000028",
+      0.176,
+      "Kraftstoff-Einfuellstutzen fuer Pkw und leichte Nutzfahrzeuge, erdungsfaehig, mit Rueckfuehrungsleitung."
+    ],
+    [
+      "s_tool",
+      "Werkzeugentwicklung und Bemusterung",
+      "service",
+      true,
+      false,
+      48500.0,
+      null,
+      "SVC-TOOL-ENTW",
+      null,
+      null,
+      "Konstruktion, Werkzeugbau, Erstbemusterung und Prozessoptimierung eines neuen Spritzgiesswerkzeugs bis zur Serienreife."
+    ],
+    [
+      "s_toolmaint",
+      "Werkzeugwartung Spritzgiessform (Monatspauschale)",
+      "service",
+      true,
+      false,
+      3200.0,
+      null,
+      "SVC-TOOL-WART",
+      null,
+      null,
+      "Turnusmaessige Wartung und Instandhaltung der Spritzgiesswerkzeuge inklusive Reinigung, Vermessung und Ersatzteilpauschale."
+    ],
+    [
+      "s_sop",
+      "Inbetriebnahme und Serienanlaufunterstuetzung (SOP)",
+      "service",
+      true,
+      false,
+      12500.0,
+      null,
+      "SVC-SOP",
+      null,
+      null,
+      "Begleitung des Serienanlaufs vor Ort, Anpassung der Prozessparameter, Anlaufkurve und Produktionsfreigabe (SOP)."
+    ],
+    [
+      "s_ppap",
+      "PPAP-Dokumentation und Erstmusterpruefbericht",
+      "service",
+      true,
+      false,
+      4800.0,
+      null,
+      "SVC-PPAP",
+      null,
+      null,
+      "Erstellung der PPAP-Dokumentation inklusive Erstmusterpruefbericht, Prozessfaehigkeitsnachweis und Freigabemuster."
+    ],
+    [
+      "s_sampling",
+      "Kunststofftechnische Machbarkeitsstudie",
+      "service",
+      true,
+      false,
+      6900.0,
+      null,
+      "SVC-MACHBAR",
+      null,
+      null,
+      "Machbarkeits- und Werkstoffstudie fuer neue Bauteile inklusive Fliesssimulation und Werkstoffauswahl."
+    ]
+  ],
+  "boms": [
+    {
+      "xml_id": "b_kvs140",
+      "product_xmlid": "f_kvs140",
+      "lines": [
+        {
+          "product_xmlid": "c_pp",
+          "qty": 0.045
+        },
+        {
+          "product_xmlid": "c_epdm",
+          "qty": 1.0
+        },
+        {
+          "product_xmlid": "c_feder",
+          "qty": 1.0
+        },
+        {
+          "product_xmlid": "c_insert",
+          "qty": 1.0
+        }
+      ]
+    },
+    {
+      "xml_id": "b_kvs200",
+      "product_xmlid": "f_kvs200",
+      "lines": [
+        {
+          "product_xmlid": "c_pa66",
+          "qty": 0.05
+        },
+        {
+          "product_xmlid": "c_epdm",
+          "qty": 1.0
+        },
+        {
+          "product_xmlid": "c_feder",
+          "qty": 1.0
+        },
+        {
+          "product_xmlid": "c_insert",
+          "qty": 1.0
+        }
+      ]
+    },
+    {
+      "xml_id": "b_oev38",
+      "product_xmlid": "f_oev38",
+      "lines": [
+        {
+          "product_xmlid": "c_pa66",
+          "qty": 0.032
+        },
+        {
+          "product_xmlid": "c_silikon",
+          "qty": 1.0
+        },
+        {
+          "product_xmlid": "c_insert",
+          "qty": 1.0
+        }
+      ]
+    },
+    {
+      "xml_id": "b_tv60",
+      "product_xmlid": "f_tv60",
+      "lines": [
+        {
+          "product_xmlid": "c_pp",
+          "qty": 0.07
+        },
+        {
+          "product_xmlid": "c_epdm",
+          "qty": 1.0
+        },
+        {
+          "product_xmlid": "c_insert",
+          "qty": 1.0
+        },
+        {
+          "product_xmlid": "c_schraube",
+          "qty": 2.0
+        }
+      ]
+    },
+    {
+      "xml_id": "b_scr45",
+      "product_xmlid": "f_scr45",
+      "lines": [
+        {
+          "product_xmlid": "c_pa66",
+          "qty": 0.055
+        },
+        {
+          "product_xmlid": "c_epdm",
+          "qty": 1.0
+        },
+        {
+          "product_xmlid": "c_feder",
+          "qty": 1.0
+        }
+      ]
+    },
+    {
+      "xml_id": "b_as60",
+      "product_xmlid": "f_as60",
+      "lines": [
+        {
+          "product_xmlid": "c_pa66",
+          "qty": 0.12
+        },
+        {
+          "product_xmlid": "c_epdm",
+          "qty": 2.0
+        },
+        {
+          "product_xmlid": "c_schelle",
+          "qty": 1.0
+        },
+        {
+          "product_xmlid": "c_insert",
+          "qty": 2.0
+        }
+      ]
+    },
+    {
+      "xml_id": "b_bev12",
+      "product_xmlid": "f_bev12",
+      "lines": [
+        {
+          "product_xmlid": "c_pa66",
+          "qty": 0.038
+        },
+        {
+          "product_xmlid": "c_membran",
+          "qty": 1.0
+        },
+        {
+          "product_xmlid": "c_aktivkohle",
+          "qty": 1.0
+        },
+        {
+          "product_xmlid": "c_ventileinsatz",
+          "qty": 1.0
+        }
+      ]
+    },
+    {
+      "xml_id": "b_bks25",
+      "product_xmlid": "f_bks25",
+      "lines": [
+        {
+          "product_xmlid": "c_pa66",
+          "qty": 0.095
+        },
+        {
+          "product_xmlid": "c_epdm",
+          "qty": 2.0
+        },
+        {
+          "product_xmlid": "c_schelle",
+          "qty": 2.0
+        }
+      ]
+    },
+    {
+      "xml_id": "b_kmv90",
+      "product_xmlid": "f_kmv90",
+      "lines": [
+        {
+          "product_xmlid": "c_pa66",
+          "qty": 0.15
+        },
+        {
+          "product_xmlid": "c_epdm",
+          "qty": 2.0
+        },
+        {
+          "product_xmlid": "c_insert",
+          "qty": 2.0
+        },
+        {
+          "product_xmlid": "c_schelle",
+          "qty": 1.0
+        }
+      ]
+    }
+  ],
+  "manufacturing_orders": [
+    {
+      "xml_id": "mo_kvs140",
+      "product_xmlid": "f_kvs140",
+      "bom_xmlid": "b_kvs140",
+      "qty": 25000.0,
+      "date_start": "2026-09-07 06:00:00"
+    },
+    {
+      "xml_id": "mo_kvs200",
+      "product_xmlid": "f_kvs200",
+      "bom_xmlid": "b_kvs200",
+      "qty": 15000.0,
+      "date_start": "2026-09-08 06:00:00"
+    },
+    {
+      "xml_id": "mo_oev38",
+      "product_xmlid": "f_oev38",
+      "bom_xmlid": "b_oev38",
+      "qty": 12000.0,
+      "date_start": "2026-09-09 06:00:00"
+    },
+    {
+      "xml_id": "mo_tv60",
+      "product_xmlid": "f_tv60",
+      "bom_xmlid": "b_tv60",
+      "qty": 6000.0,
+      "date_start": "2026-09-10 06:00:00"
+    },
+    {
+      "xml_id": "mo_scr45",
+      "product_xmlid": "f_scr45",
+      "bom_xmlid": "b_scr45",
+      "qty": 9000.0,
+      "date_start": "2026-09-11 06:00:00"
+    },
+    {
+      "xml_id": "mo_as60",
+      "product_xmlid": "f_as60",
+      "bom_xmlid": "b_as60",
+      "qty": 3000.0,
+      "date_start": "2026-09-14 06:00:00"
+    },
+    {
+      "xml_id": "mo_bev12",
+      "product_xmlid": "f_bev12",
+      "bom_xmlid": "b_bev12",
+      "qty": 10000.0,
+      "date_start": "2026-09-15 06:00:00"
+    },
+    {
+      "xml_id": "mo_bks25",
+      "product_xmlid": "f_bks25",
+      "bom_xmlid": "b_bks25",
+      "qty": 4000.0,
+      "date_start": "2026-09-16 06:00:00"
+    },
+    {
+      "xml_id": "mo_kmv90",
+      "product_xmlid": "f_kmv90",
+      "bom_xmlid": "b_kmv90",
+      "qty": 2500.0,
+      "date_start": "2026-09-17 06:00:00"
+    }
+  ],
+  "crm_leads": [
+    [
+      "xml_id",
+      "name",
+      "partner_xmlid",
+      "contact_name",
+      "email_from",
+      "phone",
+      "expected_revenue",
+      "probability",
+      "stage_xmlid",
+      "priority",
+      "description"
+    ],
+    [
+      "lead_autowerke_kvs",
+      "Kuehlerverschlussdeckel fuer neue E-Plattform",
+      "customer_autowerke_stuttgart",
+      "Karlheinz Binder",
+      "k.binder@example.de",
+      "+49 711 555 1201",
+      1450000.0,
+      70.0,
+      "crm.stage_lead3",
+      "3",
+      "Vergabe der Kuehlerverschlussdeckel KVS-140/KVS-200 fuer eine neue Elektroplattform ab 2028, Jahresvolumen rund 1,2 Mio Stueck."
+    ],
+    [
+      "lead_nordstern_scr",
+      "SCR-Verschluss fuer Dieselmotoren-Baureihe 2027",
+      "customer_nordstern",
+      "Sabine Roth",
+      "s.roth@example.de",
+      "+49 841 555 8830",
+      620000.0,
+      60.0,
+      "crm.stage_lead2",
+      "2",
+      "Neuentwicklung eines AdBlue-Verschlussdeckels mit Fehlbetankungsschutz fuer die naechste Motorengeneration."
+    ],
+    [
+      "lead_elektromobil_bev",
+      "Batterieentlueftung fuer Hochvolt-Batteriepack",
+      "customer_elektromobil",
+      "Thomas Wagner",
+      "t.wagner@example.de",
+      "+49 89 555 4471",
+      890000.0,
+      55.0,
+      "crm.stage_lead2",
+      "3",
+      "Druckausgleichseinheit BEV-12 fuer ein neues Batteriepack, Anforderungen an Dichtheit und Lebensdauer liegen vor."
+    ],
+    [
+      "lead_nutzfahrzeug_as",
+      "AdBlue-Fuellstutzen Grossserie LKW",
+      "customer_nutzfahrzeug_ulm",
+      "Julia Klein",
+      "j.klein@example.de",
+      "+49 731 555 3320",
+      1240000.0,
+      75.0,
+      "crm.stage_lead3",
+      "2",
+      "Rahmenvertrag ueber komplette AdBlue-Fuellstutzen AS-60 fuer zwei Lkw-Baureihen inklusive PPAP-Dokumentation."
+    ],
+    [
+      "lead_agrartechnik_tank",
+      "Tankverschluss fuer Landmaschinen",
+      "customer_agrartechnik",
+      null,
+      null,
+      null,
+      180000.0,
+      30.0,
+      "crm.stage_lead1",
+      "1",
+      "Interesse an einem abschliessbaren Tankverschluss TV-60 fuer Traktoren, Stueckzahlen noch unklar."
+    ],
+    [
+      "lead_baumaschinen_kvs",
+      "Kuehlerdeckel fuer Baumaschinenmotoren",
+      "customer_baumaschinen",
+      null,
+      null,
+      null,
+      240000.0,
+      25.0,
+      "crm.stage_lead1",
+      "1",
+      "Baumaschinenmotoren benoetigen robuste Kuehlerdeckel mit erhoehtem Berstdruck; Machbarkeit wird geprueft."
+    ],
+    [
+      "lead_salzburg_oev",
+      "Oeleinfuellverschluss Motorenwerk Salzburg",
+      "customer_salzburg",
+      "Peter Huber",
+      "p.huber@example.at",
+      "+43 662 555 210",
+      310000.0,
+      50.0,
+      "crm.stage_lead2",
+      "2",
+      "Nachfolgemodell des Oeleinfuellverschlusses OEV-38 mit reduziertem Gewicht fuer die naechste Motorengeneration."
+    ],
+    [
+      "lead_padana_tes",
+      "Tankeinfuellstutzen fuer Nutzfahrzeuge",
+      "customer_padana",
+      "Elena Ferrari",
+      "e.ferrari@example.it",
+      "+39 030 555 778",
+      275000.0,
+      35.0,
+      "crm.stage_lead1",
+      "1",
+      "Italienischer Nutzfahrzeughersteller sucht einen zweiten Lieferanten fuer Kraftstoff-Einfuellstutzen."
+    ],
+    [
+      "lead_detroit_bks",
+      "Batteriekuehlsystem US-Plattform",
+      "customer_detroit",
+      null,
+      null,
+      null,
+      760000.0,
+      45.0,
+      "crm.stage_lead2",
+      "2",
+      "Lokalisierung des Batteriekuehlsystem-Anschlusses BKS-25 fuer eine US-Plattform, Werk in Mexiko im Gespraech."
+    ],
+    [
+      "lead_chennai_sv",
+      "Schnellverschluss fuer indische Fahrzeugplattform",
+      "customer_chennai",
+      null,
+      null,
+      null,
+      420000.0,
+      30.0,
+      "crm.stage_lead1",
+      "1",
+      "Schnellverschluss SV-16 fuer lokale Fahrzeugplattform, Preis- und Werkzeugangebot angefragt."
+    ],
+    [
+      "lead_wroclaw_aftermarket",
+      "Aftermarket-Programm Verschlussdeckel",
+      "customer_wroclaw",
+      null,
+      null,
+      null,
+      150000.0,
+      65.0,
+      "crm.stage_lead3",
+      "2",
+      "Aufbau eines Ersatzteil-Programms fuer Kuehler- und Oeleinfuellverschluesse im osteuropaeischen Aftermarket."
+    ],
+    [
+      "lead_brno_evccs",
+      "Ladeklappenverschluss EV-CCS",
+      "customer_brno",
+      null,
+      null,
+      null,
+      530000.0,
+      20.0,
+      "crm.stage_lead1",
+      "1",
+      "Projektstudie fuer eine motorisierte Ladeklappenverriegelung fuer eine Crossover-Plattform."
+    ],
+    [
+      "lead_mexico_kmv",
+      "Kuehlmittelverteiler fuer Mexiko-Werk",
+      "customer_mexico",
+      null,
+      null,
+      null,
+      340000.0,
+      20.0,
+      "crm.stage_lead1",
+      "0",
+      "Lokalisierungsanfrage fuer den Kuehlmittelverteiler KMV-90, Lieferung ab Werk Cuautla angestrebt."
+    ],
+    [
+      "lead_aftermarket_de",
+      "Ersatzteilpaket Kuehlerdeckel freier Teilemarkt",
+      null,
+      "Markus Zimmermann",
+      "m.zimmermann@example.de",
+      "+49 711 555 9012",
+      95000.0,
+      40.0,
+      "crm.stage_lead2",
+      "1",
+      "Grosshaendler fuer freie Ersatzteile fragt ein gemischtes Deckelpaket mit eigenem Verpackungsdesign an."
+    ],
+    [
+      "lead_tool_transfer",
+      "Werkzeugverlagerung und Kapazitaetserweiterung",
+      "customer_alpine",
+      null,
+      null,
+      null,
+      210000.0,
+      50.0,
+      "crm.stage_lead2",
+      "1",
+      "Verlagerung zweier bestehender Spritzgiesswerkzeuge zum Kunden nach Oesterreich inklusive Wiederinbetriebnahme."
+    ],
+    [
+      "lead_new_material",
+      "Rezyklat-Werkstoffkonzept fuer Verschlussdeckel",
+      null,
+      "Dr. Eva Neumann",
+      "e.neumann@example.de",
+      "+49 711 555 7788",
+      130000.0,
+      20.0,
+      "crm.stage_lead1",
+      "2",
+      "Entwicklung eines Rezyklat-Anteils fuer Deckelgehaeuse zur Erfuellung neuer Nachhaltigkeitsanforderungen."
+    ]
+  ],
+  "purchase_orders": [
+    {
+      "xml_id": "po_pa66",
+      "partner_xmlid": "supplier_polymer",
+      "state": "sent",
+      "date_order": "2026-08-20 09:00:00",
+      "partner_ref": "POL-2026-4471",
+      "lines": [
+        {
+          "product_xmlid": "c_pa66",
+          "qty": 5000.0,
+          "price_unit": 4.2,
+          "description": "PA66-GF30 Granulat (Polyamid 66 glasfaserverstaerkt)"
+        },
+        {
+          "product_xmlid": "c_pp",
+          "qty": 3000.0,
+          "price_unit": 2.1,
+          "description": "PP-Homopolymer Granulat"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_pp",
+      "partner_xmlid": "supplier_polymer",
+      "state": "draft",
+      "date_order": "2026-09-02 10:00:00",
+      "partner_ref": "POL-2026-4530",
+      "lines": [
+        {
+          "product_xmlid": "c_pp",
+          "qty": 8000.0,
+          "price_unit": 2.1,
+          "description": "PP-Homopolymer Granulat"
+        },
+        {
+          "product_xmlid": "c_pom",
+          "qty": 1500.0,
+          "price_unit": 3.8,
+          "description": "POM Granulat (Polyoxymethylen)"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_epdm",
+      "partner_xmlid": "supplier_elastomer",
+      "state": "sent",
+      "date_order": "2026-08-25 08:30:00",
+      "partner_ref": "EL-2026-2210",
+      "lines": [
+        {
+          "product_xmlid": "c_epdm",
+          "qty": 120000.0,
+          "price_unit": 0.35,
+          "description": "EPDM-Dichtring DN32 (Kuehlmittel)"
+        },
+        {
+          "product_xmlid": "c_silikon",
+          "qty": 40000.0,
+          "price_unit": 0.62,
+          "description": "Silikondichtung HT-200 (hochtemperaturbestaendig)"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_feder",
+      "partner_xmlid": "supplier_federtechnik",
+      "state": "draft",
+      "date_order": "2026-09-04 11:15:00",
+      "partner_ref": "FST-2026-1180",
+      "lines": [
+        {
+          "product_xmlid": "c_feder",
+          "qty": 150000.0,
+          "price_unit": 0.18,
+          "description": "Druckfeder Edelstahl V2A (Ventilfeder)"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_insert",
+      "partner_xmlid": "supplier_metall",
+      "state": "sent",
+      "date_order": "2026-08-28 14:00:00",
+      "partner_ref": "MSU-2026-3312",
+      "lines": [
+        {
+          "product_xmlid": "c_insert",
+          "qty": 200000.0,
+          "price_unit": 0.22,
+          "description": "Gewindebuchse M6 Messing (Insert)"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_masterbatch",
+      "partner_xmlid": "supplier_masterbatch",
+      "state": "draft",
+      "date_order": "2026-09-05 09:45:00",
+      "partner_ref": "FA-2026-770",
+      "lines": [
+        {
+          "product_xmlid": "c_masterbatch",
+          "qty": 800.0,
+          "price_unit": 5.6,
+          "description": "Farbmasterbatch Schwarz UV-stabilisiert"
+        },
+        {
+          "product_xmlid": "c_uv",
+          "qty": 300.0,
+          "price_unit": 9.4,
+          "description": "UV-Stabilisator Additiv"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_verpackung",
+      "partner_xmlid": "supplier_verpackung",
+      "state": "sent",
+      "date_order": "2026-08-30 13:30:00",
+      "partner_ref": "VTA-2026-990",
+      "lines": [
+        {
+          "product_xmlid": "c_klt",
+          "qty": 1200.0,
+          "price_unit": 18.5,
+          "description": "Kleinladungstraeger KLT 6429 (rueckfuehrbar)"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_schrauben",
+      "partner_xmlid": "supplier_schrauben",
+      "state": "draft",
+      "date_order": "2026-09-06 15:00:00",
+      "partner_ref": "STN-2026-4410",
+      "lines": [
+        {
+          "product_xmlid": "c_schraube",
+          "qty": 500000.0,
+          "price_unit": 0.07,
+          "description": "Torx-Schraube T20 verzinkt"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_pruefmittel",
+      "partner_xmlid": "supplier_pruefmittel",
+      "state": "draft",
+      "date_order": "2026-09-08 10:30:00",
+      "partner_ref": "PM-2026-215",
+      "lines": [
+        {
+          "product_xmlid": "c_schelle",
+          "qty": 30000.0,
+          "price_unit": 0.48,
+          "description": "Schlauchklemme Edelstahl 32-45 mm"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_recycling",
+      "partner_xmlid": "supplier_recycling",
+      "state": "draft",
+      "date_order": "2026-09-09 08:00:00",
+      "partner_ref": "KRS-2026-640",
+      "lines": [
+        {
+          "product_xmlid": "c_pa66",
+          "qty": 2000.0,
+          "price_unit": 3.6,
+          "description": "PA66-GF30 Rezyklat (Sekundaerware)"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_aktivkohle",
+      "partner_xmlid": "supplier_rohstoff",
+      "state": "draft",
+      "date_order": "2026-09-10 09:30:00",
+      "partner_ref": "RHD-2026-301",
+      "lines": [
+        {
+          "product_xmlid": "c_aktivkohle",
+          "qty": 80000.0,
+          "price_unit": 1.2,
+          "description": "Aktivkohlefilter rund (Batterieentlueftung)"
+        },
+        {
+          "product_xmlid": "c_ventileinsatz",
+          "qty": 60000.0,
+          "price_unit": 1.85,
+          "description": "Ventileinsatz Batterieentlueftung"
+        }
+      ]
+    },
+    {
+      "xml_id": "po_oberflaeche",
+      "partner_xmlid": "supplier_oberflaeche",
+      "state": "sent",
+      "date_order": "2026-08-22 07:30:00",
+      "partner_ref": "OTG-2026-118",
+      "lines": [
+        {
+          "product_xmlid": "c_insert",
+          "qty": 50000.0,
+          "price_unit": 0.28,
+          "description": "Gewindebuchse M6, galvanisch verzinkt"
+        },
+        {
+          "product_xmlid": "c_ventileinsatz",
+          "qty": 20000.0,
+          "price_unit": 1.85,
+          "description": "Ventileinsatz Batterieentlueftung"
+        }
+      ]
+    }
+  ],
+  "stock_quants": [
+    {
+      "product_xmlid": "c_pa66",
+      "qty": 4200.0
+    },
+    {
+      "product_xmlid": "c_pp",
+      "qty": 6800.0
+    },
+    {
+      "product_xmlid": "c_pom",
+      "qty": 1200.0
+    },
+    {
+      "product_xmlid": "c_epdm",
+      "qty": 95000.0
+    },
+    {
+      "product_xmlid": "c_silikon",
+      "qty": 32000.0
+    },
+    {
+      "product_xmlid": "c_feder",
+      "qty": 120000.0
+    },
+    {
+      "product_xmlid": "c_membran",
+      "qty": 45000.0
+    },
+    {
+      "product_xmlid": "c_insert",
+      "qty": 160000.0
+    },
+    {
+      "product_xmlid": "c_masterbatch",
+      "qty": 650.0
+    },
+    {
+      "product_xmlid": "c_uv",
+      "qty": 240.0
+    },
+    {
+      "product_xmlid": "c_klt",
+      "qty": 980.0
+    },
+    {
+      "product_xmlid": "c_schraube",
+      "qty": 420000.0
+    },
+    {
+      "product_xmlid": "c_ventileinsatz",
+      "qty": 48000.0
+    },
+    {
+      "product_xmlid": "c_aktivkohle",
+      "qty": 65000.0
+    },
+    {
+      "product_xmlid": "c_schelle",
+      "qty": 26000.0
+    },
+    {
+      "product_xmlid": "f_kvs140",
+      "qty": 18500.0
+    },
+    {
+      "product_xmlid": "f_kvs200",
+      "qty": 12400.0
+    },
+    {
+      "product_xmlid": "f_oev38",
+      "qty": 21000.0
+    },
+    {
+      "product_xmlid": "f_scr45",
+      "qty": 8600.0
+    },
+    {
+      "product_xmlid": "f_bev12",
+      "qty": 15200.0
+    },
+    {
+      "product_xmlid": "f_as60",
+      "qty": 5400.0
+    }
+  ],
+  "invoices": [
+    {
+      "xml_id": "inv_autowerke_1",
+      "move_type": "out_invoice",
+      "partner_xmlid": "customer_autowerke_stuttgart",
+      "invoice_date": "2026-09-05",
+      "ref": "RE-2026-3011",
+      "lines": [
+        {
+          "product_xmlid": "f_kvs140",
+          "qty": 12000.0,
+          "price_unit": 8.9,
+          "description": "Kuehlerverschlussdeckel KVS-140 (1,4 bar)"
+        },
+        {
+          "product_xmlid": "f_kvs200",
+          "qty": 8000.0,
+          "price_unit": 9.6,
+          "description": "Kuehlerverschlussdeckel KVS-200 (2,0 bar)"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_nordstern_1",
+      "move_type": "out_invoice",
+      "partner_xmlid": "customer_nordstern",
+      "invoice_date": "2026-08-28",
+      "ref": "RE-2026-2994",
+      "lines": [
+        {
+          "product_xmlid": "f_scr45",
+          "qty": 6500.0,
+          "price_unit": 11.2,
+          "description": "SCR-/AdBlue-Verschlussdeckel SCR-45"
+        },
+        {
+          "product_xmlid": "f_as60",
+          "qty": 2200.0,
+          "price_unit": 24.5,
+          "description": "AdBlue-Fuellstutzen komplett AS-60"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_elektromobil_1",
+      "move_type": "out_invoice",
+      "partner_xmlid": "customer_elektromobil",
+      "invoice_date": "2026-08-20",
+      "ref": "RE-2026-2980",
+      "lines": [
+        {
+          "product_xmlid": "f_bev12",
+          "qty": 9000.0,
+          "price_unit": 7.3,
+          "description": "Batterieentlueftung BEV-12"
+        },
+        {
+          "product_xmlid": "f_bks25",
+          "qty": 3500.0,
+          "price_unit": 18.9,
+          "description": "Batteriekuehlsystem-Anschluss BKS-25"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_nutzfahrzeug_1",
+      "move_type": "out_invoice",
+      "partner_xmlid": "customer_nutzfahrzeug_ulm",
+      "invoice_date": "2026-07-30",
+      "ref": "RE-2026-2945",
+      "lines": [
+        {
+          "product_xmlid": "f_as60",
+          "qty": 1800.0,
+          "price_unit": 24.5,
+          "description": "AdBlue-Fuellstutzen komplett AS-60"
+        },
+        {
+          "product_xmlid": "f_tes55",
+          "qty": 1500.0,
+          "price_unit": 19.7,
+          "description": "Tankeinfuellstutzen TES-55"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_salzburg_1",
+      "move_type": "out_invoice",
+      "partner_xmlid": "customer_salzburg",
+      "invoice_date": "2026-07-15",
+      "ref": "RE-2026-2910",
+      "lines": [
+        {
+          "product_xmlid": "f_oev38",
+          "qty": 7000.0,
+          "price_unit": 6.4,
+          "description": "Oeleinfuellverschluss OEV-38"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_padana_1",
+      "move_type": "out_invoice",
+      "partner_xmlid": "customer_padana",
+      "invoice_date": "2026-06-25",
+      "ref": "RE-2026-2880",
+      "lines": [
+        {
+          "product_xmlid": "f_tes55",
+          "qty": 2600.0,
+          "price_unit": 19.7,
+          "description": "Tankeinfuellstutzen TES-55"
+        },
+        {
+          "product_xmlid": "f_sv16",
+          "qty": 12000.0,
+          "price_unit": 5.6,
+          "description": "Schnellverschluss SV-16 Steckkupplung"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_wroclaw_1",
+      "move_type": "out_invoice",
+      "partner_xmlid": "customer_wroclaw",
+      "invoice_date": "2026-06-10",
+      "ref": "RE-2026-2850",
+      "lines": [
+        {
+          "product_xmlid": "f_kvs140",
+          "qty": 5000.0,
+          "price_unit": 8.9,
+          "description": "Kuehlerverschlussdeckel KVS-140 (1,4 bar)"
+        },
+        {
+          "product_xmlid": "f_abv50",
+          "qty": 4000.0,
+          "price_unit": 7.8,
+          "description": "Ausgleichsbehaelter-Verschluss ABV-50"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_polymer_1",
+      "move_type": "in_invoice",
+      "partner_xmlid": "supplier_polymer",
+      "invoice_date": "2026-08-31",
+      "ref": "POL-RE-2026-8890",
+      "lines": [
+        {
+          "product_xmlid": "c_pa66",
+          "qty": 5000.0,
+          "price_unit": 4.2,
+          "description": "PA66-GF30 Granulat (Polyamid 66 glasfaserverstaerkt)"
+        },
+        {
+          "product_xmlid": "c_pp",
+          "qty": 3000.0,
+          "price_unit": 2.1,
+          "description": "PP-Homopolymer Granulat"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_elastomer_1",
+      "move_type": "in_invoice",
+      "partner_xmlid": "supplier_elastomer",
+      "invoice_date": "2026-08-26",
+      "ref": "EL-RE-2026-4410",
+      "lines": [
+        {
+          "product_xmlid": "c_epdm",
+          "qty": 120000.0,
+          "price_unit": 0.35,
+          "description": "EPDM-Dichtring DN32 (Kuehlmittel)"
+        },
+        {
+          "product_xmlid": "c_silikon",
+          "qty": 40000.0,
+          "price_unit": 0.62,
+          "description": "Silikondichtung HT-200 (hochtemperaturbestaendig)"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_metall_1",
+      "move_type": "in_invoice",
+      "partner_xmlid": "supplier_metall",
+      "invoice_date": "2026-08-24",
+      "ref": "MSU-RE-2026-6612",
+      "lines": [
+        {
+          "product_xmlid": "c_insert",
+          "qty": 200000.0,
+          "price_unit": 0.22,
+          "description": "Gewindebuchse M6 Messing (Insert)"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_masterbatch_1",
+      "move_type": "in_invoice",
+      "partner_xmlid": "supplier_masterbatch",
+      "invoice_date": "2026-07-28",
+      "ref": "FA-RE-2026-1540",
+      "lines": [
+        {
+          "product_xmlid": "c_masterbatch",
+          "qty": 800.0,
+          "price_unit": 5.6,
+          "description": "Farbmasterbatch Schwarz UV-stabilisiert"
+        },
+        {
+          "product_xmlid": "c_uv",
+          "qty": 300.0,
+          "price_unit": 9.4,
+          "description": "UV-Stabilisator Additiv"
+        }
+      ]
+    },
+    {
+      "xml_id": "inv_verpackung_1",
+      "move_type": "in_invoice",
+      "partner_xmlid": "supplier_verpackung",
+      "invoice_date": "2026-07-20",
+      "ref": "VTA-RE-2026-1980",
+      "lines": [
+        {
+          "product_xmlid": "c_klt",
+          "qty": 1200.0,
+          "price_unit": 18.5,
+          "description": "Kleinladungstraeger KLT 6429 (rueckfuehrbar)"
+        }
+      ]
+    }
+  ],
+  "quality_points": [
+    {
+      "xml_id": "qp_incoming_granulat",
+      "name": "QCP-010 Wareneingangspruefung Granulat",
+      "title": "Wareneingangspruefung Polymergranulat (Restfeuchte, MVR, Farbe)",
+      "product_xmlids": [
+        "c_pa66",
+        "c_pp",
+        "c_pom"
+      ],
+      "test_type": "passfail",
+      "measure_on": "product",
+      "note": "Wareneingangspruefung des Granulats nach Pruefplan: Restfeuchte, Schmelzvolumenrate (MVR) und Farbton muessen den Werkstofffreigaben entsprechen."
+    },
+    {
+      "xml_id": "qp_mass_deckel",
+      "name": "QCP-020 Masspruefung Deckelgehaeuse",
+      "title": "Masspruefung Deckelgehaeuse nach Zeichnung",
+      "product_xmlids": [
+        "f_kvs140",
+        "f_kvs200",
+        "f_scr45",
+        "f_oev38"
+      ],
+      "test_type": "passfail",
+      "measure_on": "product",
+      "note": "Masspruefung der Deckelgehaeuse und Funktionsmasse nach Zeichnung, Pruefmittel Koordinatenmessgeraet, Toleranzen nach IATF-16949-Pruefplan."
+    },
+    {
+      "xml_id": "qp_dichtheit",
+      "name": "QCP-030 Dichtheitspruefung Verschlusssystem",
+      "title": "Dichtheits- und Funktionspruefung der Verschlusssysteme",
+      "product_xmlids": [
+        "f_kvs140",
+        "f_kvs200",
+        "f_scr45",
+        "f_oev38",
+        "f_bev12"
+      ],
+      "test_type": "passfail",
+      "measure_on": "product",
+      "note": "Dichtheitspruefung mit Druckluft unter Wasser sowie Funktionspruefung des Ventils; Leckagerate kleiner 1 cm3/min."
+    },
+    {
+      "xml_id": "qp_berstdruck",
+      "name": "QCP-040 Berstdruckpruefung Kuehlsystem",
+      "title": "Berstdruckpruefung der Kuehlerverschluesse",
+      "product_xmlids": [
+        "f_kvs140",
+        "f_kvs200"
+      ],
+      "test_type": "measure",
+      "measure_on": "product",
+      "note": "Berstdruckpruefung der Kuehlerdeckel zur Absicherung der Druckfestigkeit; Messwert in bar wird dokumentiert."
+    },
+    {
+      "xml_id": "qp_endkontrolle",
+      "name": "QCP-050 Endkontrolle Optik und Funktion",
+      "title": "Endkontrolle vor Auslieferung (Optik, Funktion, Kennzeichnung)",
+      "product_xmlids": [
+        "f_kvs140",
+        "f_kvs200",
+        "f_oev38",
+        "f_scr45",
+        "f_bev12",
+        "f_as60"
+      ],
+      "test_type": "passfail",
+      "measure_on": "product",
+      "note": "Endkontrolle der Fertigware vor Verpackung: Oberflaechen, Beschriftung, Dichtungssitz und Vollstaendigkeit."
+    },
+    {
+      "xml_id": "qp_ppap",
+      "name": "QCP-060 Erstmusterpruefung (PPAP)",
+      "title": "Erstmuster- und Prozessfaehigkeitspruefung fuer Neuteile",
+      "product_xmlids": [
+        "f_scr45",
+        "f_bev12",
+        "f_bks25"
+      ],
+      "test_type": "passfail",
+      "measure_on": "product",
+      "note": "Erstmusterpruefung im Rahmen der PPAP-Freigabe inklusive Cmk-/CpK-Nachweis und Freigabemuster."
+    },
+    {
+      "xml_id": "qp_aktivkohle",
+      "name": "QCP-070 Pruefung Aktivkohlefilter",
+      "title": "Pruefung der Aktivkohlefilter fuer Batterieentlueftung",
+      "product_xmlids": [
+        "c_aktivkohle"
+      ],
+      "test_type": "measure",
+      "measure_on": "product",
+      "note": "Wareneingangspruefung der Aktivkohlefilter: Durchfluss und Adsorptionsvermoegen werden stichprobenartig gemessen."
+    },
+    {
+      "xml_id": "qp_gewinde",
+      "name": "QCP-080 Gewindepruefung Inserts",
+      "title": "Gewinde- und Auszugsfestigkeit der Messing-Inserts",
+      "product_xmlids": [
+        "c_insert"
+      ],
+      "test_type": "passfail",
+      "measure_on": "product",
+      "note": "Pruefung der Gewindegaengigkeit und Auszugsfestigkeit der Inserts im eingespritzten Zustand."
+    }
+  ],
+  "quality_checks": [
+    {
+      "xml_id": "qc_kvs140_dicht",
+      "point_xmlid": "qp_dichtheit",
+      "production_xmlid": "mo_kvs140",
+      "product_xmlid": "f_kvs140",
+      "quality_state": "pass",
+      "note": "Dichtheitspruefung bestanden, Leckagerate 0,4 cm3/min."
+    },
+    {
+      "xml_id": "qc_kvs200_berst",
+      "point_xmlid": "qp_berstdruck",
+      "production_xmlid": "mo_kvs200",
+      "product_xmlid": "f_kvs200",
+      "quality_state": "none",
+      "note": "Berstdruckpruefung angesetzt, Messung erfolgt nach Abkuehlung der Charge."
+    },
+    {
+      "xml_id": "qc_scr45_mass",
+      "point_xmlid": "qp_mass_deckel",
+      "production_xmlid": "mo_scr45",
+      "product_xmlid": "f_scr45",
+      "quality_state": "pass",
+      "note": "Masspruefung innerhalb der Toleranz, Pruefprotokoll abgelegt."
+    },
+    {
+      "xml_id": "qc_oev38_end",
+      "point_xmlid": "qp_endkontrolle",
+      "production_xmlid": "mo_oev38",
+      "product_xmlid": "f_oev38",
+      "quality_state": "none"
+    },
+    {
+      "xml_id": "qc_bev12_dicht",
+      "point_xmlid": "qp_dichtheit",
+      "production_xmlid": "mo_bev12",
+      "product_xmlid": "f_bev12",
+      "quality_state": "fail",
+      "note": "Leckagerate an zwei Prueflingen ueber Grenzwert, Ursache wird im Rahmen des 8D-Reports geprueft."
+    },
+    {
+      "xml_id": "qc_as60_mass",
+      "point_xmlid": "qp_mass_deckel",
+      "production_xmlid": "mo_as60",
+      "product_xmlid": "f_as60",
+      "quality_state": "none"
+    },
+    {
+      "xml_id": "qc_granulat_pa66",
+      "point_xmlid": "qp_incoming_granulat",
+      "product_xmlid": "c_pa66",
+      "quality_state": "pass",
+      "note": "Restfeuchte 0,08 Prozent, MVR innerhalb der Spezifikation."
+    },
+    {
+      "xml_id": "qc_ppap_kvs200",
+      "point_xmlid": "qp_ppap",
+      "production_xmlid": "mo_kvs200",
+      "product_xmlid": "f_kvs200",
+      "quality_state": "none",
+      "note": "PPAP-Unterlagen in Vorbereitung, Freigabe durch den Kunden steht aus."
+    }
+  ],
+  "quality_alerts": [
+    {
+      "xml_id": "qa_bev12_dichtheit",
+      "name": "Leckagerate BEV-12 ueber Grenzwert",
+      "product_xmlid": "f_bev12",
+      "partner_xmlid": "customer_elektromobil",
+      "production_xmlid": "mo_bev12",
+      "priority": "3",
+      "description": "Bei der Dichtheitspruefung wurde an zwei Prueflingen eine erhoehte Leckagerate festgestellt; 8D-Report wurde eingeleitet."
+    },
+    {
+      "xml_id": "qa_granulat_feuchte",
+      "name": "Granulatfeuchte PA66 ueber Spezifikation",
+      "product_xmlid": "c_pa66",
+      "partner_xmlid": "supplier_polymer",
+      "priority": "2",
+      "description": "Wareneingangspruefung meldet eine Restfeuchte oberhalb des Grenzwerts; Lieferant wurde zur Stellungnahme aufgefordert."
+    },
+    {
+      "xml_id": "qa_epdm_porositaet",
+      "name": "Porositaet EPDM-Dichtring Charge 2026-08",
+      "product_xmlid": "c_epdm",
+      "partner_xmlid": "supplier_elastomer",
+      "priority": "2",
+      "description": "Sichtpruefung zeigt vereinzelte Porositaeten an der Dichtlippe; Charge wurde gesperrt und reklamiert."
+    },
+    {
+      "xml_id": "qa_as60_riss",
+      "name": "Rissbildung AdBlue-Fuellstutzen AS-60",
+      "product_xmlid": "f_as60",
+      "partner_xmlid": "customer_nutzfahrzeug_ulm",
+      "production_xmlid": "mo_as60",
+      "priority": "3",
+      "description": "Kundenreklamation wegen Rissbildung an der Befestigungslasche; Werkstoff- und Prozessanalyse laeuft."
+    },
+    {
+      "xml_id": "qa_kvs200_berstdruck",
+      "name": "Berstdruck KVS-200 unter Toleranz",
+      "product_xmlid": "f_kvs200",
+      "partner_xmlid": "customer_nordstern",
+      "priority": "2",
+      "description": "Stichprobenpruefung ergab einen Berstdruck knapp unterhalb der Spezifikation; Prozessparameter werden nachgestellt."
+    }
+  ],
+  "helpdesk_tickets": [
+    {
+      "xml_id": "ticket_autowerke_8d",
+      "name": "8D-Report: Massabweichung Deckel Charge 2026-08",
+      "partner_xmlid": "customer_autowerke_stuttgart",
+      "stage_xmlid": "helpdesk.stage_in_progress",
+      "priority": "3",
+      "description": "Kunde beanstandet eine Massabweichung am Deckelgehaeuse; Sofortmassnahmen eingeleitet, 8D-Report in Bearbeitung."
+    },
+    {
+      "xml_id": "ticket_nordstern_berstdruck",
+      "name": "Reklamation Berstdruck KVS-200",
+      "partner_xmlid": "customer_nordstern",
+      "stage_xmlid": "helpdesk.stage_new",
+      "priority": "3",
+      "description": "Kunde meldet einen zu niedrigen Berstdruck bei zwei Lieferchargen; Ursachenanalyse wurde angestossen."
+    },
+    {
+      "xml_id": "ticket_elektromobil_bev",
+      "name": "Undichtigkeit Batterieentlueftung BEV-12",
+      "partner_xmlid": "customer_elektromobil",
+      "stage_xmlid": "helpdesk.stage_in_progress",
+      "priority": "3",
+      "description": "Feldreklamation wegen Undichtigkeit der Batterieentlueftung; Prueflinge werden zur Analyse zurueckgeholt."
+    },
+    {
+      "xml_id": "ticket_nutzfahrzeug_scr",
+      "name": "Rissbildung Fuellstutzen AS-60",
+      "partner_xmlid": "customer_nutzfahrzeug_ulm",
+      "stage_xmlid": "helpdesk.stage_in_progress",
+      "priority": "2",
+      "description": "Rissbildung an der Befestigungslasche; Werkstoffanalyse und Anpassung der Prozessfuehrung wurden beauftragt."
+    },
+    {
+      "xml_id": "ticket_polymer_fehllieferung",
+      "name": "Fehllieferung PA66-Granulat",
+      "partner_xmlid": "supplier_polymer",
+      "stage_xmlid": "helpdesk.stage_solved",
+      "priority": "1",
+      "description": "Falscher Farbton geliefert; Austauschlieferung erfolgte, Gutschrift wurde verbucht."
+    },
+    {
+      "xml_id": "ticket_elastomer_qualitaet",
+      "name": "Dichtring-Charge ausserhalb Toleranz",
+      "partner_xmlid": "supplier_elastomer",
+      "stage_xmlid": "helpdesk.stage_in_progress",
+      "priority": "2",
+      "description": "Wareneingangspruefung beanstandet die Harte der Dichtringe; Lieferant wurde zur 8D-Stellungnahme aufgefordert."
+    },
+    {
+      "xml_id": "ticket_salzburg_werkzeug",
+      "name": "Werkzeugverschleiss OEV-38",
+      "partner_xmlid": "customer_salzburg",
+      "stage_xmlid": "helpdesk.stage_in_progress",
+      "priority": "2",
+      "description": "Erhoehte Ausschussquote durch Werkzeugverschleiss; Wartungstermin mit dem Werkzeugbau wurde vereinbart."
+    },
+    {
+      "xml_id": "ticket_padana_doku",
+      "name": "Fehlende PPAP-Dokumentation",
+      "partner_xmlid": "customer_padana",
+      "stage_xmlid": "helpdesk.stage_new",
+      "priority": "1",
+      "description": "Kunde fordert die vollstaendige PPAP-Dokumentation fuer das Tankeinfuellstutzen-Projekt nach."
+    },
+    {
+      "xml_id": "ticket_agrartechnik_muster",
+      "name": "Musterteile Tankverschluss angefragt",
+      "partner_xmlid": "customer_agrartechnik",
+      "stage_xmlid": "helpdesk.stage_new",
+      "priority": "1",
+      "description": "Anfrage nach Bemusterungsteilen des Tankverschlusses TV-60 fuer einen Fahrversuch."
+    },
+    {
+      "xml_id": "ticket_baumaschinen_ersatzteil",
+      "name": "Ersatzteil-Anfrage Dichtungssatz",
+      "partner_xmlid": "customer_baumaschinen",
+      "stage_xmlid": "helpdesk.stage_solved",
+      "priority": "0",
+      "description": "Ersatzteil-Dichtungssatz fuer Kuehlerdeckel wurde angeboten und ausgeliefert."
+    },
+    {
+      "xml_id": "ticket_chennai_logistik",
+      "name": "Lieferverzug Container Chennai",
+      "partner_xmlid": "customer_chennai",
+      "stage_xmlid": "helpdesk.stage_in_progress",
+      "priority": "2",
+      "description": "Seefracht-Container hat sich verspaetet; alternativer Luftfrachtanteil wurde angeboten."
+    },
+    {
+      "xml_id": "ticket_detroit_technik",
+      "name": "Technische Anfrage Batteriekuehlsystem BKS-25",
+      "partner_xmlid": "customer_detroit",
+      "stage_xmlid": "helpdesk.stage_new",
+      "priority": "1",
+      "description": "Technische Rueckfragen zu Durchfluss und Druckverlust des Batteriekuehlsystem-Anschlusses."
+    },
+    {
+      "xml_id": "ticket_wroclaw_verpackung",
+      "name": "Verpackungsanforderung KLT",
+      "partner_xmlid": "customer_wroclaw",
+      "stage_xmlid": "helpdesk.stage_solved",
+      "priority": "0",
+      "description": "Kunde wuenschte eine geaenderte KLT-Bestueckung; Verpackungsvorschrift wurde angepasst."
+    }
+  ],
+  "quotation": {
+    "xml_id": "quote_autowerke_kvs",
+    "partner_xmlid": "customer_autowerke_stuttgart",
+    "state": "draft",
+    "lines": [
+      {
+        "product_xmlid": "f_kvs140",
+        "qty": 50000.0,
+        "description": "Kuehlerverschlussdeckel KVS-140 (1,4 bar), Jahresbedarf"
+      },
+      {
+        "product_xmlid": "f_kvs200",
+        "qty": 25000.0,
+        "description": "Kuehlerverschlussdeckel KVS-200 (2,0 bar), Jahresbedarf"
+      },
+      {
+        "product_xmlid": "s_ppap",
+        "qty": 1.0,
+        "description": "PPAP-Dokumentation und Erstmusterpruefbericht"
+      }
+    ]
+  },
+  "example_orders": [
+    {
+      "xml_id": "so_nordstern_scr",
+      "partner_xmlid": "customer_nordstern",
+      "state": "sent",
+      "date_order": "2026-08-12",
+      "lines": [
+        {
+          "product_xmlid": "f_scr45",
+          "qty": 6000.0,
+          "description": "SCR-/AdBlue-Verschlussdeckel SCR-45"
+        },
+        {
+          "product_xmlid": "f_as60",
+          "qty": 2000.0,
+          "description": "AdBlue-Fuellstutzen komplett AS-60"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_elektromobil_bev",
+      "partner_xmlid": "customer_elektromobil",
+      "state": "sent",
+      "date_order": "2026-08-14",
+      "lines": [
+        {
+          "product_xmlid": "f_bev12",
+          "qty": 10000.0,
+          "description": "Batterieentlueftung BEV-12"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_nutzfahrzeug_as",
+      "partner_xmlid": "customer_nutzfahrzeug_ulm",
+      "state": "sent",
+      "date_order": "2026-08-18",
+      "lines": [
+        {
+          "product_xmlid": "f_as60",
+          "qty": 2500.0,
+          "description": "AdBlue-Fuellstutzen komplett AS-60"
+        },
+        {
+          "product_xmlid": "s_ppap",
+          "qty": 1.0,
+          "description": "PPAP-Dokumentation und Erstmusterpruefbericht"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_salzburg_oev",
+      "partner_xmlid": "customer_salzburg",
+      "state": "sent",
+      "date_order": "2026-07-22",
+      "lines": [
+        {
+          "product_xmlid": "f_oev38",
+          "qty": 8000.0,
+          "description": "Oeleinfuellverschluss OEV-38"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_padana_tes",
+      "partner_xmlid": "customer_padana",
+      "state": "sent",
+      "date_order": "2026-07-08",
+      "lines": [
+        {
+          "product_xmlid": "f_tes55",
+          "qty": 3000.0,
+          "description": "Tankeinfuellstutzen TES-55"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_detroit_bks",
+      "partner_xmlid": "customer_detroit",
+      "state": "sent",
+      "date_order": "2026-06-30",
+      "lines": [
+        {
+          "product_xmlid": "f_bks25",
+          "qty": 4000.0,
+          "description": "Batteriekuehlsystem-Anschluss BKS-25"
+        },
+        {
+          "product_xmlid": "s_sampling",
+          "qty": 1.0,
+          "description": "Kunststofftechnische Machbarkeitsstudie"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_chennai_sv",
+      "partner_xmlid": "customer_chennai",
+      "state": "sent",
+      "date_order": "2026-06-18",
+      "lines": [
+        {
+          "product_xmlid": "f_sv16",
+          "qty": 15000.0,
+          "description": "Schnellverschluss SV-16 Steckkupplung"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_agrartechnik_tv",
+      "partner_xmlid": "customer_agrartechnik",
+      "state": "sent",
+      "date_order": "2026-06-05",
+      "lines": [
+        {
+          "product_xmlid": "f_tv60",
+          "qty": 4500.0,
+          "description": "Tankverschluss TV-60 mit Schloss"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_baumaschinen_kvs",
+      "partner_xmlid": "customer_baumaschinen",
+      "state": "sent",
+      "date_order": "2026-05-28",
+      "lines": [
+        {
+          "product_xmlid": "f_kvs140",
+          "qty": 7000.0,
+          "description": "Kuehlerverschlussdeckel KVS-140 (1,4 bar)"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_wroclaw_aftermarket",
+      "partner_xmlid": "customer_wroclaw",
+      "state": "sent",
+      "date_order": "2026-05-15",
+      "lines": [
+        {
+          "product_xmlid": "f_kvs140",
+          "qty": 4000.0,
+          "description": "Kuehlerverschlussdeckel KVS-140 (1,4 bar)"
+        },
+        {
+          "product_xmlid": "f_oev38",
+          "qty": 3500.0,
+          "description": "Oeleinfuellverschluss OEV-38"
+        },
+        {
+          "product_xmlid": "f_abv50",
+          "qty": 3000.0,
+          "description": "Ausgleichsbehaelter-Verschluss ABV-50"
+        }
+      ]
+    },
+    {
+      "xml_id": "so_mexico_kmv",
+      "partner_xmlid": "customer_mexico",
+      "state": "sent",
+      "date_order": "2026-05-04",
+      "lines": [
+        {
+          "product_xmlid": "f_kmv90",
+          "qty": 2200.0,
+          "description": "Kuehlmittelverteiler KMV-90"
+        }
+      ]
+    }
+  ],
+  "quotation_templates": [
+    {
+      "xml_id": "qt_kvs_package",
+      "name": "Kuehlerverschlussdeckel-Serie KVS (Rahmenvereinbarung)",
+      "number_of_days": 60,
+      "note": "Serienlieferung gemaess Rahmenvereinbarung. Preise freibleibend bis zur endgueltigen Werksabnahmeverhandlung. Lieferzeit nach Abruf 4 Wochen.",
+      "lines": [
+        {
+          "product_xmlid": "f_kvs140",
+          "qty": 1.0,
+          "description": "Kuehlerverschlussdeckel KVS-140 (1,4 bar)"
+        },
+        {
+          "product_xmlid": "f_kvs200",
+          "qty": 1.0,
+          "description": "Kuehlerverschlussdeckel KVS-200 (2,0 bar)"
+        },
+        {
+          "product_xmlid": "s_ppap",
+          "qty": 1.0,
+          "description": "PPAP-Dokumentation und Erstmusterpruefbericht"
+        }
+      ]
+    },
+    {
+      "xml_id": "qt_scr_system",
+      "name": "SCR-/AdBlue-Fuellsystem komplett",
+      "number_of_days": 45,
+      "note": "Systemlieferung bestehend aus Verschlussdeckel und Fuellstutzen. Werkzeugkosten werden separat ausgewiesen.",
+      "lines": [
+        {
+          "product_xmlid": "f_scr45",
+          "qty": 1.0,
+          "description": "SCR-/AdBlue-Verschlussdeckel SCR-45"
+        },
+        {
+          "product_xmlid": "f_as60",
+          "qty": 1.0,
+          "description": "AdBlue-Fuellstutzen komplett AS-60"
+        },
+        {
+          "product_xmlid": "s_tool",
+          "qty": 1.0,
+          "description": "Werkzeugentwicklung und Bemusterung"
+        }
+      ]
+    },
+    {
+      "xml_id": "qt_batterie",
+      "name": "Batterieentlueftung und Batteriekuehlung",
+      "number_of_days": 45,
+      "note": "Komponenten fuer Hochvolt-Batteriesysteme. Technische Freigabe und PPAP auf Anfrage.",
+      "lines": [
+        {
+          "product_xmlid": "f_bev12",
+          "qty": 1.0,
+          "description": "Batterieentlueftung BEV-12"
+        },
+        {
+          "product_xmlid": "f_bks25",
+          "qty": 1.0,
+          "description": "Batteriekuehlsystem-Anschluss BKS-25"
+        }
+      ]
+    },
+    {
+      "xml_id": "qt_aftermarket",
+      "name": "Aftermarket-Ersatzteilpaket Verschlussdeckel",
+      "number_of_days": 30,
+      "note": "Ersatzteilpaket fuer den freien Teilemarkt inklusive neutraler Verpackung. Mindestabnahme 500 Stueck je Variante.",
+      "lines": [
+        {
+          "product_xmlid": "f_kvs140",
+          "qty": 1.0,
+          "description": "Kuehlerverschlussdeckel KVS-140 (1,4 bar)"
+        },
+        {
+          "product_xmlid": "f_oev38",
+          "qty": 1.0,
+          "description": "Oeleinfuellverschluss OEV-38"
+        },
+        {
+          "product_xmlid": "f_abv50",
+          "qty": 1.0,
+          "description": "Ausgleichsbehaelter-Verschluss ABV-50"
+        }
+      ]
+    },
+    {
+      "xml_id": "qt_entwicklung",
+      "name": "Entwicklungs- und Werkzeugpaket Neuteil",
+      "number_of_days": 90,
+      "note": "Entwicklungspaket von der Machbarkeitsstudie bis zur Serienfreigabe. Zahlung in drei Meilensteinen.",
+      "lines": [
+        {
+          "product_xmlid": "s_sampling",
+          "qty": 1.0,
+          "description": "Kunststofftechnische Machbarkeitsstudie"
+        },
+        {
+          "product_xmlid": "s_tool",
+          "qty": 1.0,
+          "description": "Werkzeugentwicklung und Bemusterung"
+        },
+        {
+          "product_xmlid": "s_ppap",
+          "qty": 1.0,
+          "description": "PPAP-Dokumentation und Erstmusterpruefbericht"
+        }
+      ]
+    }
+  ],
+  "project_task_stages": [
+    {
+      "xml_id": "ts_konstruktion",
+      "name": "Konstruktion & Simulation",
+      "sequence": 1
+    },
+    {
+      "xml_id": "ts_werkzeugbau",
+      "name": "Werkzeugbau",
+      "sequence": 10
+    },
+    {
+      "xml_id": "ts_bemusterung",
+      "name": "Bemusterung & PPAP",
+      "sequence": 20
+    },
+    {
+      "xml_id": "ts_serienanlauf",
+      "name": "Serienanlauf (SOP)",
+      "sequence": 30
+    },
+    {
+      "xml_id": "ts_abnahme",
+      "name": "Freigabe & Abschluss",
+      "sequence": 40,
+      "fold": true
+    }
+  ],
+  "projects": [
+    {
+      "xml_id": "prj_scr45_werkzeug",
+      "name": "Werkzeugprojekt SCR-45 Fuellsystem (Bemusterung und SOP)",
+      "partner_xmlid": "customer_nutzfahrzeug_ulm",
+      "stage_xmlid": "project.project_project_stage_1",
+      "date_start": "2026-05-04",
+      "date_end": "2026-12-18",
+      "privacy_visibility": "portal",
+      "description": "Entwicklung, Werkzeugbau, Bemusterung und Serienanlauf des neuen SCR-/AdBlue-Fuellsystems AS-60 fuer die Lkw-Baureihe des Kunden."
+    },
+    {
+      "xml_id": "prj_bev12_serie",
+      "name": "Serienanlauf Batterieentlueftung BEV-12",
+      "partner_xmlid": "customer_elektromobil",
+      "stage_xmlid": "project.project_project_stage_1",
+      "date_start": "2026-06-15",
+      "date_end": "2026-11-30",
+      "privacy_visibility": "portal",
+      "description": "Industrialisierung und Serienanlauf der Batterieentlueftung BEV-12 inklusive Prozessvalidierung und PPAP-Freigabe."
+    },
+    {
+      "xml_id": "prj_bks25_entwicklung",
+      "name": "Entwicklungsprojekt Batteriekuehlsystem BKS-25",
+      "partner_xmlid": "customer_autowerke_stuttgart",
+      "stage_xmlid": "project.project_project_stage_1",
+      "date_start": "2026-04-20",
+      "date_end": "2026-10-30",
+      "privacy_visibility": "portal",
+      "description": "Kundenspezifische Entwicklung des Batteriekuehlsystem-Anschlusses BKS-25 von der Fliesssimulation bis zum Freigabemuster."
+    },
+    {
+      "xml_id": "prj_werkzeug_verlagerung",
+      "name": "Verlagerung Spritzgiesswerkzeuge Werk 2",
+      "stage_xmlid": "project.project_project_stage_1",
+      "date_start": "2026-08-01",
+      "date_end": "2026-10-15",
+      "privacy_visibility": "employees",
+      "description": "Interne Verlagerung und Wiederinbetriebnahme von vier Spritzgiesswerkzeugen nach dem Umbau der Halle 2."
+    }
+  ],
+  "project_tasks": [
+    {
+      "xml_id": "task_scr_konstruktion",
+      "name": "Konstruktion und Fliesssimulation Fuellstutzen",
+      "project_xmlid": "prj_scr45_werkzeug",
+      "stage_xmlid": "ts_konstruktion",
+      "priority": "2",
+      "allocated_hours": 120.0,
+      "date_deadline": "2026-06-30 17:00:00"
+    },
+    {
+      "xml_id": "task_scr_werkzeugbau",
+      "name": "Werkzeugbau und Musterung AS-60",
+      "project_xmlid": "prj_scr45_werkzeug",
+      "stage_xmlid": "ts_werkzeugbau",
+      "priority": "2",
+      "allocated_hours": 320.0,
+      "date_deadline": "2026-09-15 17:00:00"
+    },
+    {
+      "xml_id": "task_scr_ppap",
+      "name": "Erstmusterpruefung und PPAP SCR-45/AS-60",
+      "project_xmlid": "prj_scr45_werkzeug",
+      "stage_xmlid": "ts_bemusterung",
+      "priority": "1",
+      "allocated_hours": 80.0
+    },
+    {
+      "xml_id": "task_scr_sop",
+      "name": "Serienanlauf und Anlaufkurve",
+      "project_xmlid": "prj_scr45_werkzeug",
+      "stage_xmlid": "ts_serienanlauf",
+      "priority": "2",
+      "allocated_hours": 160.0
+    },
+    {
+      "xml_id": "task_scr_freigabe",
+      "name": "Kundenfreigabe und Dokumentation",
+      "project_xmlid": "prj_scr45_werkzeug",
+      "stage_xmlid": "ts_abnahme",
+      "priority": "0",
+      "allocated_hours": 24.0
+    },
+    {
+      "xml_id": "task_bev_konstruktion",
+      "name": "Werkzeugkonstruktion BEV-12",
+      "project_xmlid": "prj_bev12_serie",
+      "stage_xmlid": "ts_konstruktion",
+      "priority": "1",
+      "allocated_hours": 90.0
+    },
+    {
+      "xml_id": "task_bev_prozess",
+      "name": "Prozessvalidierung Spritzguss",
+      "project_xmlid": "prj_bev12_serie",
+      "stage_xmlid": "ts_serienanlauf",
+      "priority": "2",
+      "allocated_hours": 140.0
+    },
+    {
+      "xml_id": "task_bev_ppap",
+      "name": "PPAP-Freigabe BEV-12",
+      "project_xmlid": "prj_bev12_serie",
+      "stage_xmlid": "ts_bemusterung",
+      "priority": "1",
+      "allocated_hours": 60.0
+    },
+    {
+      "xml_id": "task_bev_abnahme",
+      "name": "Abschluss Serienanlauf und Uebergabe",
+      "project_xmlid": "prj_bev12_serie",
+      "stage_xmlid": "ts_abnahme",
+      "priority": "0",
+      "allocated_hours": 16.0
+    },
+    {
+      "xml_id": "task_bks_simulation",
+      "name": "Fliesssimulation BKS-25",
+      "project_xmlid": "prj_bks25_entwicklung",
+      "stage_xmlid": "ts_konstruktion",
+      "priority": "1",
+      "allocated_hours": 60.0
+    },
+    {
+      "xml_id": "task_bks_werkzeug",
+      "name": "Werkzeugbau Folgeschnitt BKS-25",
+      "project_xmlid": "prj_bks25_entwicklung",
+      "stage_xmlid": "ts_werkzeugbau",
+      "priority": "2",
+      "allocated_hours": 200.0
+    },
+    {
+      "xml_id": "task_bks_muster",
+      "name": "Freigabemuster und Dauertest",
+      "project_xmlid": "prj_bks25_entwicklung",
+      "stage_xmlid": "ts_bemusterung",
+      "priority": "1",
+      "allocated_hours": 72.0
+    },
+    {
+      "xml_id": "task_bks_serie",
+      "name": "Serienfreigabe BKS-25",
+      "project_xmlid": "prj_bks25_entwicklung",
+      "stage_xmlid": "ts_serienanlauf",
+      "priority": "1",
+      "allocated_hours": 40.0
+    },
+    {
+      "xml_id": "task_verlagerung_planung",
+      "name": "Verlagerungsplan und Demontage",
+      "project_xmlid": "prj_werkzeug_verlagerung",
+      "stage_xmlid": "ts_konstruktion",
+      "priority": "1",
+      "allocated_hours": 40.0
+    },
+    {
+      "xml_id": "task_verlagerung_umbau",
+      "name": "Umbau und Wiederinbetriebnahme Werkzeuge",
+      "project_xmlid": "prj_werkzeug_verlagerung",
+      "stage_xmlid": "ts_werkzeugbau",
+      "priority": "2",
+      "allocated_hours": 120.0
+    },
+    {
+      "xml_id": "task_verlagerung_abnahme",
+      "name": "Prozessabnahme nach Verlagerung",
+      "project_xmlid": "prj_werkzeug_verlagerung",
+      "stage_xmlid": "ts_abnahme",
+      "priority": "0",
+      "allocated_hours": 32.0
+    }
+  ],
+  "maintenance_equipment_categories": [
+    {
+      "xml_id": "mc_spritzgiess",
+      "name": "Spritzgiessmaschinen",
+      "note": "Spritzgiessmaschinen der Fertigungshallen 1 und 2."
+    },
+    {
+      "xml_id": "mc_werkzeuge",
+      "name": "Spritzgiesswerkzeuge",
+      "note": "Werkzeuge fuer Deckel-, Stutzen- und Batteriekomponenten."
+    },
+    {
+      "xml_id": "mc_peripherie",
+      "name": "Peripherie und Messtechnik",
+      "note": "Granulartrocknung, Temperierung und Messtechnik."
+    },
+    {
+      "xml_id": "mc_montage",
+      "name": "Montage- und Pruefanlagen",
+      "note": "Montagelinien und Dichtheitspruefstaende."
+    }
+  ],
+  "maintenance_equipment": [
+    {
+      "xml_id": "eq_sgm_01",
+      "name": "Spritzgiessmaschine Engel Victory 120",
+      "category_xmlid": "mc_spritzgiess",
+      "serial_no": "SGM-01",
+      "model": "Victory 120/45",
+      "assign_date": "2019-03-11",
+      "cost": 185000.0,
+      "note": "Maschine 1 in Halle 1, Schliesskraft 120 t, fuer Deckelgehaeuse."
+    },
+    {
+      "xml_id": "eq_sgm_02",
+      "name": "Spritzgiessmaschine Arburg 470A",
+      "category_xmlid": "mc_spritzgiess",
+      "serial_no": "SGM-02",
+      "model": "470A 1000-290",
+      "assign_date": "2021-09-06",
+      "cost": 240000.0,
+      "note": "Maschine 2 in Halle 1, Schliesskraft 100 t, fuer Fuellstutzen."
+    },
+    {
+      "xml_id": "eq_sgm_03",
+      "name": "Spritzgiessmaschine Engel Duo 350",
+      "category_xmlid": "mc_spritzgiess",
+      "serial_no": "SGM-03",
+      "model": "Duo 350/120",
+      "assign_date": "2018-05-22",
+      "cost": 410000.0,
+      "note": "Maschine 3 in Halle 2, Schliesskraft 350 t, fuer Kuehlmittelverteiler."
+    },
+    {
+      "xml_id": "eq_dryer",
+      "name": "Granulatrockner Motan Drymax 150",
+      "category_xmlid": "mc_peripherie",
+      "serial_no": "PER-01",
+      "model": "Drymax 150",
+      "assign_date": "2020-11-02",
+      "cost": 28000.0,
+      "note": "Trocknung von PA66-Granulat vor der Verarbeitung."
+    },
+    {
+      "xml_id": "eq_tcu",
+      "name": "Temperiergeraet Regloplas 300",
+      "category_xmlid": "mc_peripherie",
+      "serial_no": "PER-02",
+      "model": "Regloplas 300",
+      "assign_date": "2022-02-14",
+      "cost": 12500.0,
+      "note": "Werkzeugtemperierung fuer technische Teile, Temperaturbereich bis 160 Grad C."
+    },
+    {
+      "xml_id": "eq_cmm",
+      "name": "Koordinatenmessgeraet Zeiss Contura",
+      "category_xmlid": "mc_peripherie",
+      "serial_no": "PER-03",
+      "model": "Contura 7/10/6",
+      "assign_date": "2021-06-30",
+      "cost": 135000.0,
+      "note": "Messtechnik fuer Masspruefungen im Rahmen der Qualitaetssicherung."
+    },
+    {
+      "xml_id": "eq_tool_kvs",
+      "name": "Spritzgiesswerkzeug KVS-140",
+      "category_xmlid": "mc_werkzeuge",
+      "serial_no": "WZ-140-01",
+      "model": "8-fach Heisskanal",
+      "assign_date": "2020-04-15",
+      "cost": 78000.0,
+      "note": "Serienwerkzeug fuer Kuehlerverschlussdeckel KVS-140, 8-fach Heisskanalwerkzeug."
+    },
+    {
+      "xml_id": "eq_tool_scr",
+      "name": "Spritzgiesswerkzeug SCR-45",
+      "category_xmlid": "mc_werkzeuge",
+      "serial_no": "WZ-045-01",
+      "model": "4-fach Heisskanal",
+      "assign_date": "2026-07-01",
+      "cost": 92000.0,
+      "note": "Neues Serienwerkzeug fuer den SCR-/AdBlue-Verschlussdeckel SCR-45."
+    },
+    {
+      "xml_id": "eq_montage",
+      "name": "Montage- und Dichtheitspruefstand",
+      "category_xmlid": "mc_montage",
+      "serial_no": "MON-01",
+      "model": "PWS-2000",
+      "assign_date": "2022-10-10",
+      "cost": 64000.0,
+      "note": "Vollautomatischer Montage- und Dichtheitspruefstand fuer Verschlusssysteme."
+    }
+  ],
+  "maintenance_requests": [
+    {
+      "xml_id": "mr_sgm01_stoerung",
+      "name": "Stoerung Schliesseinheit Engel Victory 120",
+      "equipment_xmlid": "eq_sgm_01",
+      "maintenance_type": "corrective",
+      "stage_xmlid": "maintenance.stage_1",
+      "priority": "3",
+      "schedule_date": "2026-09-14 07:30:00",
+      "description": "Maschine blieb nach Fehlermeldung Hydraulikdruck stehen; Hydraulikpumpe und Druckventil werden geprueft."
+    },
+    {
+      "xml_id": "mr_sgm02_wartung",
+      "name": "Wartung Arburg 470A (1.000 Betriebsstunden)",
+      "equipment_xmlid": "eq_sgm_02",
+      "maintenance_type": "preventive",
+      "stage_xmlid": "maintenance.stage_0",
+      "priority": "2",
+      "schedule_date": "2026-09-21 08:00:00",
+      "description": "Turnusmaessige Wartung inklusive Oelwechsel, Filterwechsel und Pruefung der Schneckengeometrie."
+    },
+    {
+      "xml_id": "mr_tool_kvs_verschleiss",
+      "name": "Werkzeugverschleiss KVS-140 pruefen",
+      "equipment_xmlid": "eq_tool_kvs",
+      "maintenance_type": "preventive",
+      "stage_xmlid": "maintenance.stage_0",
+      "priority": "2",
+      "schedule_date": "2026-09-22 09:00:00",
+      "description": "Erhoehte Ausschussquote durch Formverschleiss; Kavitaeten vermessen und Duesen pruefen."
+    },
+    {
+      "xml_id": "mr_tool_scr_reparatur",
+      "name": "Heisskanaldefekt Werkzeug SCR-45",
+      "equipment_xmlid": "eq_tool_scr",
+      "maintenance_type": "corrective",
+      "stage_xmlid": "maintenance.stage_1",
+      "priority": "3",
+      "schedule_date": "2026-09-15 06:30:00",
+      "description": "Eine Heisskanalduse heizt nicht mehr; Widerstand und Kabelfuehrung werden durch den Werkzeugbau geprueft."
+    },
+    {
+      "xml_id": "mr_dryer_filter",
+      "name": "Filterwechsel Granulatrockner",
+      "equipment_xmlid": "eq_dryer",
+      "maintenance_type": "preventive",
+      "stage_xmlid": "maintenance.stage_3",
+      "priority": "1",
+      "close_date": "2026-09-08",
+      "description": "Filter und Trockenmittel wurden gewechselt, Trocknungsleistung wieder im Sollbereich."
+    },
+    {
+      "xml_id": "mr_tcu_kalibrierung",
+      "name": "Kalibrierung Temperiergeraet",
+      "equipment_xmlid": "eq_tcu",
+      "maintenance_type": "preventive",
+      "stage_xmlid": "maintenance.stage_3",
+      "priority": "0",
+      "close_date": "2026-08-29",
+      "description": "Jaehrliche Kalibrierung der Temperaturfuehler am Temperiergeraet durchgefuehrt."
+    },
+    {
+      "xml_id": "mr_cmm_kalibrierung",
+      "name": "Kalibrierung Koordinatenmessgeraet",
+      "equipment_xmlid": "eq_cmm",
+      "maintenance_type": "preventive",
+      "stage_xmlid": "maintenance.stage_0",
+      "priority": "1",
+      "schedule_date": "2026-09-25 08:00:00",
+      "description": "Jaehrliche Kalibrierung des Koordinatenmessgeraets inklusive Pruefung der Taster."
+    },
+    {
+      "xml_id": "mr_montage_pruefstand",
+      "name": "Druckabfall am Dichtheitspruefstand",
+      "equipment_xmlid": "eq_montage",
+      "maintenance_type": "corrective",
+      "stage_xmlid": "maintenance.stage_1",
+      "priority": "2",
+      "schedule_date": "2026-09-16 10:00:00",
+      "description": "Der Pruefstand meldet Druckabfall; Dichtungen und Ventile der Pruefkammer werden instand gesetzt."
+    },
+    {
+      "xml_id": "mr_sgm03_wartung",
+      "name": "Wartung Engel Duo 350",
+      "equipment_xmlid": "eq_sgm_03",
+      "maintenance_type": "preventive",
+      "stage_xmlid": "maintenance.stage_0",
+      "priority": "1",
+      "schedule_date": "2026-10-05 08:00:00",
+      "description": "Halbjaehrliche Wartung der grossen Maschine inklusive Pruefung der Schliesskraft und der Temperierung."
+    }
+  ]
+}

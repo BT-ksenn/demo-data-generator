@@ -47,6 +47,17 @@ VALID_PROJECT_PRIVACY = {"followers", "invited_users", "employees", "portal"}
 # addons/maintenance/models/maintenance.py (Selection: corrective/preventive).
 VALID_MAINTENANCE_TYPES = {"corrective", "preventive"}
 
+# maintenance.request.stage_id: the stages shipped as data by the maintenance
+# module (addons/maintenance/data/maintenance_data.xml: stage_0, stage_1,
+# stage_3, stage_4 - there is deliberately NO stage_2). The engine creates no
+# custom stages, so only these xmlids are valid (verified-patterns 4.22).
+VALID_MAINTENANCE_STAGES = {
+    "maintenance.stage_0",
+    "maintenance.stage_1",
+    "maintenance.stage_3",
+    "maintenance.stage_4",
+}
+
 # quality.check.quality_state: verified against
 # enterprise/quality/models/quality.py (Selection: none/pass/fail).
 VALID_QUALITY_STATES = {"none", "pass", "fail"}
@@ -66,6 +77,12 @@ VALID_QUALITY_MEASURE_ON = {"product", "operation"}
 # (sale_subscription/data/sale_subscription_data.xml, noupdate). Verified: only
 # these two plans ship as data (verified-patterns 4.25).
 VALID_SUBSCRIPTION_PLANS = {"month", "year"}
+
+# planning.slot.state: the two Planning states (1_draft/2_published,
+# enterprise/planning/models/planning_slot.py) plus the two Field Service states
+# added by planning_field_service (selection_add, verified-patterns 4.27). The
+# `planning` bundle always installs planning_field_service, so all four are safe.
+VALID_PLANNING_SLOT_STATES = {"1_draft", "2_published", "3_in_progress", "4_completed"}
 
 # Default demo-data language per country. Key is the lower-case ISO code taken
 # from the country xmlid suffix (e.g. "base.ch" -> "ch"). This is a primary
@@ -568,6 +585,12 @@ class MaintenanceRequest:
                 f"MaintenanceRequest {self.xml_id!r}: priority={self.priority!r} invalid "
                 f"(allowed: {sorted(VALID_TASK_PRIORITIES)})."
             )
+        if self.stage_xmlid not in VALID_MAINTENANCE_STAGES:
+            raise SpecError(
+                f"MaintenanceRequest {self.xml_id!r}: stage_xmlid={self.stage_xmlid!r} "
+                f"invalid (allowed: {sorted(VALID_MAINTENANCE_STAGES)}; the maintenance "
+                f"module ships no stage_2, verified-patterns 4.22)."
+            )
 
 
 @dataclass
@@ -704,6 +727,75 @@ class Subscription:
 
 
 @dataclass
+class PlanningRole:
+    """``planning.role`` (Planning app, Enterprise).
+
+    Verified against enterprise/planning/models/planning_role.py: only ``name``
+    is required (translatable); ``color``/``sequence`` are optional. (4.27)
+    """
+
+    xml_id: str
+    name: str
+    color: int | None = None
+    sequence: int | None = None
+
+
+@dataclass
+class PlanningSlot:
+    """``planning.slot`` used as a Field Service intervention (Enterprise).
+
+    Verified against enterprise/planning/models/planning_slot.py and
+    enterprise/planning_field_service/models/planning_slot.py plus their demo data
+    (verified-patterns 4.27):
+
+    - ``name`` is ``fields.Text('Note')`` and is the visible intervention text.
+    - ``company_id``/``start_datetime``/``end_datetime``/``allocated_hours``/
+      ``role_id`` are ``compute + store + readonly=False`` -> safe to set in XML.
+    - ``partner_id`` (customer) exists with ``planning_field_service`` and is
+      ``check_company`` -> the partner must belong to the demo company.
+    - ``state`` values are the two base Planning states plus the two Field
+      Service states; the engine's ``planning`` bundle installs
+      ``planning_field_service`` so all four are valid.
+    - DB constraints: ``end_datetime > start_datetime`` and
+      ``allocated_hours >= 0``.
+    """
+
+    xml_id: str
+    name: str
+    partner_xmlid: str | None = None
+    role_xmlid: str | None = None
+    start_datetime: str | None = None
+    end_datetime: str | None = None
+    allocated_hours: float | None = None
+    state: str = "1_draft"
+    priority: str | None = None
+
+    def __post_init__(self) -> None:
+        if self.state not in VALID_PLANNING_SLOT_STATES:
+            raise SpecError(
+                f"PlanningSlot {self.xml_id!r}: state={self.state!r} invalid "
+                f"(allowed: {sorted(VALID_PLANNING_SLOT_STATES)}; the field-service "
+                f"states need planning_field_service, verified-patterns 4.27)."
+            )
+        if self.priority is not None and self.priority not in VALID_TASK_PRIORITIES:
+            raise SpecError(
+                f"PlanningSlot {self.xml_id!r}: priority={self.priority!r} invalid "
+                f"(allowed: {sorted(VALID_TASK_PRIORITIES)})."
+            )
+        if (
+            self.start_datetime
+            and self.end_datetime
+            and self.end_datetime <= self.start_datetime
+        ):
+            raise SpecError(
+                f"PlanningSlot {self.xml_id!r}: end_datetime "
+                f"({self.end_datetime!r}) must be after start_datetime "
+                f"({self.start_datetime!r}) - planning.slot has a DB check "
+                f"'end_datetime > start_datetime' (verified-patterns 4.27)."
+            )
+
+
+@dataclass
 class Module:
     technical_name: str
     title: str
@@ -758,6 +850,9 @@ class CustomerSpec:
     quality_alerts: list[QualityAlert] = field(default_factory=list)
     # Subscriptions (app `sale_subscription`, Enterprise).
     subscriptions: list[Subscription] = field(default_factory=list)
+    # Planning / Field Service (app `planning_field_service`, Enterprise).
+    planning_roles: list[PlanningRole] = field(default_factory=list)
+    planning_slots: list[PlanningSlot] = field(default_factory=list)
     # Demo-data language. None -> derived from the company country (see
     # derive_language). Overridable per spec (e.g. an English-only IT lead).
     language: str | None = None
@@ -904,6 +999,15 @@ class CustomerSpec:
                 _require(line.product_xmlid, product_ids,
                          f"Subscription {subscription.xml_id}: line product_xmlid")
 
+        planning_role_ids = {r.xml_id for r in self.planning_roles}
+        for slot in self.planning_slots:
+            if slot.role_xmlid:
+                _require(slot.role_xmlid, planning_role_ids,
+                         f"PlanningSlot {slot.xml_id}: role_xmlid")
+            if slot.partner_xmlid:
+                _require(slot.partner_xmlid, partner_ids,
+                         f"PlanningSlot {slot.xml_id}: partner_xmlid")
+
         # sale_subscription._constraint_subscription_plan raises on a non-draft
         # sale.order that has a recurring product line but no plan_id
         # (sale_subscription/models/sale_order.py _check_recurring_plan_mismatch).
@@ -939,6 +1043,10 @@ class CustomerSpec:
     @property
     def needs_subscriptions(self) -> bool:
         return bool(self.subscriptions)
+
+    @property
+    def needs_planning(self) -> bool:
+        return bool(self.planning_roles) or bool(self.planning_slots)
 
     @property
     def needs_mrp(self) -> bool:

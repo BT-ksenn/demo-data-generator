@@ -40,7 +40,9 @@ Foreign xmlids (e.g. `base.ch`, `crm.stage_lead1`) are emitted 1:1 as `ref`.
   "quality_points": [ ... ],      // quality.point
   "quality_checks": [ ... ],      // quality.check
   "quality_alerts": [ ... ],      // quality.alert
-  "subscriptions": [ ... ]        // sale.order with plan_id
+  "subscriptions": [ ... ],       // sale.order with plan_id
+  "planning_roles": [ ... ],      // planning.role
+  "planning_slots": [ ... ]       // planning.slot (Field Service intervention)
 }
 ```
 
@@ -216,6 +218,22 @@ default `month`), `state` (default `draft`; only draft/sent), optional
 Products should set `recurring_invoice: true` so the lines become recurring.
 See verified-patterns 4.25.
 
+## `planning_roles[]`, `planning_slots[]` (bundle `planning`, Enterprise)
+
+Field Service / on-site interventions (`planning.slot`).
+
+`planning_roles`: `xml_id`, `name` (required); optional `color`, `sequence`.
+Creates `planning.role` ("Rollen").
+
+`planning_slots`: `xml_id`, `name` (required; the intervention text / note);
+optional `partner_xmlid` (customer, must belong to the demo company),
+`role_xmlid` (a `planning_roles` xml_id), `start_datetime`/`end_datetime`
+(`YYYY-MM-DD HH:MM:SS`; `end` must be after `start`), `allocated_hours`
+(`>= 0`), `state` (`1_draft` | `2_published` | `3_in_progress` | `4_completed`,
+default `1_draft`; the last two need `planning_field_service`, which the bundle
+installs), `priority` (`0`..`3`). Slots are created as open shifts (no resource
+assignment), like the shipped Field Service demo. See verified-patterns 4.27.
+
 ## Recommended data volume ("rich demo" tier)
 
 The generator emits exactly the records in the spec; there is no built-in
@@ -244,6 +262,8 @@ Source of truth: `engine/volume.py` (`RECOMMENDED_VOLUME`).
 | `quality_points` | 4 |
 | `quality_checks` | 6 |
 | `quality_alerts` | 4 |
+| `planning_roles` | 4 |
+| `planning_slots` | 12 |
 
 Spread invoices/orders across several months and mix customer and vendor
 documents; vary partner countries, individual contacts (`is_company: false`)

@@ -72,11 +72,14 @@ the module - minimal friction.
     default task stages.
   - **Enterprise-20 verified:** helpdesk 4.14, quality 4.23/4.24 and subscriptions
     4.25 hold; **Field Service 4.26 is obsolete** (see below).
-- **Field Service on 20.0:** `industry_fsm` and `project.is_fsm` were removed and
-  the app was re-implemented on `planning` (`planning_field_service`,
-  `planning.slot`). The `field_service` bundle and the `Project.is_fsm` spec field
-  were dropped; rebuilding it needs a new `planning.slot` building block
-  (demand-driven) - not started.
+- **Field Service on 20.0 - done (demand-driven):** `industry_fsm` and
+  `project.is_fsm` were removed and the app was re-implemented on `planning`
+  (`planning_field_service`, `planning.slot`). The `planning` bundle (spec
+  sections `planning_roles` + `planning_slots`, app `planning_field_service`)
+  now builds on-site interventions as open shifts; verified against the
+  Enterprise-20 source and installed green (verified-patterns 4.27). First
+  built for a customer module (technical name anonymized). No `Project.is_fsm`
+  field (removed in 20.0).
 - **Web research automation:** Automatically derive industry/size/business model
   from a customer name and, from it, the required apps, process chain and object
   types (per-customer composition, no fixed verticals - see the principles above).

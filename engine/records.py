@@ -22,6 +22,8 @@ from .model import (
     MaintenanceRequest,
     ManufacturingOrder,
     Partner,
+    PlanningRole,
+    PlanningSlot,
     Product,
     Project,
     ProjectTask,
@@ -542,6 +544,54 @@ def subscription_record(s: Subscription, company_xmlid: str, language: str) -> E
 
 
 # ---------------------------------------------------------------------------
+# Planning / Field Service (app `planning_field_service`, Enterprise).
+# Verified-patterns 4.27.
+# ---------------------------------------------------------------------------
+
+
+def planning_role_record(r: PlanningRole, language: str) -> ET.Element:
+    """``planning.role``. No ``company_id`` on the model; only ``name`` is
+    required (translatable). Verified-patterns 4.27."""
+    fields = [field_el("name", text=r.name)]
+    if r.color is not None:
+        fields.append(field_el("color", text=r.color))
+    if r.sequence is not None:
+        fields.append(field_el("sequence", text=r.sequence))
+    return record_el("planning.role", r.xml_id, fields, context=_context(language))
+
+
+def planning_slot_record(
+    s: PlanningSlot, company_xmlid: str, language: str
+) -> ET.Element:
+    """``planning.slot`` as a Field Service intervention.
+
+    ``company_id`` is set explicitly (its compute falls back to ``env.company``,
+    the installation company, otherwise). ``start_datetime``/``end_datetime``/
+    ``allocated_hours``/``role_id``/``partner_id`` are all ``readonly=False``
+    compute fields and safe to set; ``name`` is the intervention note. No
+    resources are assigned (open shifts, like the shipped field-service demo).
+    Verified-patterns 4.27."""
+    fields = [
+        field_el("name", text=s.name),
+        field_el("company_id", ref=company_xmlid),
+        field_el("state", text=s.state),
+    ]
+    if s.role_xmlid:
+        fields.append(field_el("role_id", ref=s.role_xmlid))
+    if s.partner_xmlid:
+        fields.append(field_el("partner_id", ref=s.partner_xmlid))
+    if s.start_datetime:
+        fields.append(field_el("start_datetime", text=s.start_datetime))
+    if s.end_datetime:
+        fields.append(field_el("end_datetime", text=s.end_datetime))
+    if s.allocated_hours is not None:
+        fields.append(field_el("allocated_hours", text=s.allocated_hours))
+    if s.priority is not None:
+        fields.append(field_el("priority", text=s.priority))
+    return record_el("planning.slot", s.xml_id, fields, context=_context(language, company_xmlid))
+
+
+# ---------------------------------------------------------------------------
 # ERP building blocks (CRM, purchase, stock, accounting, helpdesk). Each object
 # type was verified against the Odoo 20.0 source first (verified-patterns.md
 # 4.9-4.15).
@@ -923,5 +973,21 @@ def render_subscription_xml(spec: CustomerSpec) -> str:
     return render_odoo_file(
         [subscription_record(s, spec.company.xml_id, spec.resolved_language)
          for s in spec.subscriptions],
+        noupdate=True,
+    )
+
+
+def render_planning_role_xml(spec: CustomerSpec) -> str:
+    return render_odoo_file(
+        [planning_role_record(r, spec.resolved_language) for r in spec.planning_roles]
+    )
+
+
+def render_planning_slot_xml(spec: CustomerSpec) -> str:
+    return render_odoo_file(
+        [
+            planning_slot_record(s, spec.company.xml_id, spec.resolved_language)
+            for s in spec.planning_slots
+        ],
         noupdate=True,
     )

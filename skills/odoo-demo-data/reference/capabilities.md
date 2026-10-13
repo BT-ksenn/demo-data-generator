@@ -52,3 +52,4 @@ the bundle) - do not fake data for it.
 | `maintenance` | `maintenance_equipment_categories`, `maintenance_equipment`, `maintenance_requests` | `maintenance` | `contacts` | the company maintains equipment/assets with preventive or corrective maintenance requests (Community app). |
 | `quality` | `quality_points`, `quality_checks`, `quality_alerts` | `quality_control` | `mrp`, `contacts` | incoming/outgoing/in-process quality control (control points, checks, alerts) for regulated or certified production (Enterprise). |
 | `subscriptions` | `subscriptions` | `sale_subscription` | `sales` | recurring revenue (service/maintenance contracts) invoiced periodically (Enterprise; needs recurring products). |
+| `planning` | `planning_roles`, `planning_slots` | `planning_field_service` | `contacts` | on-site interventions and scheduling of field workers/customers (field service, technicians, installations; Enterprise). |

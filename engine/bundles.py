@@ -54,6 +54,8 @@ SECTION_ORDER: tuple[str, ...] = (
     "projects",
     "project_task_stages",
     "project_tasks",
+    "planning_roles",
+    "planning_slots",
 )
 
 
@@ -201,6 +203,17 @@ BUNDLES: dict[str, Bundle] = {
         relevant_when=(
             "recurring revenue (service/maintenance contracts) invoiced periodically "
             "(Enterprise; needs recurring products)."
+        ),
+    ),
+    "planning": Bundle(
+        id="planning",
+        label="Planning / Field Service",
+        sections=("planning_roles", "planning_slots"),
+        apps=("planning_field_service",),
+        requires=("contacts",),
+        relevant_when=(
+            "on-site interventions and scheduling of field workers/customers "
+            "(field service, technicians, installations; Enterprise)."
         ),
     ),
 }

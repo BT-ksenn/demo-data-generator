@@ -93,6 +93,11 @@ def data_files(spec: CustomerSpec) -> list[str]:
         files.append("data/sale_order_examples_data.xml")
     if spec.subscriptions:
         files.append("data/sale_order_subscription_data.xml")
+    # Planning roles must exist before the interventions that reference them.
+    if spec.planning_roles:
+        files.append("data/planning_role_data.xml")
+    if spec.planning_slots:
+        files.append("data/planning_slot_data.xml")
     return files
 
 
@@ -138,6 +143,9 @@ def depends(spec: CustomerSpec) -> list[str]:
     if spec.needs_subscriptions:
         # Subscriptions (Enterprise): sale.order with plan_id.
         deps.append("sale_subscription")
+    if spec.needs_planning:
+        # Planning / Field Service (Enterprise): planning.slot interventions.
+        deps.append("planning_field_service")
     return deps
 
 
