@@ -41,6 +41,8 @@ from .model import (
     SaleOrder,
     SaleOrderLine,
     SpecError,
+    StockPicking,
+    StockPickingLine,
     StockQuant,
     Subscription,
     SubscriptionLine,
@@ -331,6 +333,31 @@ def load_stock_quant(d: dict[str, Any]) -> StockQuant:
     )
 
 
+def load_stock_picking(d: dict[str, Any]) -> StockPicking:
+    xml_id = _get(d, "xml_id", "stock_picking", required=True)
+    where = f"stock_picking {xml_id}"
+    _reject_unknown(d, StockPicking, where)
+    lines_raw = _as_records(_get(d, "lines", where, required=True), f"{where} lines")
+    lines = [
+        StockPickingLine(
+            product_xmlid=_get(ld, "product_xmlid", f"{where} line", required=True),
+            qty=_get(ld, "qty", f"{where} line", required=True),
+        )
+        for ld in [_checked(x, StockPickingLine, f"{where} line") for x in lines_raw]
+    ]
+    return StockPicking(
+        xml_id=xml_id,
+        direction=_get(d, "direction", where, required=True),
+        lines=lines,
+        partner_xmlid=_get(d, "partner_xmlid", where, default=None),
+        date=_get(d, "date", where, default=None),
+        origin=_get(d, "origin", where, default=None),
+        state=_get(d, "state", where, default="done"),
+        from_location=_get(d, "from_location", where, default=None),
+        to_location=_get(d, "to_location", where, default=None),
+    )
+
+
 def load_invoice(d: dict[str, Any]) -> Invoice:
     xml_id = _get(d, "xml_id", "invoice", required=True)
     where = f"invoice {xml_id}"
@@ -580,6 +607,7 @@ def load_spec(d: dict[str, Any]) -> CustomerSpec:
         crm_leads=[load_crm_lead(x) for x in rows("crm_leads")],
         purchase_orders=[load_purchase_order(x) for x in rows("purchase_orders")],
         stock_quants=[load_stock_quant(x) for x in rows("stock_quants")],
+        stock_pickings=[load_stock_picking(x) for x in rows("stock_pickings")],
         invoices=[load_invoice(x) for x in rows("invoices")],
         helpdesk_tickets=[load_helpdesk_ticket(x) for x in rows("helpdesk_tickets")],
         quotation_templates=[load_quotation_template(x) for x in rows("quotation_templates")],
@@ -602,6 +630,8 @@ def load_spec(d: dict[str, Any]) -> CustomerSpec:
         crm_team_name=_get(d, "crm_team_name", "spec", default=None),
         helpdesk_team_name=_get(d, "helpdesk_team_name", "spec", default=None),
         accounting_app=_get(d, "accounting_app", "spec", default="full"),
+        warehouse_reception_steps=_get(d, "warehouse_reception_steps", "spec", default="one_step"),
+        warehouse_delivery_steps=_get(d, "warehouse_delivery_steps", "spec", default="ship_only"),
         customer_profile=(
             load_customer_profile(d["customer_profile"])
             if d.get("customer_profile")

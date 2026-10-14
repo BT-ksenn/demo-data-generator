@@ -4,9 +4,11 @@
     "title": "Demo Data - Musterhandel AG (Sales, Purchase, Inventory, Accounting, CRM, Helpdesk)",
     "category": "Sales",
     "summary": "ERP demo for a Swiss e-commerce retailer: own company with a chart of accounts (CH), assortment, purchasing/vendors, stock, CRM pipeline, posted customer/vendor invoices and helpdesk tickets",
-    "description": "Sample demo-data module for Musterhandel AG (Musterstadt): 1 new company including the Swiss chart of accounts (l10n_ch), 5 contacts (vendors and customers), 12 products from the riding, agriculture, fishing and hunting niches, 4 CRM opportunities, 2 purchase orders, stock for 6 products, 1 customer invoice and 1 vendor bill (posted in the post_init_hook) as well as 3 helpdesk tickets."
+    "description": "Sample demo-data module for Musterhandel AG (Musterstadt): 1 new company including the Swiss chart of accounts (l10n_ch), 5 contacts (vendors and customers), 12 products from the riding, agriculture, fishing and hunting niches, 4 CRM opportunities, 2 purchase orders, stock for 6 products, goods movements on a 2-step receiving / pick-ship warehouse (an incoming receipt with its put-away, an outgoing delivery with its pick, an internal transfer and an open delivery), 1 customer invoice and 1 vendor bill (posted in the post_init_hook) as well as 3 helpdesk tickets."
   },
   "accounting_app": "full",
+  "warehouse_reception_steps": "two_steps",
+  "warehouse_delivery_steps": "pick_ship",
   "company": {
     "xml_id": "demo_company",
     "name": "Musterhandel AG",
@@ -305,6 +307,53 @@
     {"product_xmlid": "product_agri_tape", "qty": 450.0},
     {"product_xmlid": "product_fishing_rod", "qty": 64.0},
     {"product_xmlid": "product_hunting_optics", "qty": 38.0}
+  ],
+  "stock_pickings": [
+    {
+      "xml_id": "wh_in_agri",
+      "direction": "incoming",
+      "state": "done",
+      "partner_xmlid": "partner_supplier_agri",
+      "origin": "ROTH-99120",
+      "date": "2026-09-03",
+      "lines": [
+        {"product_xmlid": "product_agri_bucket", "qty": 120.0},
+        {"product_xmlid": "product_agri_tape", "qty": 200.0}
+      ]
+    },
+    {
+      "xml_id": "wh_out_yonc",
+      "direction": "outgoing",
+      "state": "done",
+      "partner_xmlid": "partner_yonc",
+      "origin": "SO-YONC-2026-0910",
+      "date": "2026-09-11",
+      "lines": [
+        {"product_xmlid": "product_riding_boot", "qty": 20.0},
+        {"product_xmlid": "product_hunting_optics", "qty": 5.0}
+      ]
+    },
+    {
+      "xml_id": "wh_int_staging",
+      "direction": "internal",
+      "state": "done",
+      "from_location": "stock",
+      "to_location": "output",
+      "date": "2026-09-12",
+      "lines": [
+        {"product_xmlid": "product_riding_boot", "qty": 10.0}
+      ]
+    },
+    {
+      "xml_id": "wh_out_private_open",
+      "direction": "outgoing",
+      "state": "open",
+      "partner_xmlid": "partner_private",
+      "date": "2026-09-20",
+      "lines": [
+        {"product_xmlid": "product_riding_helmet", "qty": 1.0}
+      ]
+    }
   ],
   "invoices": [
     {

@@ -11,6 +11,9 @@ from __future__ import annotations
 import xml.etree.ElementTree as ET
 
 from .model import (
+    GLOBAL_LOCATION_REF,
+    LEG_PICKING_TYPE_FIELD,
+    WH_LOCATION_FIELD,
     Bom,
     Company,
     CrmLead,
@@ -22,6 +25,7 @@ from .model import (
     MaintenanceRequest,
     ManufacturingOrder,
     Partner,
+    PickingLeg,
     PlanningRole,
     PlanningSlot,
     Product,
@@ -36,6 +40,7 @@ from .model import (
     SaleOrder,
     StockQuant,
     Subscription,
+    all_picking_legs,
 )
 from .xmlgen import field_el, record_el, render_odoo_file
 
@@ -708,7 +713,92 @@ def stock_warehouse_record(spec: CustomerSpec) -> ET.Element:
         field_el("company_id", ref=spec.company.xml_id),
         field_el("code", text="DEMO"),
     ]
+    # Multi-step flows (verified-patterns 4.29): stock.warehouse.create() then
+    # creates the extra picking types/locations (stock_warehouse.py:114-160,
+    # _get_locations_values :610-655). Only set when non-default to keep the XML
+    # minimal.
+    if spec.warehouse_reception_steps != "one_step":
+        fields.append(field_el("reception_steps", text=spec.warehouse_reception_steps))
+    if spec.warehouse_delivery_steps != "ship_only":
+        fields.append(field_el("delivery_steps", text=spec.warehouse_delivery_steps))
     return record_el("stock.warehouse", WAREHOUSE_XMLID, fields, context=_context(spec.resolved_language))
+
+
+def _location_field(name: str, key: str, warehouse_xmlid: str) -> ET.Element:
+    """A ``location_id``/``location_dest_id`` field for a picking/move: a global
+    ref for suppliers/customers, else a warehouse location (lot_stock_id, ...)."""
+    if key in GLOBAL_LOCATION_REF:
+        return field_el(name, ref=GLOBAL_LOCATION_REF[key])
+    # model="stock.warehouse" makes obj() a warehouse record (convert._eval_xml
+    # only defines obj() when the field carries a model= attribute).
+    return field_el(
+        name, model="stock.warehouse",
+        eval_=f"obj(ref('{warehouse_xmlid}')).{WH_LOCATION_FIELD[key]}.id",
+    )
+
+
+def _location_eval(key: str, warehouse_ref: str) -> str:
+    """The same resolution as ``_location_field`` but as a raw Python eval string,
+    for use inside an inline ``stock.move`` dict.
+
+    ``obj().env.ref(...)`` (not ``obj(ref(...))``): inside a nested x2many value
+    the eval context's ``obj`` refers to the field's model (stock.move), so only
+    ``obj().env`` gives access to the warehouse record (same pattern as the chart
+    ``<function>``). ``warehouse_ref`` is the fully-qualified xmlid (env.ref needs
+    ``module.name``)."""
+    if key in GLOBAL_LOCATION_REF:
+        return f"ref('{GLOBAL_LOCATION_REF[key]}')"
+    return f"obj().env.ref('{warehouse_ref}').{WH_LOCATION_FIELD[key]}.id"
+
+
+def stock_picking_record(
+    leg: PickingLeg, warehouse_xmlid: str, module: str, company_xmlid: str, language: str
+) -> ET.Element:
+    """One ``stock.picking`` leg with its moves.
+
+    Verified against odoo/odoo@20.0 (verified-patterns 4.29):
+    - ``state`` is compute+store+readonly -> never set; ``create()`` confirms
+      moves that already carry a done quantity (``_autoconfirm_picking``), the
+      engine's ``post_init_hook`` runs the real workflow.
+    - ``picking_type_id`` is required and must belong to the demo company ->
+      resolved from the demo warehouse (``in_type_id`` ... ``int_type_id``).
+    - ``location_id``/``location_dest_id`` are compute+store+readonly=False and
+      are set explicitly; the same locations are set on each ``stock.move``.
+    - ``stock.move.uom_id`` (renamed from ``product_uom`` in 20.0).
+    """
+    type_field = LEG_PICKING_TYPE_FIELD[leg.type_key]
+    warehouse_ref = f"{module}.{warehouse_xmlid}"
+    move_dicts = ", ".join(
+        "(0, 0, {"
+        f"'product_id': ref('{line.product_xmlid}'), "
+        f"'uom_id': ref('uom.product_uom_unit'), "
+        f"'product_uom_qty': {line.qty}, "
+        f"'picking_type_id': obj().env.ref('{warehouse_ref}').{type_field}.id, "
+        f"'location_id': {_location_eval(leg.src_key, warehouse_ref)}, "
+        f"'location_dest_id': {_location_eval(leg.dest_key, warehouse_ref)}"
+        "})"
+        for line in leg.lines
+    )
+    fields = [
+        field_el(
+            "picking_type_id", model="stock.warehouse",
+            eval_=f"obj(ref('{warehouse_xmlid}')).{type_field}.id",
+        ),
+        _location_field("location_id", leg.src_key, warehouse_xmlid),
+        _location_field("location_dest_id", leg.dest_key, warehouse_xmlid),
+    ]
+    if leg.partner_xmlid:
+        fields.append(field_el("partner_id", ref=leg.partner_xmlid))
+    if leg.origin:
+        fields.append(field_el("origin", text=leg.origin))
+    if leg.date:
+        fields.append(field_el("scheduled_date", text=leg.date))
+    fields.append(field_el("move_ids", model="stock.move", eval_=f"[{move_dicts}]"))
+    # Company context: stock.move.company_id defaults to env.company (NOT the
+    # picking's), so without allowed_company_ids the moves would belong to the
+    # installation company and _check_company would reject the transfer
+    # (verified-patterns 4.29).
+    return record_el("stock.picking", leg.xml_id, fields, context=_context(language, company_xmlid))
 
 
 def stock_quant_record(q: StockQuant, warehouse_xmlid: str, language: str) -> ET.Element:
@@ -896,6 +986,19 @@ def render_stock_warehouse_xml(spec: CustomerSpec) -> str:
 def render_stock_quant_xml(spec: CustomerSpec) -> str:
     return render_odoo_file(
         [stock_quant_record(q, WAREHOUSE_XMLID, spec.resolved_language) for q in spec.stock_quants],
+        noupdate=True,
+    )
+
+
+def render_stock_picking_xml(spec: CustomerSpec) -> str:
+    return render_odoo_file(
+        [
+            stock_picking_record(
+                leg, WAREHOUSE_XMLID, spec.module.technical_name,
+                spec.company.xml_id, spec.resolved_language,
+            )
+            for leg in all_picking_legs(spec)
+        ],
         noupdate=True,
     )
 

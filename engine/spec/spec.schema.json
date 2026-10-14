@@ -429,6 +429,72 @@
         "qty"
       ]
     },
+    "StockPickingLine": {
+      "type": "object",
+      "properties": {
+        "product_xmlid": {
+          "type": "string"
+        },
+        "qty": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "product_xmlid",
+        "qty"
+      ]
+    },
+    "StockPicking": {
+      "type": "object",
+      "properties": {
+        "xml_id": {
+          "type": "string"
+        },
+        "direction": {
+          "type": "string",
+          "enum": [
+            "incoming",
+            "internal",
+            "outgoing"
+          ]
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StockPickingLine"
+          }
+        },
+        "partner_xmlid": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "origin": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "done",
+            "open"
+          ]
+        },
+        "from_location": {
+          "type": "string"
+        },
+        "to_location": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "xml_id",
+        "direction",
+        "lines"
+      ]
+    },
     "InvoiceLine": {
       "type": "object",
       "properties": {
@@ -1050,6 +1116,12 @@
             "$ref": "#/$defs/StockQuant"
           }
         },
+        "stock_pickings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StockPicking"
+          }
+        },
         "invoices": {
           "type": "array",
           "items": {
@@ -1139,6 +1211,22 @@
           "items": {
             "$ref": "#/$defs/PlanningSlot"
           }
+        },
+        "warehouse_reception_steps": {
+          "type": "string",
+          "enum": [
+            "one_step",
+            "three_steps",
+            "two_steps"
+          ]
+        },
+        "warehouse_delivery_steps": {
+          "type": "string",
+          "enum": [
+            "pick_pack_ship",
+            "pick_ship",
+            "ship_only"
+          ]
         },
         "language": {
           "type": "string"

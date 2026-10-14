@@ -18,7 +18,9 @@ Foreign xmlids (e.g. `base.ch`, `crm.stage_lead1`) are emitted 1:1 as `ref`.
   "language": "de_CH",            // optional; derived from company country if absent (4.16)
   "crm_team_name": "Vertrieb",    // optional; language-dependent default if absent
   "helpdesk_team_name": "Kundendienst", // optional; language-dependent default
-  "accounting_app": "full",       // "full" (account_accountant, Enterprise) | "invoicing"
+  "accounting_app": "full",       // "full" (accountant app, Enterprise) | "invoicing"
+  "warehouse_reception_steps": "one_step",   // one_step | two_steps | three_steps
+  "warehouse_delivery_steps": "ship_only",   // ship_only | pick_ship | pick_pack_ship
   "customer_profile": { ... },    // optional; business reasoning + relatability check
   "partners": [ ... ],
   "products": [ ... ],
@@ -26,6 +28,7 @@ Foreign xmlids (e.g. `base.ch`, `crm.stage_lead1`) are emitted 1:1 as `ref`.
   "crm_leads": [ ... ],
   "purchase_orders": [ ... ],
   "stock_quants": [ ... ],
+  "stock_pickings": [ ... ],      // incoming/outgoing/internal goods movements
   "invoices": [ ... ],
   "helpdesk_tickets": [ ... ],
   "quotation": { ... },           // one draft quotation (sale.order)
@@ -120,6 +123,38 @@ Stages `crm.stage_lead1`..`lead3` (not `lead4`, which is `is_won`).
 
 `product_xmlid`, `qty`. Sets `quantity` (no stock move). Forces a demo
 `stock.warehouse`; products should be `is_storable`.
+
+## `stock_pickings[]` (bundle `stock`)
+
+Real shipments/transfers (`stock.picking` + `stock.move`). A "logical" movement
+is expanded by the engine into one or more legs according to the warehouse steps
+(see below). Fields:
+
+| Field | Required | Note |
+|---|---|---|
+| `xml_id`, `direction`, `lines` | yes | `direction`: `incoming` \| `outgoing` \| `internal`. |
+| `lines[]` | yes | `product_xmlid`, `qty` (> 0); table form supported. |
+| `partner_xmlid` | no | Vendor (incoming) / customer (outgoing); must be a spec partner. |
+| `state` | no | `done` (default; completed history with a real stock posting) or `open` (confirmed/ready, left for the demo). |
+| `date` | no | `YYYY-MM-DD`; the transfer date (`date_done`/move `date`). |
+| `origin` | no | Source document label. |
+| `from_location`/`to_location` | internal only | `stock` \| `input` \| `output` \| `packing` \| `quality`; must differ and be active for the chosen steps. |
+
+`warehouse_reception_steps` / `warehouse_delivery_steps` (top level, defaults
+`one_step` / `ship_only`) set `stock.warehouse.reception_steps`/
+`delivery_steps`. Multi-step flows make the warehouse create the extra picking
+types/locations and split each shipment:
+
+- incoming `two_steps` = Vendor → Input, then Input → Stock;
+  `three_steps` adds a Quality Control step.
+- outgoing `pick_ship` = Stock → Output, then Output → Customer;
+  `pick_pack_ship` adds a Packing step.
+- A second/third leg gets the xmlids `<xml_id>_2` / `_3` (do not reuse those
+  suffixes for other `stock_pickings`).
+
+Outgoing/internal `done` legs reserve real stock: provide enough `stock_quants`
+(or incoming receipts) so the transfer can be completed. See verified-patterns
+4.29.
 
 ## `invoices[]`
 
@@ -256,6 +291,7 @@ Source of truth: `engine/volume.py` (`RECOMMENDED_VOLUME`).
 | `project_tasks` | 12 |
 | `manufacturing_orders` | 8 |
 | `stock_quants` | 10 |
+| `stock_pickings` | 12 |
 | `subscriptions` | 6 |
 | `maintenance_equipment` | 6 |
 | `maintenance_requests` | 8 |
@@ -328,3 +364,7 @@ barcodes, a `project.task` whose stage is not linked via `project.type_ids`,
 manifest files, `quality_points` without `mrp`, invalid maintenance/quality/
 subscription enum values, `recurring_invoice` without a `sale_subscription`
 dependency, and a recurring product on a non-draft `sale.order`/quotation.
+Also: invalid `stock_pickings` `direction`/`state`, an internal transfer without
+(or with identical) `from_location`/`to_location` or one that targets a location
+that the chosen warehouse steps do not create, and duplicate picking xmlids after
+multi-step expansion.

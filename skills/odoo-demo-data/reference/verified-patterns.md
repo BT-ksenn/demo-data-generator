@@ -223,12 +223,24 @@ Stages `helpdesk.stage_new`/`stage_in_progress`/`stage_solved` exist globally
 
 ## 4.15 Accounting vs. invoicing: `account` alone is only "Invoicing"
 
-The Community module `account` yields "Invoicing" in the UI. Full accounting is
-`account_accountant` (Enterprise, `depends: ['account','mail_enterprise','web_tour']`,
-`auto_install: True`), which installs `account_reports` as well. Auto-install only
-applies together with `mail_enterprise`; in a fresh Community DB it remains
-"Invoicing". Spec option `accounting_app`: `"full"` (default, Enterprise) vs.
-`"invoicing"` (only `account`, Community-compatible).
+Source: `odoo/odoo@20.0` (`account/__manifest__.py`) + `enterprise` 20.0
+(`account_accountant`, `account_reports`, `accountant`).
+
+- The Community module `account` yields "Invoicing" in the UI (`name:
+  'Invoicing'`).
+- The Enterprise module `account_accountant` is **also named "Invoicing"**
+  (`auto_install: True`, `depends: ['account','mail_enterprise','web_tour']`): it
+  adds bank reconciliation / payment follow-up but is **not** an app tile.
+- The **"Accounting" app** in 20.0 is the Enterprise module **`accountant`**
+  (`name: 'Accounting'`, `application: True`, `depends: ['account_reports']`);
+  `account_reports` depends on `account_accountant`, which depends on `account`.
+  Depending on `accountant` pulls the whole chain and shows the Accounting app.
+- **Landmine:** depending on `account_accountant` alone (as the engine did before)
+  installs only "Invoicing", so the Accounting app never appeared and had to be
+  installed manually. `engine/manifest.py` therefore adds **`accountant`** for
+  `accounting_app: "full"`.
+- Spec option `accounting_app`: `"full"` (default, Enterprise -> `accountant`) vs.
+  `"invoicing"` (only `account`, Community-compatible).
 
 ## 4.16 Demo-data language: `lang` context + country mapping
 
@@ -645,3 +657,96 @@ Source: `enterprise/planning` + `enterprise/planning_field_service` (20.0),
 - **Engine:** `PlanningRole`/`PlanningSlot`, files `planning_role_data.xml` ->
   `planning_slot_data.xml`, bundle `planning` (app `planning_field_service`,
   requires `contacts`).
+
+## 4.28 Demo documents are attributed to "Administrator", not "OdooBot"
+
+Source: `odoo/odoo@20.0`, `odoo/addons/base/data/res_users_data.xml`.
+
+- XML data files are loaded in the **superuser** environment
+  (`base.user_root`, uid 1, name "OdooBot" - `res_users_data.xml:5`), while the
+  visible human admin is `base.user_admin` (uid 2, login `admin`,
+  "Administrator" - `res_users_data.xml:17`). Every person field with
+  `default=lambda self: self.env.user` (salesperson/buyer/assigned-to/...) thus
+  ends up as **OdooBot**.
+- **Fix:** the `post_init_hook` calls
+  `_assign_demo_responsibles(env, company, admin)`, which writes the fields to
+  `base.user_admin` for the records of the demo company. It runs **after**
+  `admin.company_ids` includes the demo company, because `crm.lead.user_id` and
+  `purchase.order.user_id` have `check_company=True` (a value set during XML load
+  would violate the company check). `account.move` gets `invoice_user_id` only for
+  `out_invoice` (vendor bills have no salesperson).
+- Fields (verified against the 20.0 source): `sale.order.user_id`,
+  `account.move.invoice_user_id`, `crm.lead.user_id`, `purchase.order.user_id`,
+  `helpdesk.ticket.user_id`, `project.task.user_ids` (m2m), `quality.alert.user_id`,
+  `maintenance.request.owner_user_id`. The computes are stable - `sale.order.user_id`
+  depends on `partner_id`, `account.move.invoice_user_id` on `move_type`/`partner_id`
+  and `helpdesk.ticket.user_id` on `team_id`, none of which change after the write.
+- `create_uid` (the chatter "Created by") stays OdooBot; rewriting it would touch a
+  readonly field with tracking/audit side effects and is deliberately not done.
+- **Engine:** `engine/manifest.py` `_responsible_models()` + the
+  `_assign_demo_responsibles` block in `render_hooks_py()`;
+  `engine/verify.py` asserts the sale-order/customer-invoice salesperson.
+
+## 4.29 Inventory movements: `stock.picking` / `stock.move` (+ warehouse steps)
+
+Source: `odoo/odoo@20.0`, `addons/stock/models/{stock_picking,stock_move,
+stock_move_line,stock_picking_type,stock_warehouse}.py`,
+`addons/stock/data/stock_demo2.xml` (canonical demo pattern).
+
+So far the inventory section only created opening stock (`stock.quant`, 4.13).
+The engine now also creates real shipments/transfers:
+
+- **Data model:** `StockPicking` (a *logical* movement) is expanded by
+  `model.picking_legs()` into one or more `PickingLeg`s, resolved to the demo
+  warehouse's picking types/locations. `direction` = `incoming`/`outgoing`/
+  `internal`; `state` = `done` (history, real posting) or `open` (left ready).
+- **Warehouse steps** (`stock.warehouse.reception_steps` / `delivery_steps`,
+  `:56-66`): a new warehouse gets the extra locations/picking types at create
+  time (`create()` -> `_get_locations_values` `:610-655` ->
+  `_create_or_update_sequences_and_picking_types`). The engine sets them in
+  `stock_warehouse_record` and splits each declared shipment accordingly:
+  - incoming `one_step` Vendor->Stock; `two_steps` Vendor->Input + Input->Stock
+    (`store_type_id`); `three_steps` Vendor->Input + Input->QC + QC->Stock.
+  - outgoing `ship_only` Stock->Customer; `pick_ship` Stock->Output
+    (`pick_type_id`) + Output->Customer; `pick_pack_ship` Stock->Packing +
+    Packing->Output + Output->Customer.
+  - `internal`: explicit `from_location`/`to_location` (`stock`/`input`/`output`/
+    `packing`/`quality`), validated to be active for the chosen steps.
+- **`stock.picking`:**
+  - `state` is `compute='_compute_state', store=True, readonly=True` -> **never
+    set it**. `create()` calls `_autoconfirm_picking()`, which confirms moves
+    that already carry a done quantity, so a plain record stays draft.
+  - `picking_type_id` is required and must belong to the demo company; set from
+    the demo warehouse (`in_type_id`/`out_type_id`/`pick_type_id`/`pack_type_id`/
+    `store_type_id`/`qc_type_id`/`int_type_id`).
+  - `location_id`/`location_dest_id` are compute+store+readonly=False+required ->
+    set explicitly (suppliers/customers are global refs, the rest are the
+    warehouse locations).
+- **`stock.move`:** `uom_id` (renamed from `product_uom`); `product_uom_qty`;
+  `location_id`/`location_dest_id`; `picking_type_id` (compute from picking).
+- **Landmine - `stock.move.company_id` defaults to `env.company`, not the
+  picking's company** (`stock_move.py:36-38`). Without
+  `context="{'allowed_company_ids': [ref('demo_company')]}"` the moves belong to
+  the installation company and `_check_company` (triggered by `action_confirm`)
+  raises *"Uh-oh! You've got some company inconsistencies here"*.
+- **Landmine - forcing the done quantity.** `stock.picking.state` and
+  `stock.move.quantity` are computed; the working pattern (Odoo's own stock demo)
+  is the `post_init_hook` workflow
+  `action_confirm()` -> `action_assign()` -> for each move `picked = True` (set
+  BEFORE the quantity so the created move lines inherit `picked=True`) then
+  `quantity = product_uom_qty` -> `with_context(cancel_backorder=True)._action_done()`.
+  Relying on `action_assign()` alone leaves `stock.move.quantity` at 0 for a
+  second leg (Input->Stock, Output->Customers), so `_action_done` cancels the move
+  (state `cancel`) - verified in the smoke test. The `<function>` pattern of
+  `stock_demo2.xml` writes `stock.move.line.quantity` explicitly for the same
+  reason.
+- **Note:** moving stock *into* the `output`/`packing` location triggers the
+  warehouse's push (delivery) rule and can create an extra waiting move - Odoo
+  behaviour, not a bug. Prefer `input`/`stock` targets for generic internal
+  transfers.
+- **Engine:** `engine/model.py` (`StockPicking`/`StockPickingLine`/`PickingLeg`,
+  `picking_legs`/`all_picking_legs`, warehouse-step constants),
+  `engine/records.py` `stock_picking_record`/`render_stock_picking_xml`,
+  `engine/manifest.py` `_process_stock_pickings`, `engine/verify.py`
+  (record count + done count), bundle `stock` (sections `stock_quants` +
+  `stock_pickings`).

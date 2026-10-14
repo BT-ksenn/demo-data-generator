@@ -69,8 +69,9 @@ Copy `examples/muster_foerdertechnik.json` (manufacturing customer) or
 object types: `res.company` (incl. chart of accounts), `res.partner`,
 `product.product`, `mrp.bom`, `mrp.production`, `sale.order`,
 `sale.order.template` (quotation templates), `crm.lead`, `purchase.order`,
-`stock.quant`/`stock.warehouse`, `account.move`, `helpdesk.ticket`,
-`project.project`/`project.task` (incl. task stages).
+`stock.quant`/`stock.warehouse`, `stock.picking`/`stock.move` (incoming/
+outgoing/internal movements, incl. multi-step warehouses), `account.move`,
+`helpdesk.ticket`, `project.project`/`project.task` (incl. task stages).
 Complete format: `skills/odoo-demo-data/reference/spec-format.md`.
 Unknown fields are rejected on load (typo protection).
 
@@ -78,6 +79,20 @@ Every generated module creates, besides the administrator, a demo login
 `demo`/`demo` (name = company, same rights as `base.user_admin`) in the
 `post_init_hook` - no manual user setup after a demo appointment. If the login
 already exists, creation is skipped (verified-patterns 4.18).
+
+The `post_init_hook` also attributes the generated documents (quotes, invoices,
+leads, POs, tickets, tasks, ...) to the UI admin **Administrator** instead of the
+superuser "OdooBot" that loads the XML data (verified-patterns 4.28). With
+`accounting_app: "full"` the module depends on the Enterprise **`accountant`**
+app, so "Accounting" appears as an installed app (verified-patterns 4.15).
+
+## Autonomous generation (opencode)
+
+`.opencode/agent/demo.md` (the `demo` agent, used by the `/new-demo` command)
+runs the whole pipeline without clarifying questions. `opencode.json` grants the
+pipeline a broad `bash`/`external_directory` allowlist (destructive commands stay
+`ask`) and allows `doom_loop`, so a full demo package is built and smoke-tested
+**without approval prompts**. There is no need to start `opencode` with `--auto`.
 
 ## Local test instance
 
@@ -120,7 +135,7 @@ engine/
                    instance ../odoodemo-local-20 (see its README)
 skills/odoo-demo-data/   skill: workflow + reference (verified-patterns, spec-format, ...)
 opencode.json/.opencode/ opencode adapter (registers skills/, /new-demo command,
-                         autonomous `demo` agent, pre-approved pipeline permissions)
+                         autonomous `demo` agent, pipeline allowlist: no prompts)
 examples/                anonymized example specifications (real specs are gitignored)
 examples/reference/      historical reference modules (no longer a template)
 .githooks/pre-commit     blocks committing non-anonymized specs (enable: see Setup)

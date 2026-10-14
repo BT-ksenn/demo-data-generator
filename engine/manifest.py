@@ -5,7 +5,7 @@ title, summary, description, data file list) - the structure itself
 """
 from __future__ import annotations
 
-from .model import CustomerSpec
+from .model import CustomerSpec, all_picking_legs
 
 AUTHOR = "braintec"
 WEBSITE = "https://www.braintec.com"
@@ -71,6 +71,8 @@ def data_files(spec: CustomerSpec) -> list[str]:
         files.append("data/purchase_order_data.xml")
     if spec.stock_quants:
         files.append("data/stock_quant_data.xml")
+    if spec.stock_pickings:
+        files.append("data/stock_picking_data.xml")
     if spec.manufacturing_orders:
         files.append("data/mrp_production_data.xml")
     # Quality points need products + the warehouse manufacturing operation type;
@@ -117,11 +119,13 @@ def depends(spec: CustomerSpec) -> list[str]:
         deps.append("stock")
     if spec.needs_account:
         deps.append("account")
-        # Full accounting instead of Invoicing only: account_accountant
-        # (Enterprise) also installs account_reports. `account` alone is shown
-        # as "Invoicing" in the UI (verified-patterns.md 4.15).
+        # Full accounting instead of Invoicing only: in Odoo 20 the "Accounting"
+        # app is the Enterprise module `accountant` (application=True,
+        # depends account_reports -> account_accountant -> account). `account`
+        # (resp. account_accountant, which is also named "Invoicing") alone is
+        # only shown as "Invoicing" in the UI (verified-patterns.md 4.15).
         if spec.accounting_app == "full":
-            deps.append("account_accountant")
+            deps.append("accountant")
     # l10n_ch/l10n_de/l10n_at explicitly as a dependency so that
     # account.chart.template._load() does not have to install the module during
     # data loading (which would reset the transaction/registry mid-load, see
@@ -180,8 +184,38 @@ def render_init_py() -> str:
     return "from .hooks import pre_init_hook, post_init_hook\n"
 
 
+def _responsible_models(spec: CustomerSpec) -> list[tuple[str, str, bool]]:
+    """``(model, field, is_many2many)`` of the person fields to set to
+    ``base.user_admin`` (verified-patterns.md 4.28).
+
+    Only object types actually present in the spec are listed, so the hook never
+    writes to a model that is not installed. Field names verified against the
+    Odoo 20.0 source.
+    """
+    models: list[tuple[str, str, bool]] = []
+    if spec.quotation or spec.example_orders or spec.subscriptions:
+        models.append(("sale.order", "user_id", False))
+    if spec.invoices:
+        models.append(("account.move", "invoice_user_id", False))
+    if spec.crm_leads:
+        models.append(("crm.lead", "user_id", False))
+    if spec.purchase_orders:
+        models.append(("purchase.order", "user_id", False))
+    if spec.helpdesk_tickets:
+        models.append(("helpdesk.ticket", "user_id", False))
+    if spec.project_tasks:
+        models.append(("project.task", "user_ids", True))
+    if spec.quality_alerts:
+        models.append(("quality.alert", "user_id", False))
+    if spec.maintenance_requests:
+        models.append(("maintenance.request", "owner_user_id", False))
+    if spec.stock_pickings:
+        models.append(("stock.picking", "user_id", False))
+    return models
+
+
 def render_hooks_py(spec: CustomerSpec) -> str:
-    """post_init_hook with four tasks:
+    """post_init_hook with five tasks:
 
     1. (verified-patterns.md 4.5) res.company.create() only adds the new company
        to company_ids of self.env.user and SUPERUSER_ID, not of the normal
@@ -197,6 +231,10 @@ def render_hooks_py(spec: CustomerSpec) -> str:
        action_post() - the verified Odoo-native pattern
        (account/demo/account_demo.py _post_load_demo_data). Errors are swallowed
        so a single problematic invoice does not abort the whole installation.
+    5. (verified-patterns.md 4.28) Attribute the demo documents to the UI admin
+       (base.user_admin "Administrator") instead of the superuser "OdooBot" that
+       loads XML data. This runs AFTER admin is linked to the company, because
+       crm.lead/purchase.order.user_id have check_company=True.
     """
     module = spec.module.technical_name
     company_xmlid = spec.company.xml_id
@@ -255,6 +293,90 @@ def _create_demo_user(env, company, admin):
         "group_ids": [Command.set(groups.ids)],
     }})
 '''
+    responsible_block = ""
+    responsible_call = ""
+    responsible_models = _responsible_models(spec)
+    if responsible_models:
+        responsible_call = "\n        _assign_demo_responsibles(env, company, admin)"
+        assignments = ",\n".join(
+            f'        ("{model}", "{field}", {is_m2m})'
+            for model, field, is_m2m in responsible_models
+        )
+        responsible_block = f'''
+
+def _assign_demo_responsibles(env, company, admin):
+    """Attribute the demo documents to the UI admin (Administrator).
+
+    XML data is loaded as the SUPERUSER (base.user_root, "OdooBot"), so the
+    person fields (salesperson/buyer/assigned-to/...) default to OdooBot. Set
+    them to base.user_admin so the UI shows "Administrator"
+    (verified-patterns.md 4.28). Runs after admin was linked to the company -
+    crm.lead/purchase.order.user_id have check_company=True. Only out_invoice
+    moves get a salesperson (vendor bills have none).
+    """
+    if not (company and admin):
+        return
+    assignments = [
+{assignments},
+    ]
+    for model, field, is_m2m in assignments:
+        domain = [("company_id", "=", company.id)]
+        if model == "account.move":
+            domain.append(("move_type", "=", "out_invoice"))
+        records = env[model].sudo().search(domain)
+        if records:
+            records.write({{field: [Command.set([admin.id])] if is_m2m else admin.id}})
+'''
+    stock_block = ""
+    stock_call = ""
+    picking_legs = all_picking_legs(spec)
+    if picking_legs:
+        stock_call = "\n        _process_stock_pickings(env, company)"
+        leg_rows = ",\n".join(
+            f'        ("{module}.{leg.xml_id}", "{leg.state}", {leg.date!r})'
+            for leg in picking_legs
+        )
+        stock_block = f'''
+
+def _process_stock_pickings(env, company):
+    """Drive the demo shipments/transfers (verified-patterns 4.29).
+
+    stock.picking.state is computed/readonly, so the workflow is executed with
+    the Odoo API (the pattern of the shipped stock demo): confirm + reserve,
+    then for state "done" set picked + the done quantity on every move and call
+    _action_done. Setting quantity explicitly (not relying on the reservation)
+    is what makes the second legs of a multi-step flow (Input->Stock,
+    Output->Customers) actually move - a reservation alone can leave
+    stock.move.quantity at 0. Move.picked is set BEFORE quantity so the created
+    move lines inherit picked=True. cancel_backorder=True so a partial transfer
+    does not spawn a backorder. A date (YYYY-MM-DD) is written to date_done/date
+    afterwards, so the history is spread over time. Errors are swallowed per
+    picking, like the invoice posting.
+    """
+    if not company:
+        return
+    legs = [
+{leg_rows},
+    ]
+    for xml_id, state, date in legs:
+        picking = env.ref(xml_id, raise_if_not_found=False)
+        if not picking:
+            continue
+        try:
+            picking.action_confirm()
+            picking.action_assign()
+            if state == "done":
+                for move in picking.move_ids:
+                    move.picked = True
+                    move.quantity = move.product_uom_qty
+                picking.with_context(cancel_backorder=True)._action_done()
+                if date:
+                    picking.write({{"date_done": date}})
+                    picking.move_ids.write({{"date": date}})
+        except Exception:
+            # A single problematic transfer must not abort the demo installation.
+            pass
+'''
     return f'''# -*- coding: utf-8 -*-
 from odoo.fields import Command
 
@@ -287,5 +409,5 @@ def post_init_hook(env):
         }})
     if company:
         company.partner_id.lang = "{language}"
-        _create_demo_user(env, company, admin)
-{invoice_block}{demo_user_block}'''
+        _create_demo_user(env, company, admin){responsible_call}{stock_call}
+{invoice_block}{responsible_block}{stock_block}{demo_user_block}'''

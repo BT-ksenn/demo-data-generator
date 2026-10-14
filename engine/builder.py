@@ -71,6 +71,10 @@ def write_module_dir(spec: CustomerSpec, out_dir: Path) -> Path:
         (data_dir / "purchase_order_data.xml").write_text(records.render_purchase_order_xml(spec), encoding="utf-8")
     if spec.stock_quants:
         (data_dir / "stock_quant_data.xml").write_text(records.render_stock_quant_xml(spec), encoding="utf-8")
+    # Shipments/transfers. The workflow (confirm/assign/done) runs in the
+    # post_init_hook; the records only need products + the demo warehouse.
+    if spec.stock_pickings:
+        (data_dir / "stock_picking_data.xml").write_text(records.render_stock_picking_xml(spec), encoding="utf-8")
     if spec.manufacturing_orders:
         (data_dir / "mrp_production_data.xml").write_text(records.render_mrp_production_xml(spec), encoding="utf-8")
     if spec.quality_points:

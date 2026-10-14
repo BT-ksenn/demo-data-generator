@@ -8,9 +8,13 @@ permission:
   edit: allow
   webfetch: allow
   external_directory:
+    "*": ask
     "/Users/bt-39-bs-bd-jp/Documents/1-projects/braintec/odoodemo-local-20/**": allow
     "../odoodemo-local-20/**": allow
-    "*": ask
+    "~/.docker/**": allow
+    "/private/var/folders/**": allow
+    "/var/folders/**": allow
+  doom_loop: allow
 ---
 
 You build customer-specific Odoo demo-data modules end to end (Odoo 20 by default

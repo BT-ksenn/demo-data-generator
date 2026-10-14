@@ -48,7 +48,10 @@ class ResolveTests(unittest.TestCase):
     def test_mrp_pulls_stock_and_products(self) -> None:
         resolved = resolve(["mrp"])
         self.assertEqual(set(resolved.bundle_ids), {"mrp", "stock", "products"})
-        self.assertEqual(resolved.sections, ("products", "boms", "manufacturing_orders", "stock_quants"))
+        self.assertEqual(
+            resolved.sections,
+            ("products", "boms", "manufacturing_orders", "stock_quants", "stock_pickings"),
+        )
         self.assertIn("mrp", resolved.apps)
         self.assertIn("stock", resolved.apps)
 
@@ -62,7 +65,7 @@ class ResolveTests(unittest.TestCase):
         self.assertEqual(
             resolved.sections,
             ("partners", "products", "boms", "manufacturing_orders", "stock_quants",
-             "quality_points", "quality_checks", "quality_alerts"),
+             "stock_pickings", "quality_points", "quality_checks", "quality_alerts"),
         )
         self.assertIn("quality_control", resolved.apps)
 

@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .model import CustomerSpec
+from .model import CustomerSpec, all_picking_legs
 
 
 @dataclass(frozen=True)
@@ -63,7 +63,24 @@ def data_checks(spec: CustomerSpec) -> list[DataCheck]:
             )
         )
 
+    # base.user_admin ("Administrator", login 'admin') - the responsible person
+    # the demo documents are attributed to (verified-patterns.md 4.28).
+    admin_id = (
+        "(SELECT res_id FROM ir_model_data "
+        "WHERE module = 'base' AND name = 'user_admin')"
+    )
+
     count_xmlids("company", "res.company", 1, "the demo company was not created")
+    if spec.needs_account and spec.accounting_app == "full":
+        checks.append(
+            DataCheck(
+                label="accounting_app_installed",
+                expected="installed",
+                sql="SELECT state FROM ir_module_module WHERE name = 'accountant';",
+                hint="the 'Accounting' app (module `accountant`) is not installed - "
+                     "is it a dependency? (verified-patterns.md 4.15)",
+            )
+        )
     if spec.partners:
         count_xmlids("partners", "res.partner", len(spec.partners))
     if spec.products:
@@ -75,6 +92,19 @@ def data_checks(spec: CustomerSpec) -> list[DataCheck]:
     sale_orders = len(spec.example_orders) + (1 if spec.quotation else 0) + len(spec.subscriptions)
     if sale_orders:
         count_xmlids("sale_orders", "sale.order", sale_orders)
+        checks.append(
+            DataCheck(
+                label="sale_orders_salesperson_admin",
+                expected=sale_orders,
+                sql=(
+                    "SELECT count(*) FROM sale_order so "
+                    "JOIN ir_model_data d ON d.model = 'sale.order' AND d.res_id = so.id "
+                    f"WHERE d.module = '{module}' AND so.user_id = {admin_id};"
+                ),
+                hint="salesperson is not Administrator (OdooBot?) - "
+                     "post_init_hook _assign_demo_responsibles (verified-patterns.md 4.28)",
+            )
+        )
     if spec.subscriptions:
         checks.append(
             DataCheck(
@@ -96,6 +126,24 @@ def data_checks(spec: CustomerSpec) -> list[DataCheck]:
         count_xmlids("purchase_orders", "purchase.order", len(spec.purchase_orders))
     if spec.stock_quants:
         count_xmlids("stock_quants", "stock.quant", len(spec.stock_quants))
+    if spec.stock_pickings:
+        legs = all_picking_legs(spec)
+        count_xmlids("stock_pickings", "stock.picking", len(legs))
+        done_legs = [leg for leg in legs if leg.state == "done"]
+        if done_legs:
+            checks.append(
+                DataCheck(
+                    label="stock_pickings_done",
+                    expected=len(done_legs),
+                    sql=(
+                        "SELECT count(*) FROM stock_picking sp "
+                        "JOIN ir_model_data d ON d.model = 'stock.picking' AND d.res_id = sp.id "
+                        f"WHERE d.module = '{module}' AND sp.state = 'done';"
+                    ),
+                    hint="a transfer was not completed - check _process_stock_pickings "
+                         "(verified-patterns.md 4.29)",
+                )
+            )
     if spec.invoices:
         count_xmlids("invoices", "account.move", len(spec.invoices))
         checks.append(
@@ -110,6 +158,22 @@ def data_checks(spec: CustomerSpec) -> list[DataCheck]:
                 hint="post_init_hook posting failed (error was swallowed)",
             )
         )
+        out_invoices = [i for i in spec.invoices if i.move_type == "out_invoice"]
+        if out_invoices:
+            checks.append(
+                DataCheck(
+                    label="customer_invoices_salesperson_admin",
+                    expected=len(out_invoices),
+                    sql=(
+                        "SELECT count(*) FROM account_move am "
+                        "JOIN ir_model_data d ON d.model = 'account.move' AND d.res_id = am.id "
+                        f"WHERE d.module = '{module}' AND am.move_type = 'out_invoice' "
+                        f"AND am.invoice_user_id = {admin_id};"
+                    ),
+                    hint="invoice salesperson is not Administrator (OdooBot?) - "
+                         "post_init_hook _assign_demo_responsibles (verified-patterns.md 4.28)",
+                )
+            )
     if spec.helpdesk_tickets:
         count_xmlids("helpdesk_tickets", "helpdesk.ticket", len(spec.helpdesk_tickets))
     if spec.projects:

@@ -45,7 +45,7 @@ the bundle) - do not fake data for it.
 | `crm` | `crm_leads` | `crm` | `contacts` | a lead/opportunity pipeline before or alongside quoting. |
 | `project` | `projects`, `project_task_stages`, `project_tasks` | `project` | `contacts` | delivery/implementation work is tracked as projects with tasks and stages (services, construction, IT rollout, ...). |
 | `purchase` | `purchase_orders` | `purchase` | `products`, `contacts`, `stock` | procurement of goods/services from suppliers. |
-| `stock` | `stock_quants` | `stock` | `products` | the company holds, stores or ships inventory. |
+| `stock` | `stock_quants`, `stock_pickings` | `stock` | `products` | the company holds, stores or ships inventory; incoming/outgoing shipments and internal transfers (incl. multi-step warehouses). |
 | `mrp` | `boms`, `manufacturing_orders` | `mrp` | `stock`, `products` | the company manufactures goods from components (bills of materials); implies a warehouse. |
 | `accounting` | `invoices` | `account` | `products`, `contacts` | posted customer/vendor invoices; needs a chart of accounts (company.chart_template). |
 | `helpdesk` | `helpdesk_tickets` | `helpdesk` | `contacts` | after-sales support / service tickets (Enterprise). |

@@ -81,8 +81,9 @@ def validate_module(module_dir: Path) -> list[Finding]:
             if rec_id:
                 defined_ids.add(rec_id)
 
+    module_name = module_dir.name
     for fname, root in trees.items():
-        _check_records(fname, root, defined_ids, findings)
+        _check_records(fname, root, defined_ids, findings, module_name)
 
     barcodes: dict[str, list[str]] = {}
     for fname, root in trees.items():
@@ -145,6 +146,13 @@ def validate_module(module_dir: Path) -> list[Finding]:
             "a new company does not get a warehouse automatically "
             "(reference/verified-patterns.md 4.13)."
         ))
+    if "stock.picking" in models_present and "stock.warehouse" not in models_present:
+        findings.append(Finding(
+            "error",
+            "stock.picking records present, but no stock.warehouse for the demo company - "
+            "picking_type_id is required and must belong to the demo company "
+            "(reference/verified-patterns.md 4.29)."
+        ))
     if "mrp.production" in models_present and "stock.warehouse" not in models_present:
         findings.append(Finding(
             "error",
@@ -180,7 +188,10 @@ def _parse_manifest(manifest_path: Path, findings: list[Finding]) -> dict | None
     return None
 
 
-def _check_records(fname: str, root: ET.Element, defined_ids: set[str], findings: list[Finding]) -> None:
+def _check_records(
+    fname: str, root: ET.Element, defined_ids: set[str], findings: list[Finding],
+    module_name: str = "",
+) -> None:
     for rec in root.iter("record"):
         model = rec.get("model")
         rec_id = rec.get("id", "?")
@@ -255,15 +266,23 @@ def _check_records(fname: str, root: ET.Element, defined_ids: set[str], findings
         for f in rec.findall("field"):
             ref = f.get("ref")
             if ref:
-                _check_ref(fname, rec_id, ref, defined_ids, findings)
+                _check_ref(fname, rec_id, ref, defined_ids, findings, module_name)
             evl = f.get("eval")
             if evl:
                 for ref_match in REF_ATTR_RE.findall(evl):
-                    _check_ref(fname, rec_id, ref_match, defined_ids, findings)
+                    _check_ref(fname, rec_id, ref_match, defined_ids, findings, module_name)
 
 
-def _check_ref(fname: str, rec_id: str, ref: str, defined_ids: set[str], findings: list[Finding]) -> None:
+def _check_ref(
+    fname: str, rec_id: str, ref: str, defined_ids: set[str], findings: list[Finding],
+    module_name: str = "",
+) -> None:
     if "." in ref:
+        prefix, _, name = ref.partition(".")
+        # A module-qualified reference to one of our own records (e.g.
+        # env.ref('bt_demo_x.warehouse_demo')) is fine if the record exists.
+        if prefix == module_name and name in defined_ids:
+            return
         if not ref.startswith(KNOWN_EXTERNAL_PREFIXES):
             findings.append(Finding(
                 "warning",

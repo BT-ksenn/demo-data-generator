@@ -37,9 +37,13 @@ from engine.model import (
     SaleOrder,
     SaleOrderLine,
     SpecError,
+    StockPicking,
+    StockPickingLine,
     StockQuant,
     Subscription,
     SubscriptionLine,
+    all_picking_legs,
+    picking_legs,
 )
 from engine.docker.test_install import analyze_log
 from engine.manifest import (
@@ -324,14 +328,17 @@ class ErpBlockTests(unittest.TestCase):
             move_xml = (data_dir / "account_move_data.xml").read_text(encoding="utf-8")
             self.assertIn("allowed_company_ids", move_xml)
 
-    def test_full_accounting_pulls_account_accountant(self):
+    def test_full_accounting_pulls_accountant_app(self):
+        # In Odoo 20 the "Accounting" app is the Enterprise module `accountant`
+        # (application=True); account_accountant alone is only "Invoicing"
+        # (verified-patterns.md 4.15).
         spec = self._erp_spec(invoices=[
             Invoice(xml_id="inv1", move_type="out_invoice", partner_xmlid="p1",
                     invoice_date="2025-02-01", lines=[
                         InvoiceLine(product_xmlid="prod_a", qty=1.0, price_unit=100.0, description="x"),
                     ]),
         ])
-        self.assertIn("account_accountant", depends(spec))
+        self.assertIn("accountant", depends(spec))
         spec_invoicing = self._erp_spec(accounting_app="invoicing", invoices=[
             Invoice(xml_id="inv1", move_type="out_invoice", partner_xmlid="p1",
                     invoice_date="2025-02-01", lines=[
@@ -339,7 +346,48 @@ class ErpBlockTests(unittest.TestCase):
                     ]),
         ])
         self.assertIn("account", depends(spec_invoicing))
-        self.assertNotIn("account_accountant", depends(spec_invoicing))
+        self.assertNotIn("accountant", depends(spec_invoicing))
+
+    def test_responsibles_are_assigned_to_admin(self):
+        # XML data loads as the superuser (OdooBot), so the person fields default
+        # to OdooBot. The post_init_hook reassigns them to base.user_admin
+        # (Administrator) - verified-patterns.md 4.28.
+        spec = self._erp_spec(
+            crm_leads=[],
+            quotation=SaleOrder(xml_id="q1", partner_xmlid="p1", state="draft", lines=[
+                SaleOrderLine(product_xmlid="prod_a", qty=1.0, description="x"),
+            ]),
+            purchase_orders=[
+                PurchaseOrder(xml_id="po1", partner_xmlid="p2", state="draft", lines=[
+                    PurchaseOrderLine(product_xmlid="prod_a", qty=1.0, price_unit=40.0, description="x"),
+                ]),
+            ],
+            invoices=[
+                Invoice(xml_id="inv1", move_type="out_invoice", partner_xmlid="p1",
+                        invoice_date="2025-02-01", lines=[
+                            InvoiceLine(product_xmlid="prod_a", qty=1.0, price_unit=100.0, description="x"),
+                        ]),
+            ],
+        )
+        hooks = render_hooks_py(spec)
+        self.assertIn("_assign_demo_responsibles", hooks)
+        self.assertIn('("sale.order", "user_id", False)', hooks)
+        self.assertIn('("account.move", "invoice_user_id", False)', hooks)
+        self.assertIn('("purchase.order", "user_id", False)', hooks)
+        self.assertIn('admin = env.ref("base.user_admin"', hooks)
+
+    def test_no_sale_section_means_no_sale_assignment(self):
+        spec = self._erp_spec(
+            crm_leads=[], invoices=[
+                Invoice(xml_id="inv1", move_type="out_invoice", partner_xmlid="p1",
+                        invoice_date="2025-02-01", lines=[
+                            InvoiceLine(product_xmlid="prod_a", qty=1.0, price_unit=100.0, description="x"),
+                        ]),
+            ],
+        )
+        hooks = render_hooks_py(spec)
+        self.assertIn('("account.move", "invoice_user_id", False)', hooks)
+        self.assertNotIn('("sale.order", "user_id", False)', hooks)
 
     def test_german_chart_template_pulls_l10n_de(self):
         # The localization MUST be declared as a dependency, otherwise
@@ -870,6 +918,142 @@ class InstallLogTests(unittest.TestCase):
         log = "Module bt_other loaded in 1.0s\n"
         ok, _ = analyze_log(log, "bt_demo_x")
         self.assertFalse(ok)
+
+
+class StockPickingTests(unittest.TestCase):
+    """Shipments/transfers expand per warehouse steps (verified-patterns 4.29)."""
+
+    def _spec(self, **overrides) -> CustomerSpec:
+        base = dict(
+            module=Module(technical_name="bt_demo_stock", title="Stock", summary="S", description="S"),
+            company=Company(
+                name="Test AG", street="Teststrasse 1", city="Teststadt", zip="1234",
+                country_xmlid="base.ch", chart_template="ch",
+            ),
+            partners=[
+                Partner(xml_id="p1", name="Kunde AG", country_xmlid="base.ch",
+                        street="Weg 1", city="Stadt", zip="1111", customer_rank=1),
+                Partner(xml_id="p2", name="Lieferant AG", country_xmlid="base.de",
+                        street="Weg 2", city="Ort", zip="2222", supplier_rank=1, customer_rank=0),
+            ],
+            products=[
+                Product(xml_id="prod_a", name="Ware A", type="consu", sale_ok=True,
+                        purchase_ok=True, list_price=100.0, standard_price=40.0),
+            ],
+        )
+        base.update(overrides)
+        return CustomerSpec(**base)
+
+    def _picking(self, direction="incoming", **kwargs) -> StockPicking:
+        return StockPicking(
+            xml_id=kwargs.pop("xml_id", "wh1"),
+            direction=direction,
+            lines=[StockPickingLine(product_xmlid="prod_a", qty=5.0)],
+            **kwargs,
+        )
+
+    def test_incoming_steps_expand(self):
+        for steps, expected in [
+            ("one_step", [("in", "suppliers", "stock")]),
+            ("two_steps", [("in", "suppliers", "input"), ("store", "input", "stock")]),
+            ("three_steps", [("in", "suppliers", "input"), ("qc", "input", "quality"),
+                             ("store", "quality", "stock")]),
+        ]:
+            legs = picking_legs(self._picking("incoming"), steps, "ship_only")
+            self.assertEqual([(l.type_key, l.src_key, l.dest_key) for l in legs], expected)
+            self.assertEqual(legs[0].xml_id, "wh1")
+            if len(legs) > 1:
+                self.assertEqual(legs[1].xml_id, "wh1_2")
+
+    def test_outgoing_steps_expand(self):
+        for steps, expected in [
+            ("ship_only", [("out", "stock", "customers")]),
+            ("pick_ship", [("pick", "stock", "output"), ("out", "output", "customers")]),
+            ("pick_pack_ship", [("pick", "stock", "packing"), ("pack", "packing", "output"),
+                                ("out", "output", "customers")]),
+        ]:
+            legs = picking_legs(self._picking("outgoing"), "one_step", steps)
+            self.assertEqual([(l.type_key, l.src_key, l.dest_key) for l in legs], expected)
+
+    def test_internal_transfer_uses_from_to(self):
+        picking = self._picking("internal", from_location="input", to_location="stock")
+        legs = picking_legs(picking, "two_steps", "ship_only")
+        self.assertEqual(len(legs), 1)
+        self.assertEqual((legs[0].type_key, legs[0].src_key, legs[0].dest_key),
+                         ("internal", "input", "stock"))
+
+    def test_internal_requires_from_and_to(self):
+        with self.assertRaises(SpecError):
+            self._picking("internal")
+        with self.assertRaises(SpecError):
+            self._picking("internal", from_location="stock", to_location="stock")
+
+    def test_non_internal_forbids_from_to(self):
+        with self.assertRaises(SpecError):
+            self._picking("incoming", from_location="stock", to_location="input")
+
+    def test_invalid_direction_and_state(self):
+        with self.assertRaises(SpecError):
+            self._picking("sideways")
+        with self.assertRaises(SpecError):
+            self._picking("incoming", state="posted")
+
+    def test_internal_location_must_be_active_for_steps(self):
+        # "output" only exists with a multi-step delivery.
+        with self.assertRaises(SpecError):
+            self._spec(stock_pickings=[
+                self._picking("internal", from_location="stock", to_location="output"),
+            ])
+        # With pick_ship it is fine.
+        spec = self._spec(
+            warehouse_delivery_steps="pick_ship",
+            stock_pickings=[self._picking("internal", from_location="stock", to_location="output")],
+        )
+        self.assertEqual(len(spec.stock_pickings), 1)
+
+    def test_duplicate_leg_xmlids_rejected(self):
+        with self.assertRaises(SpecError):
+            self._spec(
+                warehouse_reception_steps="two_steps",
+                stock_pickings=[
+                    self._picking("incoming", xml_id="wh1"),
+                    # "wh1_2" is derived as the second leg of wh1.
+                    self._picking("outgoing", xml_id="wh1_2"),
+                ],
+            )
+
+    def test_invalid_warehouse_steps_rejected(self):
+        with self.assertRaises(SpecError):
+            self._spec(warehouse_reception_steps="four_steps")
+        with self.assertRaises(SpecError):
+            self._spec(warehouse_delivery_steps="teleport")
+
+    def test_build_renders_pickings_and_data_file(self):
+        spec = self._spec(
+            warehouse_reception_steps="two_steps",
+            warehouse_delivery_steps="pick_ship",
+            stock_pickings=[
+                StockPicking(xml_id="wh_in", direction="incoming", partner_xmlid="p2",
+                             state="done", lines=[StockPickingLine(product_xmlid="prod_a", qty=5.0)]),
+                StockPicking(xml_id="wh_out", direction="outgoing", partner_xmlid="p1",
+                             state="open", lines=[StockPickingLine(product_xmlid="prod_a", qty=2.0)]),
+            ],
+        )
+        with TemporaryDirectory() as tmp:
+            module_dir = write_module_dir(spec, Path(tmp))
+            self.assertTrue((module_dir / "data" / "stock_picking_data.xml").exists())
+            xml = (module_dir / "data" / "stock_picking_data.xml").read_text(encoding="utf-8")
+            # 2 incoming legs + 2 outgoing legs.
+            self.assertEqual(xml.count('model="stock.picking"'), 4)
+            self.assertIn("store_type_id", xml)
+            self.assertIn("wh_in_2", xml)
+            manifest = (module_dir / "__manifest__.py").read_text(encoding="utf-8")
+            self.assertIn('"data/stock_picking_data.xml"', manifest)
+            hooks = (module_dir / "hooks.py").read_text(encoding="utf-8")
+            self.assertIn("_process_stock_pickings", hooks)
+            self.assertIn('("bt_demo_stock.wh_in", "done", None)', hooks)
+            self.assertIn('("bt_demo_stock.wh_out", "open", None)', hooks)
+            self.assertEqual(len(all_picking_legs(spec)), 4)
 
 
 if __name__ == "__main__":

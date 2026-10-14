@@ -84,6 +84,48 @@ VALID_SUBSCRIPTION_PLANS = {"month", "year"}
 # `planning` bundle always installs planning_field_service, so all four are safe.
 VALID_PLANNING_SLOT_STATES = {"1_draft", "2_published", "3_in_progress", "4_completed"}
 
+# stock.picking: a demo shipment/transfer (verified-patterns 4.29). `direction`
+# selects the flow, `state` whether the record is a completed history entry
+# ("done") or left open/ready ("open").
+VALID_PICKING_DIRECTIONS = {"incoming", "outgoing", "internal"}
+VALID_PICKING_STATES = {"done", "open"}
+
+# stock.warehouse.reception_steps / delivery_steps (odoo/odoo@20.0,
+# addons/stock/models/stock_warehouse.py:56-66). Selecting a multi-step flow
+# makes the warehouse create the extra picking types/locations and the engine
+# splits a logical shipment into the matching legs (verified-patterns 4.29).
+VALID_RECEPTION_STEPS = {"one_step", "two_steps", "three_steps"}
+VALID_DELIVERY_STEPS = {"ship_only", "pick_ship", "pick_pack_ship"}
+
+# Internal transfer endpoints, resolved to warehouse locations by the engine.
+# "stock" = WH/Stock, "input"/"output"/"packing"/"quality" = the warehouse
+# sub-locations created for multi-step flows (stock_warehouse.py:610-655).
+VALID_INTERNAL_LOCATIONS = {"stock", "input", "output", "packing", "quality"}
+
+# Picking-type field on stock.warehouse per leg ("in"/"out"/"pick"/"pack"/
+# "store"/"qc"/"internal"), and the location key -> warehouse field / global ref.
+# Verified against _get_picking_type_update_values (stock_warehouse.py:960-1000).
+LEG_PICKING_TYPE_FIELD = {
+    "in": "in_type_id",
+    "out": "out_type_id",
+    "pick": "pick_type_id",
+    "pack": "pack_type_id",
+    "store": "store_type_id",
+    "qc": "qc_type_id",
+    "internal": "int_type_id",
+}
+WH_LOCATION_FIELD = {
+    "stock": "lot_stock_id",
+    "input": "wh_input_stock_loc_id",
+    "output": "wh_output_stock_loc_id",
+    "packing": "wh_pack_stock_loc_id",
+    "quality": "wh_qc_stock_loc_id",
+}
+GLOBAL_LOCATION_REF = {
+    "suppliers": "stock.stock_location_suppliers",
+    "customers": "stock.stock_location_customers",
+}
+
 # Default demo-data language per country. Key is the lower-case ISO code taken
 # from the country xmlid suffix (e.g. "base.ch" -> "ch"). This is a primary
 # language per country; the spec's optional "language" field overrides it.
@@ -396,6 +438,161 @@ class StockQuant:
 
     product_xmlid: str
     qty: float
+
+
+@dataclass
+class StockPickingLine:
+    product_xmlid: str
+    qty: float
+
+
+@dataclass
+class StockPicking:
+    """A logical goods movement, expanded by the engine into one or more
+    ``stock.picking`` legs according to the warehouse's reception/delivery steps
+    (verified-patterns 4.29).
+
+    ``direction``:
+    - ``incoming`` (Vendor -> Stock; two/three-step: Vendor -> Input [-> QC] -> Stock)
+    - ``outgoing`` (Stock -> Customer; two/three-step: Stock -> [Packing ->] Output -> Customer)
+    - ``internal`` (between two warehouse locations, chosen via ``from_location``/
+      ``to_location``)
+
+    ``state``: ``done`` = completed history entry (real stock posting),
+    ``open`` = confirmed/ready transfer left for the demo. ``partner_xmlid`` is
+    the vendor/customer; ``date`` (``YYYY-MM-DD``) is the transfer date.
+    """
+
+    xml_id: str
+    direction: str
+    lines: list[StockPickingLine]
+    partner_xmlid: str | None = None
+    date: str | None = None
+    origin: str | None = None
+    state: str = "done"
+    from_location: str | None = None
+    to_location: str | None = None
+
+    def __post_init__(self) -> None:
+        if self.direction not in VALID_PICKING_DIRECTIONS:
+            raise SpecError(
+                f"StockPicking {self.xml_id!r}: direction={self.direction!r} invalid "
+                f"(allowed: {sorted(VALID_PICKING_DIRECTIONS)})."
+            )
+        if self.state not in VALID_PICKING_STATES:
+            raise SpecError(
+                f"StockPicking {self.xml_id!r}: state={self.state!r} invalid "
+                f"(allowed: {sorted(VALID_PICKING_STATES)})."
+            )
+        if not self.lines:
+            raise SpecError(f"StockPicking {self.xml_id!r}: at least one line is required.")
+        for line in self.lines:
+            if line.qty <= 0:
+                raise SpecError(
+                    f"StockPicking {self.xml_id!r}: line qty must be > 0 "
+                    f"(product {line.product_xmlid!r})."
+                )
+        if self.direction == "internal":
+            if not self.from_location or not self.to_location:
+                raise SpecError(
+                    f"StockPicking {self.xml_id!r}: an internal transfer needs "
+                    f"from_location and to_location (one of "
+                    f"{sorted(VALID_INTERNAL_LOCATIONS)})."
+                )
+            for key in (self.from_location, self.to_location):
+                if key not in VALID_INTERNAL_LOCATIONS:
+                    raise SpecError(
+                        f"StockPicking {self.xml_id!r}: location {key!r} invalid "
+                        f"(allowed: {sorted(VALID_INTERNAL_LOCATIONS)})."
+                    )
+            if self.from_location == self.to_location:
+                raise SpecError(
+                    f"StockPicking {self.xml_id!r}: internal transfer from and to the "
+                    f"same location ({self.from_location!r}) is a no-op."
+                )
+        elif self.from_location or self.to_location:
+            raise SpecError(
+                f"StockPicking {self.xml_id!r}: from_location/to_location are only "
+                f"valid for direction='internal'."
+            )
+
+
+@dataclass
+class PickingLeg:
+    """Concrete ``stock.picking`` derived from a ``StockPicking`` (verified-patterns
+    4.29). ``type_key``/``src_key``/``dest_key`` are resolved by the renderer to
+    the demo warehouse's picking type / locations."""
+
+    xml_id: str
+    type_key: str
+    src_key: str
+    dest_key: str
+    lines: list[StockPickingLine]
+    partner_xmlid: str | None
+    date: str | None
+    origin: str | None
+    state: str
+
+
+def picking_legs(picking: StockPicking, reception_steps: str, delivery_steps: str) -> list[PickingLeg]:
+    """Expand a ``StockPicking`` into its ``stock.picking`` legs.
+
+    Location keys: ``suppliers``/``customers`` are global refs, the others are
+    warehouse locations (see ``WH_LOCATION_FIELD``). Verified against
+    ``stock_warehouse._get_picking_type_update_values`` for the 20.0 route steps.
+    """
+    def leg(xml_id, type_key, src, dest, state=None):
+        return PickingLeg(
+            xml_id=xml_id,
+            type_key=type_key,
+            src_key=src,
+            dest_key=dest,
+            lines=picking.lines,
+            partner_xmlid=picking.partner_xmlid,
+            date=picking.date,
+            origin=picking.origin,
+            state=state or picking.state,
+        )
+
+    xid = picking.xml_id
+    if picking.direction == "internal":
+        return [leg(xid, "internal", picking.from_location, picking.to_location)]
+
+    if picking.direction == "incoming":
+        if reception_steps == "one_step":
+            return [leg(xid, "in", "suppliers", "stock")]
+        if reception_steps == "two_steps":
+            return [
+                leg(xid, "in", "suppliers", "input"),
+                leg(f"{xid}_2", "store", "input", "stock"),
+            ]
+        return [
+            leg(xid, "in", "suppliers", "input"),
+            leg(f"{xid}_2", "qc", "input", "quality"),
+            leg(f"{xid}_3", "store", "quality", "stock"),
+        ]
+
+    # outgoing
+    if delivery_steps == "ship_only":
+        return [leg(xid, "out", "stock", "customers")]
+    if delivery_steps == "pick_ship":
+        return [
+            leg(xid, "pick", "stock", "output"),
+            leg(f"{xid}_2", "out", "output", "customers"),
+        ]
+    return [
+        leg(xid, "pick", "stock", "packing"),
+        leg(f"{xid}_2", "pack", "packing", "output"),
+        leg(f"{xid}_3", "out", "output", "customers"),
+    ]
+
+
+def all_picking_legs(spec: "CustomerSpec") -> list[PickingLeg]:
+    """All legs of all ``stock_pickings`` in declaration order."""
+    legs: list[PickingLeg] = []
+    for picking in spec.stock_pickings:
+        legs.extend(picking_legs(picking, spec.warehouse_reception_steps, spec.warehouse_delivery_steps))
+    return legs
 
 
 @dataclass
@@ -834,6 +1031,7 @@ class CustomerSpec:
     crm_leads: list[CrmLead] = field(default_factory=list)
     purchase_orders: list[PurchaseOrder] = field(default_factory=list)
     stock_quants: list[StockQuant] = field(default_factory=list)
+    stock_pickings: list[StockPicking] = field(default_factory=list)
     invoices: list[Invoice] = field(default_factory=list)
     helpdesk_tickets: list[HelpdeskTicket] = field(default_factory=list)
     quotation_templates: list[QuotationTemplate] = field(default_factory=list)
@@ -853,6 +1051,11 @@ class CustomerSpec:
     # Planning / Field Service (app `planning_field_service`, Enterprise).
     planning_roles: list[PlanningRole] = field(default_factory=list)
     planning_slots: list[PlanningSlot] = field(default_factory=list)
+    # Warehouse flows (stock.warehouse.reception_steps/delivery_steps). Multi-step
+    # flows make the warehouse create the extra picking types/locations and split
+    # each declared stock_picking into the matching legs (verified-patterns 4.29).
+    warehouse_reception_steps: str = "one_step"
+    warehouse_delivery_steps: str = "ship_only"
     # Demo-data language. None -> derived from the company country (see
     # derive_language). Overridable per spec (e.g. an English-only IT lead).
     language: str | None = None
@@ -877,7 +1080,17 @@ class CustomerSpec:
         if self.accounting_app not in {"full", "invoicing"}:
             raise SpecError(
                 f"accounting_app={self.accounting_app!r} invalid "
-                f"(allowed: 'full' = account_accountant, 'invoicing' = account)."
+                f"(allowed: 'full' = accountant, 'invoicing' = account)."
+            )
+        if self.warehouse_reception_steps not in VALID_RECEPTION_STEPS:
+            raise SpecError(
+                f"warehouse_reception_steps={self.warehouse_reception_steps!r} invalid "
+                f"(allowed: {sorted(VALID_RECEPTION_STEPS)})."
+            )
+        if self.warehouse_delivery_steps not in VALID_DELIVERY_STEPS:
+            raise SpecError(
+                f"warehouse_delivery_steps={self.warehouse_delivery_steps!r} invalid "
+                f"(allowed: {sorted(VALID_DELIVERY_STEPS)})."
             )
         barcodes = [p.barcode for p in self.products if p.barcode]
         dupes = {b for b in barcodes if barcodes.count(b) > 1}
@@ -916,6 +1129,44 @@ class CustomerSpec:
                 _require(line.product_xmlid, product_ids, f"PurchaseOrder {po.xml_id}: order_line product_xmlid")
         for quant in self.stock_quants:
             _require(quant.product_xmlid, product_ids, f"StockQuant {quant.product_xmlid!r}: product_xmlid")
+        for picking in self.stock_pickings:
+            if picking.partner_xmlid:
+                _require(picking.partner_xmlid, partner_ids,
+                         f"StockPicking {picking.xml_id}: partner_xmlid")
+            for line in picking.lines:
+                _require(line.product_xmlid, product_ids,
+                         f"StockPicking {picking.xml_id}: line product_xmlid")
+        # Internal transfer endpoints must be locations the chosen warehouse steps
+        # actually create/activate (stock_warehouse.py:610-655). "stock" always
+        # exists; the others only with multi-step flows.
+        active_locations = {"stock"}
+        if self.warehouse_reception_steps != "one_step":
+            active_locations.add("input")
+        if self.warehouse_reception_steps == "three_steps":
+            active_locations.add("quality")
+        if self.warehouse_delivery_steps != "ship_only":
+            active_locations.add("output")
+        if self.warehouse_delivery_steps == "pick_pack_ship":
+            active_locations.add("packing")
+        for picking in self.stock_pickings:
+            if picking.direction != "internal":
+                continue
+            for key in (picking.from_location, picking.to_location):
+                if key not in active_locations:
+                    raise SpecError(
+                        f"StockPicking {picking.xml_id!r}: internal location {key!r} is "
+                        f"not created by the chosen warehouse steps (active: "
+                        f"{sorted(active_locations)}). Set warehouse_reception_steps/"
+                        f"warehouse_delivery_steps accordingly or use another location."
+                    )
+        leg_ids = [leg.xml_id for leg in all_picking_legs(self)]
+        duplicate_legs = {x for x in leg_ids if leg_ids.count(x) > 1}
+        if duplicate_legs:
+            raise SpecError(
+                f"Duplicate picking xml_id(s) after expansion: {sorted(duplicate_legs)}. "
+                f"A multi-step shipment derives the follow-up legs as <xml_id>_2/_3 - "
+                f"avoid those suffixes for other stock_pickings."
+            )
         for invoice in self.invoices:
             _require(invoice.partner_xmlid, partner_ids, f"Invoice {invoice.xml_id}: partner_xmlid")
             for line in invoice.lines:
@@ -1062,7 +1313,7 @@ class CustomerSpec:
 
     @property
     def needs_stock(self) -> bool:
-        return bool(self.stock_quants)
+        return bool(self.stock_quants) or bool(self.stock_pickings)
 
     @property
     def needs_warehouse(self) -> bool:

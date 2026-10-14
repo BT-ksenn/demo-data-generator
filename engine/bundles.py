@@ -42,6 +42,7 @@ SECTION_ORDER: tuple[str, ...] = (
     "crm_leads",
     "purchase_orders",
     "stock_quants",
+    "stock_pickings",
     "quality_points",
     "quality_checks",
     "quality_alerts",
@@ -131,10 +132,13 @@ BUNDLES: dict[str, Bundle] = {
     "stock": Bundle(
         id="stock",
         label="Inventory / warehouse",
-        sections=("stock_quants",),
+        sections=("stock_quants", "stock_pickings"),
         apps=("stock",),
         requires=("products",),
-        relevant_when="the company holds, stores or ships inventory.",
+        relevant_when=(
+            "the company holds, stores or ships inventory; incoming/outgoing "
+            "shipments and internal transfers (incl. multi-step warehouses)."
+        ),
     ),
     "mrp": Bundle(
         id="mrp",

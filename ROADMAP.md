@@ -54,6 +54,22 @@ the module - minimal friction.
 - Auto-created demo login (`demo`/`demo`, name = company) with the same
   groups/companies as `base.user_admin` - no manual user setup after a demo
   appointment (verified-patterns.md 4.18). Existing login is skipped, not fatal.
+- Generated documents (quotes, invoices, leads, POs, tickets, tasks, ...) are
+  attributed to the UI admin **Administrator** instead of the superuser "OdooBot"
+  that loads XML data (verified-patterns.md 4.28).
+- `accounting_app: "full"` depends on the Enterprise **`accountant`** module, so
+  the **Accounting** app appears as installed instead of only "Invoicing"
+  (verified-patterns.md 4.15).
+- The opencode pipeline (`opencode.json` + `.opencode/agent/demo.md`) runs with a
+  broad `bash`/`external_directory` allowlist and `doom_loop` allowed - demo
+  packages build and smoke-test without approval prompts (`opencode --auto` not
+  needed).
+- Real inventory movements (`stock.picking`/`stock.move`): incoming receipts,
+  outgoing deliveries and internal transfers, completed in the `post_init_hook`
+  (verified-patterns.md 4.29). Multi-step warehouses
+  (`warehouse_reception_steps`/`warehouse_delivery_steps`, up to 2-step receiving
+  and pick-ship delivery) split each shipment into the matching legs
+  automatically.
 
 ## Open
 

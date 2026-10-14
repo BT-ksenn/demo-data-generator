@@ -28,7 +28,11 @@ _ENUMS: dict[tuple[str, str], set[str]] = {
     ("SaleOrder", "state"): model.SAFE_SALE_ORDER_STATES,
     ("PurchaseOrder", "state"): model.SAFE_PURCHASE_ORDER_STATES,
     ("Invoice", "move_type"): model.VALID_INVOICE_MOVE_TYPES,
+    ("StockPicking", "direction"): model.VALID_PICKING_DIRECTIONS,
+    ("StockPicking", "state"): model.VALID_PICKING_STATES,
     ("CustomerSpec", "accounting_app"): {"full", "invoicing"},
+    ("CustomerSpec", "warehouse_reception_steps"): model.VALID_RECEPTION_STEPS,
+    ("CustomerSpec", "warehouse_delivery_steps"): model.VALID_DELIVERY_STEPS,
 }
 
 
